@@ -51,5 +51,8 @@ namespace SomeKindOfGame
             if (Pers is IXPRecievable pers) pers.ReceiveXP(7);
             if (Enemy is IXPRecievable enemy) enemy.ReceiveXP(17);
         }
+        private void logTick()
+        {
+        }
     }
 }
