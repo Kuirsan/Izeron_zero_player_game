@@ -17,7 +17,7 @@ namespace SomeKindOfGame.Persons
                 return _health;
             }
         }
-        public AbstractPerson(int HP,int LVL,string Name):base(Name)
+        private protected AbstractPerson(int HP,int LVL,string Name):base(Name)
         {
             _health = HP;
             _lvl = LVL;

@@ -7,7 +7,7 @@ namespace SomeKindOfGame.Objects
     abstract class AbstractMainObject
     {
         private readonly protected string _name;
-        public AbstractMainObject(string Name)
+        private protected AbstractMainObject(string Name)
         {
             _name = Name;
         }

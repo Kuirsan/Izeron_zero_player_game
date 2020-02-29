@@ -11,7 +11,7 @@ namespace SomeKindOfGame.Persons
         private float _lvlMultiple = 1;
         private float _curXP = 0f;
         private protected Dictionary<int, float> _lvlTable;
-        public AbstractPersonTier0(int HP, int LVL, string Name, Dictionary<int,float> LVLTable) : base(HP, LVL, Name)
+        private protected AbstractPersonTier0(int HP, int LVL, string Name, Dictionary<int,float> LVLTable) : base(HP, LVL, Name)
         {
             _lvlTable = LVLTable;
             _lvlCup = _lvlTable.Count;
