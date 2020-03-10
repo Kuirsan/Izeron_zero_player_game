@@ -38,15 +38,15 @@ namespace SomeKindOfGame
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            txtBlock.Text += $"Создан персонаж класса {Pers} а также его враг класса {Enemy}";
+            txtBlock.Text += $"Создан персонаж класса {Pers} а также его враг класса {Enemy}\n";
             if (Enemy is IDmgable dmgable)
             {
-                txtBlock.Text += $"Наносим урон";
+                txtBlock.Text += $"Наносим урон \n";
                 Pers.MakeDmg(dmgable);
             }
             else
             {
-                txtBlock.Text += $"Нельзя ударить";
+                txtBlock.Text += $"Нельзя ударить \n";
             }
             if (Pers is IXPRecievable pers) pers.ReceiveXP(7);
             if (Enemy is IXPRecievable enemy) enemy.ReceiveXP(17);

@@ -7,15 +7,8 @@ namespace SomeKindOfGame.Persons.Tier0
 {
     class Peasant:AbstractPersonTier0,IDmgable
     {
-        private float _attack;
-        
-        public float Attack
-        {
-            get
-            {
-                return _str*1.1f;
-            }
-        }
+
+        public float Attack => _str * 1.1f;
 
         private int _str;
         private Peasant(Dictionary<int, float> LVLTable) :base(2,0,"Peasant",LVLTable)
