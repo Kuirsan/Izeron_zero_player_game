@@ -5,10 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SomeKindOfGame"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="67,308,0,0" VerticalAlignment="Top" Width="95" Click="Button_Click"/>
-        <TextBlock x:Name="txtBlock" HorizontalAlignment="Left" Margin="67,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="194" Width="658"/>
+        Title="MainWindow" Height="484" Width="800">
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
 
+        <DockPanel Grid.Column="0" Grid.Row="1">
+            <Grid DockPanel.Dock="Left" Background="AliceBlue">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="200"/>
+                    <ColumnDefinition MinWidth="250" Width="*"/>
+                    <ColumnDefinition MinWidth="200" Width="*"/>
+                </Grid.ColumnDefinitions>
+                <GridSplitter Grid.Column="0" Width="3" Background="Gray"/>
+                <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
+                <StackPanel Grid.Row="0">
+                    <DataGrid x:Name="gridHero" Height="250" Margin="5 5" ColumnWidth="*"/>
+                    <ProgressBar x:Name="expBar" Height="20" Margin="5 5"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1"></StackPanel>
+                <StackPanel Grid.Row="2"></StackPanel>
+            </Grid>
+        </DockPanel>
+
+        <StackPanel Grid.Row="3">
+            <Label Height="50" Content="Здесь что-то будет..."/>
+            <StatusBar Grid.Row="3" Height="30" DockPanel.Dock="Bottom" Background="Beige">
+                <StatusBarItem>
+                    <TextBlock Name="statBarText" Text="Ready"/>
+                </StatusBarItem>
+            </StatusBar>
+        </StackPanel>
+
+
+        <Label x:Name="timeNow" Grid.Column="0" Grid.Row="0"/>
+        <Button x:Name="doSmt" Grid.Column="0" Grid.Row="1" Height="20" Width="100" Content="do something" Click="doSmt_Click"/>
+        <Label x:Name="doSomething" Grid.Column="0" Grid.Row="0" Margin="200 0"/>
     </Grid>
 </Window>

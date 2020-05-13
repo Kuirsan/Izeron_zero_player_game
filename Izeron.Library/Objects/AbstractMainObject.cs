@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SomeKindOfGame.Objects
+﻿namespace Izeron.Library.Objects
 {
-    abstract class AbstractMainObject
+    /// <summary>
+    /// Base class for others
+    /// </summary>
+    public abstract class AbstractMainObject
     {
         private readonly protected string _name;
         private protected AbstractMainObject(string Name)
