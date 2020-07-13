@@ -32,7 +32,7 @@ namespace SomeKindOfGame
         {
             Dictionary<int, float> dict = new Dictionary<int, float>
             {
-                {0,10f},{1,20f},{2,30f}
+                {0,10f},{1,20f},{2,30f},{3,40f},{4,50f},{5,60f},{6,70f},{7,80f},{8,90f},{9,100f},{10,130f}
             };
             Pers = new Peasant(1, dict);
             Enemy = new Peasant(1, dict);
@@ -92,7 +92,10 @@ namespace SomeKindOfGame
                 xP.ReceiveXP(3);
                 //this.expBar.Value = xP.GetCurrentXP();
             }
-
+            if(Pers is IDmgable dmg)
+            {
+                dmg.GetDamage(1);
+            }
             //await Task.Run(() => DoSomething(15, 20), cancelToken.Token);
             //this.doSomething.Content = $"Done!";
         }
@@ -126,13 +129,22 @@ namespace SomeKindOfGame
         }
         private void LoadGridHero()
         {
-            Binding b = new Binding();
-            b.Source = Pers;
-            b.Path = new PropertyPath("exp");
+            //Binding b = new Binding();
+            //b.Source = Pers;
+            //b.Path = new PropertyPath("exp");
             this.gridHero.HeadersVisibility = DataGridHeadersVisibility.None;
             if (Pers is Peasant pst)
             {
                 this.gridHero.ItemsSource = pst.CharacterList;
+            }
+
+        }
+
+        private void expBar_ToolTipOpening(object sender, ToolTipEventArgs e)
+        {
+            if(Pers is AbstractPersonTier0 ap)
+            {
+                ((ProgressBar)e.Source).ToolTip = $"exp for next level: {ap.MaxXP - ap.CurrentXP} exp.";
             }
 
         }

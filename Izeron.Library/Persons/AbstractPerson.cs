@@ -1,4 +1,5 @@
-﻿using Izeron.Library.Interfaces;
+﻿using Izeron.Library.Enums;
+using Izeron.Library.Interfaces;
 using Izeron.Library.Objects;
 using System.Collections.Generic;
 
@@ -10,18 +11,22 @@ namespace Izeron.Library.Persons
     public abstract class AbstractPerson : AbstractMainObject
     {
         private protected int _health;
+        private protected int _maxHealth;
         private protected int _lvl;
+        private protected List<PersonTags> _personTags;
         public int Health
         {
             get
             {
-                return _health;
+                return _maxHealth;
             }
         }
         private protected AbstractPerson(int HP, int LVL, string Name) : base(Name)
         {
-            _health = HP;
+            _maxHealth = HP;
+            _health = _maxHealth;
             _lvl = LVL;
+            _personTags = new List<PersonTags>();
         }
         /// <summary>
         /// Hit only those who implement IDmgable
@@ -35,7 +40,8 @@ namespace Izeron.Library.Persons
                 Dictionary<string, string> valPairs = new Dictionary<string, string>();
                 valPairs.Add("Класс", this.ToString());
                 valPairs.Add("Уровень", this._lvl.ToString());
-                valPairs.Add("здоровье", this.Health.ToString());
+                valPairs.Add("Здоровье", $"{this._health}\\{this._maxHealth}");
+                valPairs.Add("Тэги", string.Join("; ", _personTags));
                 return valPairs;
             }
         }

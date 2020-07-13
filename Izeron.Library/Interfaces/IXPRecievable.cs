@@ -1,12 +1,12 @@
 ﻿namespace Izeron.Library.Interfaces
 {
     /// <summary>
-    /// Interface for xp and lvl Logic
+    /// Interface to markup those classes that can receive expirience
     /// </summary>
     public interface IXPRecievable
     {
         /// <summary>
-        /// Interface to markup those classes that can receive damage
+        /// Get amount of xp
         /// </summary>
         /// <param name="Amount"></param>
         public void ReceiveXP(float Amount);

@@ -27,7 +27,7 @@
                 <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
                 <StackPanel Grid.Row="0">
                     <DataGrid x:Name="gridHero" Height="250" Margin="5 5" ColumnWidth="*"/>
-                    <ProgressBar x:Name="expBar" Height="20" Margin="5 5"/>
+                    <ProgressBar x:Name="expBar" Height="20" Margin="5 5" ToolTip="Xp for now: " ToolTipOpening="expBar_ToolTipOpening"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1"></StackPanel>
                 <StackPanel Grid.Row="2"></StackPanel>

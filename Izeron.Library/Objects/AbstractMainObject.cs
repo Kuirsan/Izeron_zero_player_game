@@ -6,6 +6,7 @@
     public abstract class AbstractMainObject
     {
         private readonly protected string _name;
+
         private protected AbstractMainObject(string Name)
         {
             _name = Name;

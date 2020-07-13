@@ -56,7 +56,7 @@ namespace Izeron.Library.Persons
         /// <summary>
         /// lvlUp the character.
         /// </summary>
-        private void _lvlUp()
+        protected virtual void _lvlUp()
         {
             _lvl++;
             _curXP = 0;

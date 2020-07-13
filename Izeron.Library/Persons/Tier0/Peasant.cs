@@ -1,4 +1,5 @@
 ﻿using Izeron.Library.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Izeron.Library.Persons.Tier0
@@ -8,13 +9,14 @@ namespace Izeron.Library.Persons.Tier0
     /// </summary>
     public class Peasant : AbstractPersonTier0, IDmgable
     {
+        private protected decimal _attackModifier = 0.0M;
+        public decimal Attack => (_str * 1.1M) + _attackModifier;
 
-        public float Attack => _str * 1.1f;
-
-        private int _str;
+        private protected int _str;
         private Peasant(Dictionary<int, float> LVLTable) : base(2, 0, "Peasant", LVLTable)
         {
             //TODO rewrite
+            _personTags.Add(Enums.PersonTags.Human);
         }
         public Peasant(int Str, Dictionary<int, float> LVLTable) : this(LVLTable)
         {
@@ -36,6 +38,16 @@ namespace Izeron.Library.Persons.Tier0
         public void GetDamage(int Amount)
         {
             _health -= Amount;
+            if (_health <= 0)
+            {
+                Death();
+            }
+            OnPropertyChanged("CharacterList");
+        }
+
+        protected virtual void Death()
+        {
+            //TODO some logic
         }
 
         public override Dictionary<string, string> CharacterList
@@ -46,6 +58,12 @@ namespace Izeron.Library.Persons.Tier0
                 valPairs.Add("Урон", Attack.ToString());
                 return valPairs;
             }
+        }
+        protected override void _lvlUp()
+        {
+            _str += (Int32)(new Random().NextDouble()+0.015f*_lvl);
+            _maxHealth += new Random().Next(1,3);
+            base._lvlUp();
         }
     }
 }
