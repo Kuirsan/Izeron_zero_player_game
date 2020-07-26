@@ -1,4 +1,5 @@
-﻿using Izeron.Library.Interfaces;
+﻿using Izeron.Library.Enums;
+using Izeron.Library.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -16,7 +17,7 @@ namespace Izeron.Library.Persons.Tier0
         private Peasant(Dictionary<int, float> LVLTable) : base(2, 0, "Peasant", LVLTable)
         {
             //TODO rewrite
-            _personTags.Add(Enums.PersonTags.Human);
+            _personTags.Add(PersonTags.Human);
         }
         public Peasant(int Str, Dictionary<int, float> LVLTable) : this(LVLTable)
         {

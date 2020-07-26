@@ -13,7 +13,7 @@ namespace Izeron.Library.Persons
         private protected int _health;
         private protected int _maxHealth;
         private protected int _lvl;
-        private protected List<PersonTags> _personTags;
+        private protected HashSet<PersonTags> _personTags;
         public int Health
         {
             get
@@ -26,7 +26,7 @@ namespace Izeron.Library.Persons
             _maxHealth = HP;
             _health = _maxHealth;
             _lvl = LVL;
-            _personTags = new List<PersonTags>();
+            _personTags = new HashSet<PersonTags>();
         }
         /// <summary>
         /// Hit only those who implement IDmgable
