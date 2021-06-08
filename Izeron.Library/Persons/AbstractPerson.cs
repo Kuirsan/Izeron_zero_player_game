@@ -14,6 +14,7 @@ namespace Izeron.Library.Persons
         private protected int _maxHealth;
         private protected int _lvl;
         private protected HashSet<PersonTags> _personTags;
+        private protected bool _isDead = false;
         public int Health
         {
             get
@@ -44,6 +45,15 @@ namespace Izeron.Library.Persons
                 valPairs.Add("Тэги", string.Join("; ", _personTags));
                 return valPairs;
             }
+        }
+        virtual public bool isDead()
+        {
+            return _isDead;
+        }
+
+        protected virtual void Death()
+        {
+            _isDead = true;
         }
 
     }

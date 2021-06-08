@@ -7,25 +7,25 @@ namespace QuesHandlerSystem.Library
 {
     public static class QuestEditor
     {
-        private static List<QuestModel> quests;
+        private static List<BaseQuestModel> quests;
 
-        public static List<QuestModel> GetQuests()
+        public static List<BaseQuestModel> GetQuests()
         {
             //TODO getQuests
-            return new List<QuestModel>();
+            return new List<BaseQuestModel>();
         }
 
-        public static void UpdateQuestInDB(QuestModel quest)
+        public static void UpdateQuestInDB(BaseQuestModel quest)
         {
             //TODO update quest
         }
 
-        public static void RemoveQuestFromDB(QuestModel quest)
+        public static void RemoveQuestFromDB(BaseQuestModel quest)
         {
             //TODO remove quest
         }
 
-        public static void AddQuestToDB(QuestModel quest)
+        public static void AddQuestToDB(BaseQuestModel quest)
         {
             //TODO add quest
         }

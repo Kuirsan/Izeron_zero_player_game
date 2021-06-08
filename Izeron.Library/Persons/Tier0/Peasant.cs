@@ -15,7 +15,6 @@ namespace Izeron.Library.Persons.Tier0
         public decimal Attack => (_str * 1.1M) + _attackModifier;
 
         private protected int _str;
-        private protected bool _isDead = false;
         private Peasant(Dictionary<int, float> LVLTable) : base(2, 0, "Peasant", LVLTable)
         {
             //TODO rewrite
@@ -56,8 +55,9 @@ namespace Izeron.Library.Persons.Tier0
             OnPropertyChanged("CharacterList");
         }
 
-        protected virtual void Death()
+        protected override void Death()
         {
+            _isDead = true;
             throw new YouDeadException("You DIED");
         }
 

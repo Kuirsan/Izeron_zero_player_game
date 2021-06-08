@@ -19,7 +19,10 @@ using System.Windows.Threading;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using Izeron.Library.Persons;
+using Izeron.Library.Persons.Enemies.Tier0;
 using Izeron.Library.Persons.Tier0;
+using QuesHandlerSystem.Library;
+using QuestHandlerSystem.Library.Quest.Models;
 using SomeKindOfGame.GameCenter;
 
 namespace SomeKindOfGame
@@ -33,6 +36,7 @@ namespace SomeKindOfGame
         AbstractPerson Pers;
         AbstractPerson Enemy;
         someclass battleClass;
+        QuestObserver quests;
 
         static string ByteArrayToString(byte[] arrInput)
         {
@@ -53,7 +57,14 @@ namespace SomeKindOfGame
             };
             Pers = new Peasant(1, dict);
             Enemy = new Peasant(1, dict);
-            battleClass = new someclass(Pers, Enemy);
+            quests = GameManager.InitiateQuestObserver(Pers);
+            List<AbstractPerson> monsterRoaster = new List<AbstractPerson>(){
+                new Rat(1, 1, "rat"),
+                new Rat(1, 1, "rat"),
+                new Rat(1, 1, "rat")
+                };
+            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monsterRoaster, new RewardModel { xpReward = 10 }));
+            battleClass = new someclass(Pers, monsterRoaster);
             InitializeComponent();
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             DispatcherTimer timer = new DispatcherTimer();
@@ -103,7 +114,7 @@ namespace SomeKindOfGame
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             try
             {
-                GameManager.GameTick(new IUpdatable[] { battleClass });
+                GameManager.GameTick(new IUpdatable[] { battleClass,quests});
             }
             catch(YouDeadException ex)
             {
@@ -114,21 +125,23 @@ namespace SomeKindOfGame
         class someclass : IUpdatable
         {
             AbstractPerson Pers;
-            AbstractPerson Enemy;
+            List<AbstractPerson> Enemies;
 
-            public someclass(AbstractPerson pers, AbstractPerson enemy)
+            public someclass(AbstractPerson pers, List<AbstractPerson> enemies)
             {
                 this.Pers = pers;
-                this.Enemy = enemy;
+                this.Enemies = enemies;
             }
             public void Update()
             {
-                if (Pers is IXPRecievable xP)
-                {
-                    xP.ReceiveXP(3);
-                    //this.expBar.Value = xP.GetCurrentXP();
-                }
-                if (Pers is IDmgable dmg)
+                //if (Pers is IXPRecievable xP)
+                //{
+                //    xP.ReceiveXP(3);
+                //    //this.expBar.Value = xP.GetCurrentXP();
+                //}
+                if (Enemies.Count == 0) return;
+                var Enemy = Enemies.First();
+                if (Enemy is IDmgable dmg)
                 {
                     dmg.GetDamage(1);
                 }
