@@ -28,13 +28,23 @@ namespace Izeron.Library.Persons
 
         public int MaxXP
         {
-            get => (int)_lvlTable[_lvl];
+            get
+            {
+                if (_lvlTable.ContainsKey(_lvl))
+                {
+                    return (int)_lvlTable[_lvl];
+                }
+                else
+                {
+                    return (int)_lvlTable[_lvlCup];
+                }
+            }
         }
 
         private protected AbstractPersonTier0(int HP, int LVL, string Name, Dictionary<int, float> LVLTable) : base(HP, LVL, Name)
         {
             _lvlTable = LVLTable;
-            _lvlCup = _lvlTable.Count;
+            _lvlCup = _lvlTable.Count-1;
         }
         /// <summary>
         /// Gain amount of XP to person. When XP>=MaxXP then lvlUp
@@ -42,7 +52,7 @@ namespace Izeron.Library.Persons
         /// <param name="Amount">amont of xp gained</param>
         private void _gainXP(float Amount)
         {
-            if (_lvl >= _lvlTable.Count) return;
+            if (_lvl >= _lvlCup) return;
             if (_curXP + (Amount * _lvlMultiple) >= _lvlTable[_lvl])
             {
                 _lvlUp();

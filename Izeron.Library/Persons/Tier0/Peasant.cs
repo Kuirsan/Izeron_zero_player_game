@@ -1,4 +1,5 @@
 ﻿using Izeron.Library.Enums;
+using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Izeron.Library.Persons.Tier0
         public decimal Attack => (_str * 1.1M) + _attackModifier;
 
         private protected int _str;
+        private protected bool _isDead = false;
         private Peasant(Dictionary<int, float> LVLTable) : base(2, 0, "Peasant", LVLTable)
         {
             //TODO rewrite
@@ -38,17 +40,25 @@ namespace Izeron.Library.Persons.Tier0
         /// <param name="Amount"></param>
         public void GetDamage(int Amount)
         {
-            _health -= Amount;
-            if (_health <= 0)
+            if (_isDead)
             {
                 Death();
+            }
+            else
+            {
+                _health -= Amount;
+                if (_health <= 0)
+                {
+                    _health = 0;
+                    Death();
+                }
             }
             OnPropertyChanged("CharacterList");
         }
 
         protected virtual void Death()
         {
-            //TODO some logic
+            throw new YouDeadException("You DIED");
         }
 
         public override Dictionary<string, string> CharacterList

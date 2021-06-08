@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,9 +16,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using Izeron.Library.Persons;
 using Izeron.Library.Persons.Tier0;
+using SomeKindOfGame.GameCenter;
 
 namespace SomeKindOfGame
 {
@@ -28,14 +32,28 @@ namespace SomeKindOfGame
         static CancellationTokenSource cancelToken = new CancellationTokenSource();
         AbstractPerson Pers;
         AbstractPerson Enemy;
+        someclass battleClass;
+
+        static string ByteArrayToString(byte[] arrInput)
+        {
+            int i;
+            StringBuilder sOutput = new StringBuilder(arrInput.Length);
+            for (i = 0; i < arrInput.Length; i++)
+            {
+                sOutput.Append(arrInput[i].ToString("X2"));
+            }
+            return sOutput.ToString();
+        }
         public MainWindow()
         {
+
             Dictionary<int, float> dict = new Dictionary<int, float>
             {
                 {0,10f},{1,20f},{2,30f},{3,40f},{4,50f},{5,60f},{6,70f},{7,80f},{8,90f},{9,100f},{10,130f}
             };
             Pers = new Peasant(1, dict);
             Enemy = new Peasant(1, dict);
+            battleClass = new someclass(Pers, Enemy);
             InitializeComponent();
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             DispatcherTimer timer = new DispatcherTimer();
@@ -47,17 +65,17 @@ namespace SomeKindOfGame
             {
                 Binding b = new Binding();
                 b.Source = Pers;
-                b.Path = new PropertyPath("CurrentXP");
+                b.Path = new PropertyPath(nameof(pp.CurrentXP));
                 b.Mode = BindingMode.OneWay;
                 Binding b1 = new Binding();
                 b1.Source = Pers;
-                b1.Path = new PropertyPath("MaxXP");
+                b1.Path = new PropertyPath(nameof(pp.MaxXP));
                 b1.Mode = BindingMode.OneWay;
                 this.expBar.SetBinding(ProgressBar.ValueProperty, b);
                 this.expBar.SetBinding(ProgressBar.MaximumProperty, b1);
                 Binding b2 = new Binding();
                 b2.Source = Pers;
-                b2.Path = new PropertyPath("CharacterList");
+                b2.Path = new PropertyPath(nameof(pp.CharacterList));
                 b2.Mode = BindingMode.OneWay;
                 this.gridHero.SetBinding(DataGrid.ItemsSourceProperty, b2);
                 //this.doSomething.Content = $"XP is {pp.CurrentXP}!";
@@ -83,22 +101,40 @@ namespace SomeKindOfGame
         void timer_Tick(object sender, EventArgs e)
         {
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
+            try
+            {
+                GameManager.GameTick(new IUpdatable[] { battleClass });
+            }
+            catch(YouDeadException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
-        private async void doSmt_Click(object sender, RoutedEventArgs e)
+        class someclass : IUpdatable
         {
-            if (Pers is IXPRecievable xP)
+            AbstractPerson Pers;
+            AbstractPerson Enemy;
+
+            public someclass(AbstractPerson pers, AbstractPerson enemy)
             {
-                xP.ReceiveXP(3);
-                //this.expBar.Value = xP.GetCurrentXP();
+                this.Pers = pers;
+                this.Enemy = enemy;
             }
-            if(Pers is IDmgable dmg)
+            public void Update()
             {
-                dmg.GetDamage(1);
+                if (Pers is IXPRecievable xP)
+                {
+                    xP.ReceiveXP(3);
+                    //this.expBar.Value = xP.GetCurrentXP();
+                }
+                if (Pers is IDmgable dmg)
+                {
+                    dmg.GetDamage(1);
+                }
             }
-            //await Task.Run(() => DoSomething(15, 20), cancelToken.Token);
-            //this.doSomething.Content = $"Done!";
         }
+
 
         private void DoSomething(float sec, int msDuratation)
         {

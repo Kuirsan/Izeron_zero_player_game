@@ -45,7 +45,6 @@
 
 
         <Label x:Name="timeNow" Grid.Column="0" Grid.Row="0"/>
-        <Button x:Name="doSmt" Grid.Column="0" Grid.Row="1" Height="20" Width="100" Content="do something" Click="doSmt_Click"/>
         <Label x:Name="doSomething" Grid.Column="0" Grid.Row="0" Margin="200 0"/>
     </Grid>
 </Window>
