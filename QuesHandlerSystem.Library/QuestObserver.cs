@@ -1,37 +1,55 @@
-﻿using QuesHandlerSystem.Library.Quest.Models;
+﻿using Izeron.Library.Interfaces;
+using Izeron.Library.Persons;
+using QuesHandlerSystem.Library.Quest.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace QuesHandlerSystem.Library
 {
-    public class QuestObserver
+    public class QuestObserver : IUpdatable
     {
-        private List<QuestModel> activeQuests;
+        private List<BaseQuestModel> _activeQuests;
+        private AbstractPerson _hero;
 
-        public QuestObserver()
+        public QuestObserver(AbstractPerson Hero)
         {
-            activeQuests = new List<QuestModel>();
+            _activeQuests = new List<BaseQuestModel>();
+            _hero = Hero;
         }
 
-        public void SignOnQuest(QuestModel quest)
+        public void SignOnQuest(BaseQuestModel quest)
         {
-            activeQuests.Add(quest);
-        }
-        public void RemoveQuest(QuestModel quest)
-        {
-            activeQuests.Remove(quest);
+            _activeQuests.Add(quest);
         }
 
-        public void UpdateAllQuests()
+        protected void UpdateAllQuests()
         {
-            //TODO all quests update
+            foreach (var quest in _activeQuests.Where(quest => !quest.isFinish))
+            {
+                UpdateQuest(quest);
+            }
+            RemoveObsoleteQuests();
         }
 
-        public void UpdateQuest(QuestModel quest)
+        protected void RemoveObsoleteQuests()
         {
-            //TODO single quest update
+            foreach(var quest in _activeQuests)
+            {
+                if(quest.isFinish) quest.getReward(_hero);
+            }
+            _activeQuests.RemoveAll(quest => quest.isFinish);
         }
 
+        protected void UpdateQuest(BaseQuestModel quest)
+        {
+            quest.UpdateQuest();
+        }
+
+        public void Update()
+        {
+            UpdateAllQuests();
+        }
     }
 }

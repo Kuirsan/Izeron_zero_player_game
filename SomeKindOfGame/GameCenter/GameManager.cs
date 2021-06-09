@@ -1,5 +1,7 @@
 ﻿using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
+using Izeron.Library.Persons;
+using QuesHandlerSystem.Library;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +15,7 @@ namespace SomeKindOfGame.GameCenter
         private static bool _isRunTick = false;
         private static bool _lose = false;
         private static string _excMessage = string.Empty;
+        private static QuestObserver _questObserver;
 
         private GameManager() { }
 
@@ -61,6 +64,16 @@ namespace SomeKindOfGame.GameCenter
             {
                 _isRunTick = false;
             }
+        }
+
+        public static QuestObserver InitiateQuestObserver(AbstractPerson hero)
+        {
+            if(_questObserver==null)
+            {
+                _questObserver = new QuestObserver(hero);
+                return _questObserver;
+            }
+            return _questObserver;
         }
     }
 }
