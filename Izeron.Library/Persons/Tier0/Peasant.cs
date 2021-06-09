@@ -9,13 +9,13 @@ namespace Izeron.Library.Persons.Tier0
     /// <summary>
     /// Tier 0 class - Peasant
     /// </summary>
-    public class Peasant : AbstractPersonTier0, IDmgable
+    public class Peasant : AbstractPersonTier0, IDmgable,IHealable
     {
         private protected decimal _attackModifier = 0.0M;
         public decimal Attack => (_str * 1.1M) + _attackModifier;
 
         private protected int _str;
-        private Peasant(Dictionary<int, float> LVLTable) : base(2, 0, "Peasant", LVLTable)
+        private Peasant(Dictionary<int, float> LVLTable) : base(4, 0, "Peasant", LVLTable)
         {
             //TODO rewrite
             _personTags.Add(PersonTags.Human);
@@ -75,6 +75,20 @@ namespace Izeron.Library.Persons.Tier0
             _str += (Int32)(new Random().NextDouble()+0.015f*_lvl);
             _maxHealth += new Random().Next(1,3);
             base._lvlUp();
+        }
+
+        public void getHeal(int amount)
+        {
+            if (amount < 0) return;
+            if (_health + amount > _maxHealth)
+            {
+                _health = _maxHealth;
+            }
+            else
+            {
+                _health += amount;
+            }
+            OnPropertyChanged("CharacterList");
         }
     }
 }

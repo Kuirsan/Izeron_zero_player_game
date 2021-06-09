@@ -15,11 +15,20 @@ namespace Izeron.Library.Persons
         private protected int _lvl;
         private protected HashSet<PersonTags> _personTags;
         private protected bool _isDead = false;
-        public int Health
+        private protected int[] _inventory;
+        private protected int _money;
+        public int MaxHealth
         {
             get
             {
                 return _maxHealth;
+            }
+        }
+        public int CurrentHealth
+        {
+            get
+            {
+                return _health;
             }
         }
         private protected AbstractPerson(int HP, int LVL, string Name) : base(Name)
@@ -56,5 +65,13 @@ namespace Izeron.Library.Persons
             _isDead = true;
         }
 
+        virtual public bool somethingInInventory()
+        {
+            return _inventory?.Length>0? true:false;
+        }
+        virtual public bool isAnyMoney()
+        {
+            return _money > 0;
+        }
     }
 }

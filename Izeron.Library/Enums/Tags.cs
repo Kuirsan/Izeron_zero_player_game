@@ -4,22 +4,22 @@ using System.Text;
 
 namespace Izeron.Library.Enums
 {
-    enum PersonTags
+    public enum PersonTags
     {
         Human
     }
 
-    enum WeaponTags
+    public enum WeaponTags
     {
 
     }
 
-    enum ArmorTags
+    public enum ArmorTags
     {
 
     }
 
-    enum QuestTags
+    public enum QuestTags
     {
 
     }
