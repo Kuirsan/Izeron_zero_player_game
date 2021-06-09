@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GameCenter.Library\GameCenter.Library.csproj" />
     <ProjectReference Include="..\Izeron.Library\Izeron.Library.csproj" />
-    <ProjectReference Include="..\QuesHandlerSystem.Library\QuestHandlerSystem.Library.csproj" />
   </ItemGroup>
 
 </Project>

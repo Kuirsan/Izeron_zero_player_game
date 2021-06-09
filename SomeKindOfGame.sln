@@ -11,7 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuestHandlerSystem.Library"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuestEditorApplication", "QuestEditorApplication\QuestEditorApplication.csproj", "{6725120F-88F2-4840-993A-2CC33714A35E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Izeron.Library", "Izeron.Library\Izeron.Library.csproj", "{93F5DCA1-7BA3-4253-9526-E5BE1A45A4BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Izeron.Library", "Izeron.Library\Izeron.Library.csproj", "{93F5DCA1-7BA3-4253-9526-E5BE1A45A4BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameCenter.Library", "GameCenter.Library\GameCenter.Library.csproj", "{9B7FF6EE-62DA-4E2D-AFE0-DCC568730109}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic.Library", "GameLogic.Library\GameLogic.Library.csproj", "{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,14 @@ Global
 		{93F5DCA1-7BA3-4253-9526-E5BE1A45A4BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93F5DCA1-7BA3-4253-9526-E5BE1A45A4BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93F5DCA1-7BA3-4253-9526-E5BE1A45A4BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B7FF6EE-62DA-4E2D-AFE0-DCC568730109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B7FF6EE-62DA-4E2D-AFE0-DCC568730109}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B7FF6EE-62DA-4E2D-AFE0-DCC568730109}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B7FF6EE-62DA-4E2D-AFE0-DCC568730109}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

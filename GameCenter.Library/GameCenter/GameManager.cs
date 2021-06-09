@@ -1,12 +1,13 @@
-﻿using Izeron.Library.Exceptions;
+﻿using GameLogic.Library.GameStateLogic;
+using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using Izeron.Library.Persons;
-using QuesHandlerSystem.Library;
+using QuestHandlerSystem.Library;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SomeKindOfGame.GameCenter
+namespace GameCenter.Library.GameCenter
 {
     public class GameManager
     {
@@ -16,6 +17,7 @@ namespace SomeKindOfGame.GameCenter
         private static bool _lose = false;
         private static string _excMessage = string.Empty;
         private static QuestObserver _questObserver;
+        private static GameProcess _gameProcess;
 
         private GameManager() { }
 
@@ -74,6 +76,14 @@ namespace SomeKindOfGame.GameCenter
                 return _questObserver;
             }
             return _questObserver;
+        }
+        public static GameProcess InitiateGameProcess(AbstractPerson hero, BaseGameStateLogic logic)
+        {
+            if(_gameProcess==null)
+            {
+                _gameProcess = new GameProcess(hero, logic);
+            }
+            return _gameProcess;
         }
     }
 }

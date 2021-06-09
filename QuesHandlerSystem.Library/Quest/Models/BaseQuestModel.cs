@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuesHandlerSystem.Library.Quest.Models
+namespace QuestHandlerSystem.Library.Quest.Models
 {
     public abstract class BaseQuestModel
     {

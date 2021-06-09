@@ -1,9 +1,9 @@
-﻿using QuesHandlerSystem.Library.Quest.Models;
+﻿using QuestHandlerSystem.Library.Quest.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuesHandlerSystem.Library
+namespace QuestHandlerSystem.Library
 {
     public static class QuestEditor
     {

@@ -1,12 +1,12 @@
 ﻿using Izeron.Library.Interfaces;
 using Izeron.Library.Persons;
-using QuesHandlerSystem.Library.Quest.Models;
+using QuestHandlerSystem.Library.Quest.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace QuesHandlerSystem.Library
+namespace QuestHandlerSystem.Library
 {
     public class QuestObserver : IUpdatable
     {
