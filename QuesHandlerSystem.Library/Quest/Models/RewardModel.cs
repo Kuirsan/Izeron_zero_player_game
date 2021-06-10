@@ -8,5 +8,12 @@ namespace QuestHandlerSystem.Library.Quest.Models
     {
         public float xpReward;
         public int goldReward;
+        public override string ToString()
+        {
+            return @$"Награда:
+                      Опыт = {xpReward}
+                      Золото = {goldReward}";
+
+        }
     }
 }

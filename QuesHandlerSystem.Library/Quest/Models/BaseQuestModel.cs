@@ -23,7 +23,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
 
         public abstract void getReward(AbstractPerson pers);
 
-        public abstract void UpdateQuest();
+        public abstract string UpdateQuest();
         
     }
 }

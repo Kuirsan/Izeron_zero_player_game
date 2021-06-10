@@ -55,10 +55,10 @@ namespace SomeKindOfGame
             quests = GameManager.InitiateQuestObserver(Pers);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
             monsterRoaster = new List<AbstractPerson>(){
-                new Rat(1, 1, "rat"),
-                new Rat(1, 1, "rat"),
-                new Rat(1, 1, "rat"),
-                new Rat(1, 1, "rat")
+                new Rat(1, 1, "rat",1),
+                new Rat(2, 1, "rat",1),
+                new Rat(3, 1, "rat",1),
+                new Rat(5, 1, "giant rat",1)
                 };
             quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monsterRoaster, new RewardModel { xpReward = 10 }));
             battleClass = new someclass(Pers, monsterRoaster);
@@ -92,11 +92,12 @@ namespace SomeKindOfGame
         void timer_Tick(object sender, EventArgs e)
         {
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
+            string message = string.Empty;
             if (gameProcess.CurrentState == GameState.Fighting)
             {
                 try
                 {
-                    GameManager.GameTick(new IUpdatable[] { battleClass, quests });
+                    message=GameManager.GameTick(new IUpdatable[] { battleClass, quests });
                 }
                 catch (YouDeadException ex)
                 {
@@ -106,9 +107,10 @@ namespace SomeKindOfGame
             }
             else
             {
-                GameManager.GameTick(new IUpdatable[] { quests });
+                message=GameManager.GameTick(new IUpdatable[] { quests });
                 gameProcess.MoveNext(null);
             }
+            this.notificationLabel.Content = message;
         }
 
         class someclass : IUpdatable
@@ -121,18 +123,29 @@ namespace SomeKindOfGame
                 this.Pers = pers;
                 this.Enemies = enemies;
             }
-            public void Update()
+            public string Update()
             {
-                if (Enemies.Count == 0) return;
+                string notification = string.Empty;
+                if (Enemies.Count == 0) return notification;
                 var Enemy = Enemies.First();
                 if (Enemy is IDmgable dmg)
                 {
-                    dmg.GetDamage(1);
+                    Pers.MakeDmg(dmg);
+                    notification += @$"Наносим {Pers.attackAmount()} урона по противнику [{Enemy}]!" + Environment.NewLine;
                 }
-                if(Pers is IDmgable pdmg)
+                if(Enemy.isDead())
                 {
-                    pdmg.GetDamage(1);
+                    notification += @$"Противник [{Enemy}] получает смертельную рану!" + Environment.NewLine;
                 }
+                else
+                {
+                    if (Pers is IDmgable pdmg)
+                    {
+                        Enemy.MakeDmg(pdmg);
+                        notification += $@"Противник [{Enemy}] наносит {Enemy.attackAmount()} урона по герою!" + Environment.NewLine;
+                    }
+                }
+                return notification;
             }
         }
 

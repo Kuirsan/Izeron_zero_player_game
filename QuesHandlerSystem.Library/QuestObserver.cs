@@ -24,13 +24,15 @@ namespace QuestHandlerSystem.Library
             _activeQuests.Add(quest);
         }
 
-        protected void UpdateAllQuests()
+        protected string UpdateAllQuests()
         {
+            string notification = string.Empty;
             foreach (var quest in _activeQuests.Where(quest => !quest.isFinish))
             {
-                UpdateQuest(quest);
+                notification+=UpdateQuest(quest);
             }
             RemoveObsoleteQuests();
+            return notification;
         }
 
         protected void RemoveObsoleteQuests()
@@ -42,14 +44,15 @@ namespace QuestHandlerSystem.Library
             _activeQuests.RemoveAll(quest => quest.isFinish);
         }
 
-        protected void UpdateQuest(BaseQuestModel quest)
+        protected string UpdateQuest(BaseQuestModel quest)
         {
-            quest.UpdateQuest();
+            return quest.UpdateQuest();
         }
 
-        public void Update()
+        public string Update()
         {
-            UpdateAllQuests();
+            string notification = UpdateAllQuests();
+            return notification;
         }
     }
 }

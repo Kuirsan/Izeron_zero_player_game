@@ -73,5 +73,6 @@ namespace Izeron.Library.Persons
         {
             return _money > 0;
         }
+        abstract public float attackAmount();
     }
 }

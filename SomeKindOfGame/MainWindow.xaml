@@ -25,17 +25,19 @@
                 </Grid.ColumnDefinitions>
                 <GridSplitter Grid.Column="0" Width="3" Background="Gray"/>
                 <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
-                <StackPanel Grid.Row="0">
+                <StackPanel Grid.Row="0" Grid.Column="0">
                     <DataGrid x:Name="gridHero" Height="250" Margin="5 5" ColumnWidth="*"/>
                     <ProgressBar x:Name="expBar" Height="20" Margin="5 5" ToolTip="Xp for now: " ToolTipOpening="expBar_ToolTipOpening"/>
                 </StackPanel>
-                <StackPanel Grid.Row="1"></StackPanel>
-                <StackPanel Grid.Row="2"></StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1">
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="2">
+                </StackPanel>
             </Grid>
         </DockPanel>
 
         <StackPanel Grid.Row="3">
-            <Label Height="50" Content="Здесь что-то будет..."/>
+            <Label Height="50" x:Name="notificationLabel"  Content=""/>
             <StatusBar Grid.Row="3" Height="30" DockPanel.Dock="Bottom" Background="Beige">
                 <StatusBarItem>
                     <TextBlock Name="statBarText" Text="Ready"/>
