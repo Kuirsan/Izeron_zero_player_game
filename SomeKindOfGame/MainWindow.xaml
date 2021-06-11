@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SomeKindOfGame"
         mc:Ignorable="d"
-        Title="MainWindow" Height="484" Width="800">
+        Title="MainWindow" Height="560" Width="800">
     <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -13,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="130"/>
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Column="0" Grid.Row="1">
@@ -25,17 +25,30 @@
                 </Grid.ColumnDefinitions>
                 <GridSplitter Grid.Column="0" Width="3" Background="Gray"/>
                 <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
-                <StackPanel Grid.Row="0">
+                <StackPanel Grid.Row="0" Grid.Column="0">
                     <DataGrid x:Name="gridHero" Height="250" Margin="5 5" ColumnWidth="*"/>
                     <ProgressBar x:Name="expBar" Height="20" Margin="5 5" ToolTip="Xp for now: " ToolTipOpening="expBar_ToolTipOpening"/>
                 </StackPanel>
-                <StackPanel Grid.Row="1"></StackPanel>
-                <StackPanel Grid.Row="2"></StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1">
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="2">
+                </StackPanel>
             </Grid>
         </DockPanel>
 
-        <StackPanel Grid.Row="3">
-            <Label Height="50" Content="Здесь что-то будет..."/>
+        <StackPanel Grid.Row="2">
+            <TabControl Height="100">
+                <TabItem Header="all log">
+                    <ScrollViewer x:Name="textAllViewerScroll">
+                        <TextBlock x:Name="notificationAllText" TextWrapping="Wrap" ></TextBlock>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="fight log">
+                    <ScrollViewer x:Name="textFightViewerScroll">
+                        <TextBlock x:Name="notificationFightText" TextWrapping="Wrap" ></TextBlock>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
             <StatusBar Grid.Row="3" Height="30" DockPanel.Dock="Bottom" Background="Beige">
                 <StatusBarItem>
                     <TextBlock Name="statBarText" Text="Ready"/>
@@ -45,6 +58,6 @@
 
 
         <Label x:Name="timeNow" Grid.Column="0" Grid.Row="0"/>
-        <Label x:Name="doSomething" Grid.Column="0" Grid.Row="0" Margin="200 0"/>
+        <Label x:Name="doSomething" Grid.Column="0" Grid.Row="0" Margin="200,0,200,0"/>
     </Grid>
 </Window>

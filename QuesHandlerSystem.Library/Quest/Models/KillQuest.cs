@@ -22,17 +22,24 @@ namespace QuestHandlerSystem.Library.Quest.Models
             }
         }
 
-        public override void UpdateQuest()
+        public override string UpdateQuest()
         {
-            if (isFinish) return;
+            string notification=string.Empty;
+            if (isFinish) return string.Empty;
             if (_enemies.Count == 0)
             {
                 isFinish = true;
+                notification=setNotificationText();
             }
             else
             {
                 _enemies.RemoveAll(enemy => enemy.isDead());
             }
+            return notification;
+        }
+        private string setNotificationText()
+        {
+            return $@"Квест {Title} завершен! Награда: {_reward}";
         }
     }
 }

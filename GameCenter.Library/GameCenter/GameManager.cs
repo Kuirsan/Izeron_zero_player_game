@@ -36,19 +36,20 @@ namespace GameCenter.Library.GameCenter
             return _instance;
         }
         
-        public static void GameTick(IUpdatable[] updatableObjects)
+        public static string GameTick(IUpdatable[] updatableObjects)
         {
-            if (_lose) return;
+            string notification = string.Empty;
+            if (_lose) return string.Empty;
             try
             {
-                if (_isRunTick) return;
+                if (_isRunTick) return string.Empty;
                 lock (_syncRoot)
                 {
-                    if (_isRunTick) return;
+                    if (_isRunTick) return string.Empty;
                     _isRunTick = true;
                     foreach (var obj in updatableObjects)
                     {
-                        obj.Update();
+                        notification+= obj.Update();
                     }
                 }
             }
@@ -66,6 +67,7 @@ namespace GameCenter.Library.GameCenter
             {
                 _isRunTick = false;
             }
+            return notification;
         }
 
         public static QuestObserver InitiateQuestObserver(AbstractPerson hero)

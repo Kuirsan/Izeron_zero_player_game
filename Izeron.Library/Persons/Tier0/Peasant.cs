@@ -11,8 +11,8 @@ namespace Izeron.Library.Persons.Tier0
     /// </summary>
     public class Peasant : AbstractPersonTier0, IDmgable,IHealable
     {
-        private protected decimal _attackModifier = 0.0M;
-        public decimal Attack => (_str * 1.1M) + _attackModifier;
+        private protected float _attackModifier = 0.0F;
+        public float Attack => (_str * 1.1F) + _attackModifier;
 
         private protected int _str;
         private Peasant(Dictionary<int, float> LVLTable) : base(4, 0, "Peasant", LVLTable)
@@ -89,6 +89,11 @@ namespace Izeron.Library.Persons.Tier0
                 _health += amount;
             }
             OnPropertyChanged("CharacterList");
+        }
+
+        public override float attackAmount()
+        {
+            return Attack;
         }
     }
 }
