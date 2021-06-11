@@ -107,10 +107,14 @@ namespace SomeKindOfGame
             }
             else
             {
-                message=GameManager.GameTick(new IUpdatable[] { quests });
+                message=(GameManager.GameTick(new IUpdatable[] { quests }));
                 gameProcess.MoveNext(null);
             }
-            this.notificationLabel.Content = message;
+            if (!string.IsNullOrEmpty(message.Trim()))
+            {
+                this.notificationText.Text += message;
+                this.textViewerScroll.ScrollToEnd();
+            }
         }
 
         class someclass : IUpdatable

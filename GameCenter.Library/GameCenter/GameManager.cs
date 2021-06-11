@@ -49,7 +49,7 @@ namespace GameCenter.Library.GameCenter
                     _isRunTick = true;
                     foreach (var obj in updatableObjects)
                     {
-                        notification+= obj.Update()+Environment.NewLine;
+                        notification+= obj.Update();
                     }
                 }
             }

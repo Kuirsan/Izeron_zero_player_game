@@ -37,7 +37,9 @@
         </DockPanel>
 
         <StackPanel Grid.Row="3">
-            <Label Height="50" x:Name="notificationLabel"  Content=""/>
+            <ScrollViewer x:Name="textViewerScroll"  Height="50">
+                <TextBlock x:Name="notificationText" TextWrapping="Wrap" ></TextBlock>
+            </ScrollViewer>
             <StatusBar Grid.Row="3" Height="30" DockPanel.Dock="Bottom" Background="Beige">
                 <StatusBarItem>
                     <TextBlock Name="statBarText" Text="Ready"/>
