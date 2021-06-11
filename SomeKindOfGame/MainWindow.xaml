@@ -44,8 +44,8 @@
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="fight log">
-                    <ScrollViewer x:Name="textViewerScroll">
-                        <TextBlock x:Name="notificationText" TextWrapping="Wrap" ></TextBlock>
+                    <ScrollViewer x:Name="textFightViewerScroll">
+                        <TextBlock x:Name="notificationFightText" TextWrapping="Wrap" ></TextBlock>
                     </ScrollViewer>
                 </TabItem>
             </TabControl>

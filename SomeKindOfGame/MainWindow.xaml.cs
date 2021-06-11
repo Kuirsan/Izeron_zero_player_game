@@ -92,12 +92,13 @@ namespace SomeKindOfGame
         void timer_Tick(object sender, EventArgs e)
         {
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
-            string message = string.Empty;
+            string allMessage = string.Empty;
+            string FightMessage = string.Empty;
             if (gameProcess.CurrentState == GameState.Fighting)
             {
                 try
                 {
-                    message=GameManager.GameTick(new IUpdatable[] { battleClass, quests });
+                    FightMessage = GameManager.GameTick(new IUpdatable[] { battleClass, quests });
                 }
                 catch (YouDeadException ex)
                 {
@@ -107,13 +108,15 @@ namespace SomeKindOfGame
             }
             else
             {
-                message=(GameManager.GameTick(new IUpdatable[] { quests }));
+                allMessage = (GameManager.GameTick(new IUpdatable[] { quests }));
                 gameProcess.MoveNext(null);
             }
-            if (!string.IsNullOrEmpty(message.Trim()))
+            if (!string.IsNullOrEmpty(allMessage.Trim()) || !string.IsNullOrEmpty(FightMessage.Trim()))
             {
-                this.notificationText.Text += message;
-                this.textViewerScroll.ScrollToEnd();
+                this.notificationFightText.Text += FightMessage;
+                this.notificationAllText.Text += allMessage + FightMessage;
+                this.textFightViewerScroll.ScrollToEnd();
+                this.textAllViewerScroll.ScrollToEnd();
             }
         }
 
