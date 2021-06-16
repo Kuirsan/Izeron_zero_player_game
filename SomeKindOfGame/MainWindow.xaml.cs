@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 using GameCenter.Library.GameCenter;
+using GameLogic.Library.GameBattleRoaster;
 using GameLogic.Library.GameStateLogic;
 using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
@@ -31,7 +32,7 @@ namespace SomeKindOfGame
         someclass battleClass;
         QuestObserver quests;
         GameProcess gameProcess;
-        List<AbstractPerson> monsterRoaster;
+        BattleRoasterManager monsterRoaster=new BattleRoasterManager();
 
         static string ByteArrayToString(byte[] arrInput)
         {
@@ -54,14 +55,19 @@ namespace SomeKindOfGame
             Enemy = new Peasant(1, dict);
             quests = GameManager.InitiateQuestObserver(Pers);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
-            monsterRoaster = new List<AbstractPerson>(){
+            var monstrRoast = new List<AbstractPerson>()
+            {
                 new Rat(1, 1, "rat",1),
-                new Rat(2, 1, "rat",1),
-                new Rat(3, 1, "rat",1),
-                new Rat(5, 1, "giant rat",1)
-                };
-            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monsterRoaster, new RewardModel { xpReward = 10 }));
-            battleClass = new someclass(Pers, monsterRoaster);
+                new Rat(1, 1, "rat",1),
+                new Rat(1, 1, "rat",1)
+            };
+            monsterRoaster.AddMonsterToRoaset(1, monstrRoast.ToArray());
+            monsterRoaster.AddMonsterToRoaset(1, new AbstractPerson[] {new Rat(1, 1, "rat",1),
+                new Rat(2, 1, "wolf",1),
+                new Rat(3, 1, "wolf",1),
+                new Rat(5, 1, "giant rat",1)});
+            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10 }));
+            battleClass = new someclass(Pers, monsterRoaster.getMonsterRoastForFloor(1).ToList());
             InitializeComponent();
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             DispatcherTimer timer = new DispatcherTimer();
@@ -98,17 +104,17 @@ namespace SomeKindOfGame
             {
                 try
                 {
-                    FightMessage = GameManager.GameTick(new IUpdatable[] { battleClass, quests });
+                    FightMessage = GameManager.GameTick(new IUpdatable[] { battleClass, quests,monsterRoaster });
                 }
                 catch (YouDeadException ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-                gameProcess.MoveNext(monsterRoaster);
+                gameProcess.MoveNext(monsterRoaster.getMonsterRoastForFloor(1));
             }
             else
             {
-                allMessage = (GameManager.GameTick(new IUpdatable[] { quests }));
+                allMessage = (GameManager.GameTick(new IUpdatable[] { quests,monsterRoaster }));
                 gameProcess.MoveNext(null);
             }
             if (!string.IsNullOrEmpty(allMessage.Trim()) || !string.IsNullOrEmpty(FightMessage.Trim()))
@@ -152,6 +158,7 @@ namespace SomeKindOfGame
                         notification += $@"Противник [{Enemy}] наносит {Enemy.attackAmount()} урона по герою!" + Environment.NewLine;
                     }
                 }
+                Enemies.RemoveAll(x => x.isDead());
                 return notification;
             }
         }
