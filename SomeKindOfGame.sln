@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuestEditorApplication", "Q
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Izeron.Library", "Izeron.Library\Izeron.Library.csproj", "{93F5DCA1-7BA3-4253-9526-E5BE1A45A4BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameCenter.Library", "GameCenter.Library\GameCenter.Library.csproj", "{9B7FF6EE-62DA-4E2D-AFE0-DCC568730109}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameCenter.Library", "GameCenter.Library\GameCenter.Library.csproj", "{9B7FF6EE-62DA-4E2D-AFE0-DCC568730109}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic.Library", "GameLogic.Library\GameLogic.Library.csproj", "{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic.Library", "GameLogic.Library\GameLogic.Library.csproj", "{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Izeron.Library.Tests", "Izeron.Library.Tests\Izeron.Library.Tests.csproj", "{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
