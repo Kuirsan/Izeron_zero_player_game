@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Izeron.Library.Notification;
 
 namespace Izeron.Library.Interfaces
 {
     public interface IUpdatable
     {
-        public string Update();
+        public GameNotification Update();
     }
 }

@@ -20,4 +20,11 @@ namespace Izeron.Library.Enums
         Start,
         End
     }
+    public enum GameNotificationState
+    {
+        All,
+        Battle,
+        Quest,
+        Other
+    }
 }

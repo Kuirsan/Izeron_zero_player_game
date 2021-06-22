@@ -1,4 +1,6 @@
-﻿using Izeron.Library.Interfaces;
+﻿using Izeron.Library.Enums;
+using Izeron.Library.Interfaces;
+using Izeron.Library.Notification;
 using Izeron.Library.Persons;
 using QuestHandlerSystem.Library.Quest.Models;
 using System;
@@ -49,10 +51,14 @@ namespace QuestHandlerSystem.Library
             return quest.UpdateQuest();
         }
 
-        public string Update()
+        public GameNotification Update()
         {
-            string notification = UpdateAllQuests();
-            return notification;
+            GameNotification gameNotification = new GameNotification()
+            {
+                gameNotificationState = GameNotificationState.Quest
+            };
+            gameNotification.body = UpdateAllQuests();
+            return gameNotification;
         }
     }
 }
