@@ -13,6 +13,7 @@ using GameLogic.Library.GameStateLogic;
 using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
+using Izeron.Library.Notification;
 using Izeron.Library.Persons;
 using Izeron.Library.Persons.Enemies.Tier0;
 using Izeron.Library.Persons.Tier0;
@@ -97,14 +98,17 @@ namespace SomeKindOfGame
 
         void timer_Tick(object sender, EventArgs e)
         {
-            this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
+            string dateTime = DateTime.Now.ToShortTimeString();
+            this.timeNow.Content = $"Сейчас: {dateTime}";
             string allMessage = string.Empty;
             string FightMessage = string.Empty;
+            string anotherMessage = string.Empty;
+            string QuestMessage = string.Empty;
             if (gameProcess.CurrentState == GameState.Fighting)
             {
                 try
                 {
-                    FightMessage = GameManager.GameTick(new IUpdatable[] { battleClass, quests,monsterRoaster });
+                    GameManager.GameTick(new IUpdatable[] { battleClass, quests });
                 }
                 catch (YouDeadException ex)
                 {
@@ -112,18 +116,38 @@ namespace SomeKindOfGame
                 }
                 gameProcess.MoveNext(monsterRoaster.getMonsterRoastForFloor(1));
             }
-            else
+            else if (gameProcess.CurrentState == GameState.BackToTown)
             {
-                allMessage = (GameManager.GameTick(new IUpdatable[] { quests,monsterRoaster }));
+                //anotherMessage = "Возвращаемся в город" + Environment.NewLine;
                 gameProcess.MoveNext(null);
             }
-            if (!string.IsNullOrEmpty(allMessage.Trim()) || !string.IsNullOrEmpty(FightMessage.Trim()))
+            else if(gameProcess.CurrentState==GameState.Healing)
             {
-                this.notificationFightText.Text += FightMessage;
-                this.notificationAllText.Text += allMessage + FightMessage;
-                this.textFightViewerScroll.ScrollToEnd();
-                this.textAllViewerScroll.ScrollToEnd();
+                //anotherMessage = "Лечимся" + Environment.NewLine;
+                gameProcess.MoveNext(null);
             }
+            else
+            {
+                GameManager.GameTick(new IUpdatable[] { quests });
+                gameProcess.MoveNext(null);
+            }
+            FightMessage = GameManager.getUnreadLogsString(GameNotificationState.Battle);
+            QuestMessage = GameManager.getUnreadLogsString(GameNotificationState.Quest);
+            anotherMessage = GameManager.getUnreadLogsString(GameNotificationState.Other);
+            allMessage = GameManager.getUnreadLogsString(GameNotificationState.All);
+
+            this.notificationAllText.Text += allMessage;
+            this.textAllViewerScroll.ScrollToEnd();
+
+            this.notificationFightText.Text += FightMessage;
+            this.textFightViewerScroll.ScrollToEnd();
+
+            this.notificationQuestText.Text += QuestMessage;
+            this.textQuestViewerScroll.ScrollToEnd();
+
+            this.notificationAnotherText.Text += anotherMessage;
+            this.textAnotherViewerScroll.ScrollToEnd();
+
         }
 
         class someclass : IUpdatable
@@ -136,26 +160,29 @@ namespace SomeKindOfGame
                 this.Pers = pers;
                 this.Enemies = enemies;
             }
-            public string Update()
+            public GameNotification Update()
             {
-                string notification = string.Empty;
+                GameNotification notification = new GameNotification()
+                {
+                    gameNotificationState = GameNotificationState.Battle
+                };
                 if (Enemies.Count == 0) return notification;
                 var Enemy = Enemies.First();
                 if (Enemy is IDmgable dmg)
                 {
                     Pers.MakeDmg(dmg);
-                    notification += @$"Наносим {Pers.attackAmount()} урона по противнику [{Enemy}]!" + Environment.NewLine;
+                    notification.body += @$"Наносим {Pers.attackAmount()} урона по противнику [{Enemy}]!" + Environment.NewLine;
                 }
                 if(Enemy.isDead())
                 {
-                    notification += @$"Противник [{Enemy}] получает смертельную рану!" + Environment.NewLine;
+                    notification.body += @$"Противник [{Enemy}] получает смертельную рану!" + Environment.NewLine;
                 }
                 else
                 {
                     if (Pers is IDmgable pdmg)
                     {
                         Enemy.MakeDmg(pdmg);
-                        notification += $@"Противник [{Enemy}] наносит {Enemy.attackAmount()} урона по герою!" + Environment.NewLine;
+                        notification.body += $@"Противник [{Enemy}] наносит {Enemy.attackAmount()} урона по герою!" + Environment.NewLine;
                     }
                 }
                 Enemies.RemoveAll(x => x.isDead());

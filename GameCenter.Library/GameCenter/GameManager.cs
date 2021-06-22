@@ -1,10 +1,13 @@
 ﻿using GameLogic.Library.GameStateLogic;
+using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
+using Izeron.Library.Notification;
 using Izeron.Library.Persons;
 using QuestHandlerSystem.Library;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GameCenter.Library.GameCenter
@@ -18,6 +21,7 @@ namespace GameCenter.Library.GameCenter
         private static string _excMessage = string.Empty;
         private static QuestObserver _questObserver;
         private static GameProcess _gameProcess;
+        private static List<GameNotification> _gameLogs= new List<GameNotification>();
 
         private GameManager() { }
 
@@ -36,20 +40,26 @@ namespace GameCenter.Library.GameCenter
             return _instance;
         }
         
-        public static string GameTick(IUpdatable[] updatableObjects)
+        public static void GameTick(IUpdatable[] updatableObjects)
         {
-            string notification = string.Empty;
-            if (_lose) return string.Empty;
+            if (_lose) return;
             try
             {
-                if (_isRunTick) return string.Empty;
+                if (_isRunTick) return;
                 lock (_syncRoot)
                 {
-                    if (_isRunTick) return string.Empty;
+                    if (_isRunTick) return;
                     _isRunTick = true;
                     foreach (var obj in updatableObjects)
                     {
-                        notification+= obj.Update();
+                        GameNotification notification = obj.Update();
+                        _gameLogs.Add(notification);
+                        _gameLogs.Add(new GameNotification
+                        {
+                            body = notification.body,
+                            gameNotificationState = GameNotificationState.All,
+                            isRead = false
+                        });
                     }
                 }
             }
@@ -66,8 +76,40 @@ namespace GameCenter.Library.GameCenter
             finally
             {
                 _isRunTick = false;
+                updateLogs();
             }
-            return notification;
+        }
+
+        private static void updateLogs()
+        {
+            _gameLogs.RemoveAll(x => string.IsNullOrEmpty(x.body));
+            var keys = _gameLogs.GroupBy(x => x.gameNotificationState).Where(x => x.Count() > 10).Select(x => x.Key).ToList();
+            foreach(var key in keys)
+            {
+                _gameLogs.Remove(_gameLogs.Where(x => x.gameNotificationState == key).FirstOrDefault());
+            }
+        }
+
+        public static List<GameNotification> getUnreadLogs(GameNotificationState gameNotificationState)
+        {
+            var notification = _gameLogs.Where(log => log.gameNotificationState == gameNotificationState && log.isRead == false).Select(log => log);
+            foreach(var not in notification)
+            {
+                not.isRead = true;
+            }
+            return notification.ToList();
+        }
+
+        public static string getUnreadLogsString(GameNotificationState gameNotificationState)
+        {
+            var notification = _gameLogs.Where(log => log.gameNotificationState == gameNotificationState && log.isRead == false).Select(log => log);
+            StringBuilder sb = new StringBuilder();
+            foreach (var not in notification)
+            {
+                not.isRead = true;
+                sb.Append($"[{not.TimeStamp}] {not.body}");
+            }
+            return sb.ToString();
         }
 
         public static QuestObserver InitiateQuestObserver(AbstractPerson hero)
