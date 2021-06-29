@@ -15,7 +15,7 @@ namespace GameCenter.Library.GameCenter
         {
             CurrentState = GameState.InTown;
             if (Hero == null) throw new NullReferenceException("field Hero is empty");
-            if (gameStateLogic == null) throw new NullReferenceException("field gmaeStateLogic is empty");
+            if (gameStateLogic == null) throw new NullReferenceException("field gameStateLogic is empty");
             _hero = Hero;
             _gameStateLogic = gameStateLogic;
         }
