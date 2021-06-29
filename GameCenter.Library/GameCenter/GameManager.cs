@@ -18,7 +18,6 @@ namespace GameCenter.Library.GameCenter
         private static object _syncRoot = new object();
         private static bool _isRunTick = false;
         private static bool _lose = false;
-        private static string _excMessage = string.Empty;
         private static QuestObserver _questObserver;
         private static GameProcess _gameProcess;
         private static List<GameNotification> _gameLogs= new List<GameNotification>();
@@ -66,7 +65,6 @@ namespace GameCenter.Library.GameCenter
             catch (YouDeadException ex) 
             {
                 _lose = true;
-                _excMessage = ex.Message;
                 throw ex;
             }
             catch(Exception ex)

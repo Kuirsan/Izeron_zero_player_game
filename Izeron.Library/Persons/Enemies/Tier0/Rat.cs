@@ -5,12 +5,14 @@ using System.Text;
 
 namespace Izeron.Library.Persons.Enemies.Tier0
 {
-    public class Rat : AbstractPerson,IDmgable
+    public class Rat : AbstractPerson,IDmgable,IXPTransmittable
     {
+        protected float _xpToGain;
         public Rat(int HP, int LVL, string Name,float str) : base(HP, LVL, Name)
         {
 
             _str = str;
+            _xpToGain = HP;
         }
 
         public float Attack => _str;
@@ -46,6 +48,11 @@ namespace Izeron.Library.Persons.Enemies.Tier0
         protected override void Death()
         {
             _isDead = true;
+        }
+
+        public void TransmitXP(IXPRecievable recievable)
+        {
+            recievable.ReceiveXP(_xpToGain);
         }
     }
 }

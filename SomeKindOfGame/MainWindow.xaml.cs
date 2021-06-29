@@ -108,7 +108,7 @@ namespace SomeKindOfGame
             {
                 try
                 {
-                    GameManager.GameTick(new IUpdatable[] { battleClass, quests });
+                    GameManager.GameTick(new IUpdatable[] { battleClass, quests, monsterRoaster });
                 }
                 catch (YouDeadException ex)
                 {
@@ -176,6 +176,13 @@ namespace SomeKindOfGame
                 if(Enemy.isDead())
                 {
                     notification.body += @$"Противник [{Enemy}] получает смертельную рану!" + Environment.NewLine;
+                    if(Enemy is IXPTransmittable xpTransmittable)
+                    {
+                        if(Pers is IXPRecievable xpRecievable)
+                        {
+                            xpTransmittable.TransmitXP(xpRecievable);
+                        }
+                    }
                 }
                 else
                 {

@@ -1,4 +1,5 @@
 ﻿using Izeron.Library.Interfaces;
+using Izeron.Library.Notification;
 using Izeron.Library.Persons;
 using System;
 using System.Collections.Generic;
@@ -42,13 +43,17 @@ namespace GameLogic.Library.GameBattleRoaster
             return null;
         }
 
-        public string Update()
+        public GameNotification Update()
         {
+            GameNotification gameNotification = new GameNotification
+            {
+                gameNotificationState = Izeron.Library.Enums.GameNotificationState.Battle
+            };
             foreach(var monsterByFloor in _battleRoasterByFloor)
             {
                 monsterByFloor.Value.RemoveAll(x => x.isDead());
             }
-            return string.Empty;
+            return gameNotification;
         }
     }
 }
