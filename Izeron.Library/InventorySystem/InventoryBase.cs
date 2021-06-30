@@ -7,9 +7,13 @@ namespace Izeron.Library.InventorySystem
 {
     public abstract class InventoryBase
     {
-        private protected int _cellNumber;
+        private protected int _capacity;
         private protected List<ILootable> _inventory;
-        public abstract void Add(ILootable item);
-        public abstract void Remove(ILootable item);
+        protected abstract void Add(ILootable item);
+        protected abstract void Remove(ILootable item);
+        public abstract bool tryToAddItemToInventory(ILootable item);
+        public abstract bool tryToRemoveFromInventory(ILootable item);
+        public abstract bool somethingInInventory();
+        public abstract ILootable getItemForSale();
     }
 }

@@ -14,6 +14,7 @@ using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using Izeron.Library.Notification;
+using Izeron.Library.Objects.LootableObjects;
 using Izeron.Library.Persons;
 using Izeron.Library.Persons.Enemies.Tier0;
 using Izeron.Library.Persons.Tier0;
@@ -35,16 +36,6 @@ namespace SomeKindOfGame
         GameProcess gameProcess;
         BattleRoasterManager monsterRoaster=new BattleRoasterManager();
 
-        static string ByteArrayToString(byte[] arrInput)
-        {
-            int i;
-            StringBuilder sOutput = new StringBuilder(arrInput.Length);
-            for (i = 0; i < arrInput.Length; i++)
-            {
-                sOutput.Append(arrInput[i].ToString("X2"));
-            }
-            return sOutput.ToString();
-        }
         public MainWindow()
         {
 
@@ -53,6 +44,18 @@ namespace SomeKindOfGame
                 {0,11f},{1,20f},{2,30f},{3,40f},{4,50f},{5,60f},{6,70f},{7,80f},{8,90f},{9,100f},{10,130f}
             };
             Pers = new Peasant(1, dict);
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
             Enemy = new Peasant(1, dict);
             quests = GameManager.InitiateQuestObserver(Pers);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
@@ -98,6 +101,7 @@ namespace SomeKindOfGame
 
         void timer_Tick(object sender, EventArgs e)
         {
+
             string dateTime = DateTime.Now.ToShortTimeString();
             this.timeNow.Content = $"Сейчас: {dateTime}";
             string allMessage = string.Empty;

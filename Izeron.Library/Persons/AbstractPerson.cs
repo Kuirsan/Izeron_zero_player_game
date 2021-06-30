@@ -1,5 +1,6 @@
 ﻿using Izeron.Library.Enums;
 using Izeron.Library.Interfaces;
+using Izeron.Library.InventorySystem;
 using Izeron.Library.Objects;
 using System.Collections.Generic;
 
@@ -15,7 +16,6 @@ namespace Izeron.Library.Persons
         private protected int _lvl;
         private protected HashSet<PersonTags> _personTags;
         private protected bool _isDead = false;
-        private protected int[] _inventory;
         private protected int _money;
         public int MaxHealth
         {
@@ -67,12 +67,26 @@ namespace Izeron.Library.Persons
 
         virtual public bool somethingInInventory()
         {
-            return _inventory?.Length>0? true:false;
+            return false;
         }
+
+        public virtual bool AddItemToInventory(ILootable item)
+        {
+            return false;
+        }
+
         virtual public bool isAnyMoney()
         {
             return _money > 0;
         }
         abstract public float attackAmount();
+        public virtual void addMoneyAmount(int money)
+        {
+            _money += money;
+        }
+        public virtual void sellIteminInventory()
+        {
+
+        }
     }
 }
