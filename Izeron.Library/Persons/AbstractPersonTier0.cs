@@ -99,6 +99,17 @@ namespace Izeron.Library.Persons
             var item = _inventory.getItemForSale();
             addMoneyAmount(item.Volume);
             _inventory.tryToRemoveFromInventory(item);
+        
+        }
+        public override void setMoneyAmount(int value)
+        {
+            _money = value;
+            OnPropertyChanged("CharacterList");
+        }
+        public override void addMoneyAmount(int money)
+        {
+            base.addMoneyAmount(money);
+            OnPropertyChanged("CharacterList");
         }
     }
 }

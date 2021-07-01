@@ -25,6 +25,7 @@ namespace Izeron.Library.Persons.Tier0
         {
             //TODO rewrite
             _str = Str;
+
         }
         /// <summary>
         /// Make damage to instance of IDmgable
@@ -68,6 +69,7 @@ namespace Izeron.Library.Persons.Tier0
             {
                 Dictionary<string, string> valPairs = base.CharacterList;
                 valPairs.Add("Урон", Attack.ToString());
+                valPairs.Add("Монеты", Money.ToString());
                 return valPairs;
             }
         }

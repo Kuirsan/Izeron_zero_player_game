@@ -32,6 +32,7 @@
                 <StackPanel Grid.Row="0" Grid.Column="1">
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2">
+                    <ListBox x:Name="somethingC" />
                 </StackPanel>
             </Grid>
         </DockPanel>

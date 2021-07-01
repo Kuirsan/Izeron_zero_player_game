@@ -88,5 +88,7 @@ namespace Izeron.Library.Persons
         {
 
         }
+        public virtual int Money => _money;
+        public virtual void setMoneyAmount(int value) { }
     }
 }

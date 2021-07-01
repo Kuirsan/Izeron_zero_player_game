@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -61,16 +62,16 @@ namespace SomeKindOfGame
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
             var monstrRoast = new List<AbstractPerson>()
             {
-                new Rat(1, 1, "rat",1),
+                new Rat(2, 1, "rat",1),
                 new Rat(1, 1, "rat",1),
                 new Rat(1, 1, "rat",1)
             };
-            monsterRoaster.AddMonsterToRoaset(1, monstrRoast.ToArray());
-            monsterRoaster.AddMonsterToRoaset(1, new AbstractPerson[] {new Rat(1, 1, "rat",1),
+            monsterRoaster.AddMonsterToRoaster(1, monstrRoast.ToArray());
+            monsterRoaster.AddMonsterToRoaster(1, new AbstractPerson[] {new Rat(1, 1, "rat",1),
                 new Rat(2, 1, "wolf",1),
                 new Rat(3, 1, "wolf",1),
                 new Rat(5, 1, "giant rat",1)});
-            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10 }));
+            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10,goldReward=15 }));
             battleClass = new someclass(Pers, monsterRoaster.getMonsterRoastForFloor(1).ToList());
             InitializeComponent();
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";

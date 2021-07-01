@@ -10,7 +10,8 @@ namespace QuestHandlerSystem.Library.Quest.Models
         public int goldReward;
         public override string ToString()
         {
-            return @$"Опыт = {xpReward}
+            return @$"
+                      Опыт = {xpReward}
                       Золото = {goldReward}";
 
         }
