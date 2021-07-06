@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 using GameCenter.Library.GameCenter;
-using GameLogic.Library.GameBattleRoaster;
+using GameLogic.Library.GameBattleRoster;
 using GameLogic.Library.GameStateLogic;
 using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
@@ -35,7 +35,7 @@ namespace SomeKindOfGame
         someclass battleClass;
         QuestObserver quests;
         GameProcess gameProcess;
-        BattleRoasterManager monsterRoaster=new BattleRoasterManager();
+        BattleRosterManager monsterRoster=new BattleRosterManager();
 
         public MainWindow()
         {
@@ -66,13 +66,13 @@ namespace SomeKindOfGame
                 new Rat(1, 1, "rat",1),
                 new Rat(1, 1, "rat",1)
             };
-            monsterRoaster.AddMonsterToRoaster(1, monstrRoast.ToArray());
-            monsterRoaster.AddMonsterToRoaster(1, new AbstractPerson[] {new Rat(1, 1, "rat",1),
+            monsterRoster.AddMonsterToRoster(1, monstrRoast.ToArray());
+            monsterRoster.AddMonsterToRoster(1, new AbstractPerson[] {new Rat(1, 1, "rat",1),
                 new Rat(2, 1, "wolf",1),
                 new Rat(3, 1, "wolf",1),
                 new Rat(5, 1, "giant rat",1)});
             quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10,goldReward=15 }));
-            battleClass = new someclass(Pers, monsterRoaster.getMonsterRoastForFloor(1).ToList());
+            battleClass = new someclass(Pers, monsterRoster.getMonsterRoastForFloor(1).ToList());
             InitializeComponent();
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             DispatcherTimer timer = new DispatcherTimer();
@@ -113,13 +113,13 @@ namespace SomeKindOfGame
             {
                 try
                 {
-                    GameManager.GameTick(new IUpdatable[] { battleClass, quests, monsterRoaster });
+                    GameManager.GameTick(new IUpdatable[] { battleClass, quests, monsterRoster });
                 }
                 catch (YouDeadException ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-                gameProcess.MoveNext(monsterRoaster.getMonsterRoastForFloor(1));
+                gameProcess.MoveNext(monsterRoster.getMonsterRoastForFloor(1));
             }
             else if (gameProcess.CurrentState == GameState.BackToTown)
             {

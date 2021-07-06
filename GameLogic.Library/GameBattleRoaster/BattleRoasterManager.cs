@@ -6,39 +6,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GameLogic.Library.GameBattleRoaster
+namespace GameLogic.Library.GameBattleRoster
 {
-    public class BattleRoasterManager:IUpdatable
+    public class BattleRosterManager:IUpdatable
     {
-        private Dictionary<int, List<AbstractPerson>> _battleRoasterByFloor;
+        private Dictionary<int, List<AbstractPerson>> _battleRosterByFloor;
 
-        public BattleRoasterManager()
+        public BattleRosterManager()
         {
             Init();
         }
         private void Init()
         {
-            _battleRoasterByFloor = new Dictionary<int, List<AbstractPerson>>();
+            _battleRosterByFloor = new Dictionary<int, List<AbstractPerson>>();
         }
 
-        public void AddMonsterToRoaster(int floor,AbstractPerson[] monsters)
+        public void AddMonsterToRoster(int floor,AbstractPerson[] monsters)
         {
-            if (_battleRoasterByFloor.ContainsKey(floor))
+            if (_battleRosterByFloor.ContainsKey(floor))
             {
-                var tmpRoaster = getMonsterRoastForFloor(1);
-                tmpRoaster.AddRange(monsters);
-                _battleRoasterByFloor[floor] = tmpRoaster;
+                var tmpRoster = getMonsterRoastForFloor(1);
+                tmpRoster.AddRange(monsters);
+                _battleRosterByFloor[floor] = tmpRoster;
             }
             else
             {
-                _battleRoasterByFloor.Add(floor, monsters.ToList());
+                _battleRosterByFloor.Add(floor, monsters.ToList());
             }
         }
         public List<AbstractPerson> getMonsterRoastForFloor(int floor)
         {
-            if (_battleRoasterByFloor.ContainsKey(floor))
+            if (_battleRosterByFloor.ContainsKey(floor))
             {
-                return _battleRoasterByFloor[floor];
+                return _battleRosterByFloor[floor];
             }
             return null;
         }
@@ -49,7 +49,7 @@ namespace GameLogic.Library.GameBattleRoaster
             {
                 gameNotificationState = Izeron.Library.Enums.GameNotificationState.Battle
             };
-            foreach(var monsterByFloor in _battleRoasterByFloor)
+            foreach(var monsterByFloor in _battleRosterByFloor)
             {
                 monsterByFloor.Value.RemoveAll(x => x.isDead());
             }
