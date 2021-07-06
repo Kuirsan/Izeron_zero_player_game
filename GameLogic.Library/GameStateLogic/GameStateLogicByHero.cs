@@ -12,8 +12,8 @@ namespace GameLogic.Library.GameStateLogic
         public override GameState GetNextGameStateByPerson(AbstractPerson person, GameState currentState,object opt)
         {
             if (currentState == GameState.InTown) return InTownState(person);
-            if (currentState == GameState.SellingLoot) return GameState.InTown;
-            if (currentState == GameState.BuyGears) return GameState.InTown;
+            if (currentState == GameState.SellingLoot) return SellingLootState(person);
+            if (currentState == GameState.BuyGears) return BuyingGearState(person);
             if (currentState == GameState.Healing) return HealingState(person);
             if (currentState == GameState.Explorirng) return GameState.Fighting;
             if (currentState == GameState.Fighting) return FightingState(person,opt);
@@ -49,6 +49,22 @@ namespace GameLogic.Library.GameStateLogic
                 healHero.getHeal(1 + (int)(hero.MaxHealth * 0.1));
             }
             return GameState.Healing;
+        }
+        private GameState SellingLootState(AbstractPerson hero)
+        {
+            if (!hero.somethingInInventory()) return GameState.InTown;
+            hero.sellIteminInventory();
+            return GameState.SellingLoot;
+
+        }
+        private GameState BuyingGearState(AbstractPerson hero)
+        {
+            if (hero.isAnyMoney())
+            {
+                hero.setMoneyAmount(0);
+                return GameState.BuyGears;
+            }
+            return GameState.InTown;
         }
     }
 }

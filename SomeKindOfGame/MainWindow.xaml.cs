@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,6 +15,7 @@ using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using Izeron.Library.Notification;
+using Izeron.Library.Objects.LootableObjects;
 using Izeron.Library.Persons;
 using Izeron.Library.Persons.Enemies.Tier0;
 using Izeron.Library.Persons.Tier0;
@@ -35,16 +37,6 @@ namespace SomeKindOfGame
         GameProcess gameProcess;
         BattleRoasterManager monsterRoaster=new BattleRoasterManager();
 
-        static string ByteArrayToString(byte[] arrInput)
-        {
-            int i;
-            StringBuilder sOutput = new StringBuilder(arrInput.Length);
-            for (i = 0; i < arrInput.Length; i++)
-            {
-                sOutput.Append(arrInput[i].ToString("X2"));
-            }
-            return sOutput.ToString();
-        }
         public MainWindow()
         {
 
@@ -53,21 +45,33 @@ namespace SomeKindOfGame
                 {0,11f},{1,20f},{2,30f},{3,40f},{4,50f},{5,60f},{6,70f},{7,80f},{8,90f},{9,100f},{10,130f}
             };
             Pers = new Peasant(1, dict);
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
+            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
             Enemy = new Peasant(1, dict);
             quests = GameManager.InitiateQuestObserver(Pers);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
             var monstrRoast = new List<AbstractPerson>()
             {
-                new Rat(1, 1, "rat",1),
+                new Rat(2, 1, "rat",1),
                 new Rat(1, 1, "rat",1),
                 new Rat(1, 1, "rat",1)
             };
-            monsterRoaster.AddMonsterToRoaset(1, monstrRoast.ToArray());
-            monsterRoaster.AddMonsterToRoaset(1, new AbstractPerson[] {new Rat(1, 1, "rat",1),
+            monsterRoaster.AddMonsterToRoaster(1, monstrRoast.ToArray());
+            monsterRoaster.AddMonsterToRoaster(1, new AbstractPerson[] {new Rat(1, 1, "rat",1),
                 new Rat(2, 1, "wolf",1),
                 new Rat(3, 1, "wolf",1),
                 new Rat(5, 1, "giant rat",1)});
-            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10 }));
+            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10,goldReward=15 }));
             battleClass = new someclass(Pers, monsterRoaster.getMonsterRoastForFloor(1).ToList());
             InitializeComponent();
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
@@ -98,6 +102,7 @@ namespace SomeKindOfGame
 
         void timer_Tick(object sender, EventArgs e)
         {
+
             string dateTime = DateTime.Now.ToShortTimeString();
             this.timeNow.Content = $"Сейчас: {dateTime}";
             string allMessage = string.Empty;

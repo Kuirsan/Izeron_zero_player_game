@@ -23,4 +23,11 @@ namespace Izeron.Library.Enums
     {
 
     }
+    public enum SpecialEnemyTags
+    {
+        Strong,
+        Weak,
+        Big,
+        Small
+    }
 }

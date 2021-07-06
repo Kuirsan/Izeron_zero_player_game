@@ -1,0 +1,62 @@
+[
+  {
+    "Name": "Rat",
+    "AttackRange": {
+      "minParameter": 1,
+      "maxParameter": 1
+    },
+    "XPToGain": 1,
+    "possibleTags": [
+      {
+        "specialEnemyTag": 2,
+        "SpecialTagString": "Big"
+      },
+      {
+        "specialEnemyTag": 1,
+        "SpecialTagString": "Weak"
+      }
+    ],
+    "HPRange": {
+      "minParameter": 1,
+      "maxParameter": 4
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 2
+    }
+  },
+  {
+    "Name": "Wolf",
+    "AttackRange": {
+      "minParameter": 1,
+      "maxParameter": 2
+    },
+    "XPToGain": 2,
+    "possibleTags": [
+      {
+        "specialEnemyTag": 2,
+        "SpecialTagString": "Big"
+      },
+      {
+        "specialEnemyTag": 3,
+        "SpecialTagString": "Small"
+      },
+      {
+        "specialEnemyTag": 0,
+        "SpecialTagString": "Strong"
+      },
+      {
+        "specialEnemyTag": 1,
+        "SpecialTagString": "Weak"
+      }
+    ],
+    "HPRange": {
+      "minParameter": 1,
+      "maxParameter": 5
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 3
+    }
+  }
+]

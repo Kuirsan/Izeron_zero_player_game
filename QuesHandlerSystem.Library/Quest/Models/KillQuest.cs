@@ -20,6 +20,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
             {
                 hero.ReceiveXP(_reward.xpReward);
             }
+            pers.addMoneyAmount(_reward.goldReward);
         }
 
         public override string UpdateQuest()

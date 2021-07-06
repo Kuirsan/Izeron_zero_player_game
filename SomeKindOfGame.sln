@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameCenter.Library", "GameC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic.Library", "GameLogic.Library\GameLogic.Library.csproj", "{B18CE1C9-BE5B-4B31-AC21-C057B50BE9ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Izeron.Library.Tests", "Izeron.Library.Tests\Izeron.Library.Tests.csproj", "{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Izeron.Library.Tests", "Izeron.Library.Tests\Izeron.Library.Tests.csproj", "{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEditor", "GameEditor\GameEditor.csproj", "{60FC16D5-4CE3-4C1F-B056-DE03B496CC9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60FC16D5-4CE3-4C1F-B056-DE03B496CC9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60FC16D5-4CE3-4C1F-B056-DE03B496CC9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60FC16D5-4CE3-4C1F-B056-DE03B496CC9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60FC16D5-4CE3-4C1F-B056-DE03B496CC9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

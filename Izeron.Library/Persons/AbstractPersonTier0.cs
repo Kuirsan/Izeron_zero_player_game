@@ -1,4 +1,5 @@
 ﻿using Izeron.Library.Interfaces;
+using Izeron.Library.InventorySystem;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -14,6 +15,7 @@ namespace Izeron.Library.Persons
         private float _lvlMultiple = 1;
         private float _curXP = 0f;
         private protected Dictionary<int, float> _lvlTable;
+        private protected InventoryBase _inventory;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
@@ -41,10 +43,11 @@ namespace Izeron.Library.Persons
             }
         }
 
-        private protected AbstractPersonTier0(int HP, int LVL, string Name, Dictionary<int, float> LVLTable) : base(HP, LVL, Name)
+        private protected AbstractPersonTier0(int HP, int LVL, string Name, Dictionary<int, float> LVLTable,InventoryBase inventory) : base(HP, LVL, Name)
         {
             _lvlTable = LVLTable;
             _lvlCup = _lvlTable.Count-1;
+            _inventory = inventory;
         }
         /// <summary>
         /// Gain amount of XP to person. When XP>=MaxXP then lvlUp
@@ -80,6 +83,33 @@ namespace Izeron.Library.Persons
         public void ReceiveXP(float Amount)
         {
             _gainXP(Amount);
+        }
+
+        public override bool AddItemToInventory(ILootable item)
+        {
+            return _inventory.tryToAddItemToInventory(item);
+        }
+        public override bool somethingInInventory()
+        {
+            return _inventory.somethingInInventory();
+        }
+
+        public override void sellIteminInventory()
+        {
+            var item = _inventory.getItemForSale();
+            addMoneyAmount(item.Volume);
+            _inventory.tryToRemoveFromInventory(item);
+        
+        }
+        public override void setMoneyAmount(int value)
+        {
+            _money = value;
+            OnPropertyChanged("CharacterList");
+        }
+        public override void addMoneyAmount(int money)
+        {
+            base.addMoneyAmount(money);
+            OnPropertyChanged("CharacterList");
         }
     }
 }

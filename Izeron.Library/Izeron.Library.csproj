@@ -5,4 +5,17 @@
     <RootNamespace>Izeron.Library</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Update="EnemiesLibrary\enemies.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="QuestLibrary\quests.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="QuestLibrary\" />
+  </ItemGroup>
+
 </Project>

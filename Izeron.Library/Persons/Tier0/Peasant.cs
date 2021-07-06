@@ -1,6 +1,7 @@
 ﻿using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
+using Izeron.Library.InventorySystem;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +16,7 @@ namespace Izeron.Library.Persons.Tier0
         public float Attack => (_str * 1.1F) + _attackModifier;
 
         private protected int _str;
-        private Peasant(Dictionary<int, float> LVLTable) : base(4, 0, "Peasant", LVLTable)
+        private Peasant(Dictionary<int, float> LVLTable) : base(4, 0, "Peasant", LVLTable,new InventoryPerson(10))
         {
             //TODO rewrite
             _personTags.Add(PersonTags.Human);
@@ -24,6 +25,7 @@ namespace Izeron.Library.Persons.Tier0
         {
             //TODO rewrite
             _str = Str;
+
         }
         /// <summary>
         /// Make damage to instance of IDmgable
@@ -67,6 +69,7 @@ namespace Izeron.Library.Persons.Tier0
             {
                 Dictionary<string, string> valPairs = base.CharacterList;
                 valPairs.Add("Урон", Attack.ToString());
+                valPairs.Add("Монеты", Money.ToString());
                 return valPairs;
             }
         }

@@ -21,7 +21,7 @@ namespace GameLogic.Library.GameBattleRoaster
             _battleRoasterByFloor = new Dictionary<int, List<AbstractPerson>>();
         }
 
-        public void AddMonsterToRoaset(int floor,AbstractPerson[] monsters)
+        public void AddMonsterToRoaster(int floor,AbstractPerson[] monsters)
         {
             if (_battleRoasterByFloor.ContainsKey(floor))
             {
