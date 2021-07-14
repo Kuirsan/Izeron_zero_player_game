@@ -58,5 +58,35 @@
       "minParameter": 1,
       "maxParameter": 3
     }
+  },
+  {
+    "Name": "Warg",
+    "AttackRange": {
+      "minParameter": 1,
+      "maxParameter": 3
+    },
+    "XPToGain": 4,
+    "possibleTags": [
+      {
+        "specialEnemyTag": 2,
+        "SpecialTagString": "Big"
+      },
+      {
+        "specialEnemyTag": 0,
+        "SpecialTagString": "Strong"
+      },
+      {
+        "specialEnemyTag": 1,
+        "SpecialTagString": "Weak"
+      }
+    ],
+    "HPRange": {
+      "minParameter": 2,
+      "maxParameter": 6
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 4
+    }
   }
 ]

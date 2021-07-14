@@ -80,7 +80,7 @@ namespace Izeron.Library.Persons
         /// Recieve amount of XP.
         /// </summary>
         /// <param name="Amount">How many XP get chracter</param>
-        public void ReceiveXP(float Amount)
+        public void ReceiveXP(int Amount)
         {
             _gainXP(Amount);
         }

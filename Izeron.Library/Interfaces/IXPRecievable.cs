@@ -9,6 +9,6 @@
         /// Get amount of xp
         /// </summary>
         /// <param name="Amount"></param>
-        public void ReceiveXP(float Amount);
+        public void ReceiveXP(int Amount);
     }
 }

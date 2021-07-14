@@ -12,8 +12,8 @@ namespace Izeron.Library.Persons.Tier0
     /// </summary>
     public class Peasant : AbstractPersonTier0, IDmgable,IHealable
     {
-        private protected float _attackModifier = 0.0F;
-        public float Attack => (_str * 1.1F) + _attackModifier;
+        private protected int _attackModifier = 0;
+        public int Attack => _str  + _attackModifier;
 
         private protected int _str;
         private Peasant(Dictionary<int, float> LVLTable) : base(4, 0, "Peasant", LVLTable,new InventoryPerson(10))
@@ -33,7 +33,7 @@ namespace Izeron.Library.Persons.Tier0
         /// <param name="dmgable"></param>
         public override void MakeDmg(IDmgable dmgable)
         {
-            dmgable.GetDamage((int)Attack);
+            dmgable.GetDamage(Attack);
         }
         /// <summary>
         /// Get amount of damage
@@ -75,8 +75,8 @@ namespace Izeron.Library.Persons.Tier0
         }
         protected override void _lvlUp()
         {
-            _str += (Int32)(new Random().NextDouble()+0.015f*_lvl);
-            _maxHealth += new Random().Next(1,3);
+            _str += (Int32)(new Random().NextDouble()+0.020f*_lvl* _str);
+            _maxHealth += new Random().Next((int)(1 + 0.015f * _lvl), (int)(3*(1 + 0.015f * _lvl)));
             base._lvlUp();
         }
 
@@ -94,7 +94,7 @@ namespace Izeron.Library.Persons.Tier0
             OnPropertyChanged("CharacterList");
         }
 
-        public override float attackAmount()
+        public override int attackAmount()
         {
             return Attack;
         }

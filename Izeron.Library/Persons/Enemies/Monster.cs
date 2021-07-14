@@ -3,25 +3,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Izeron.Library.Persons.Enemies.Tier0
+namespace Izeron.Library.Persons.Enemies
 {
-    public class Rat : AbstractPerson,IDmgable,IXPTransmittable
+    public class Monster : AbstractPerson, IXPTransmittable,IDmgable
     {
-        protected int _xpToGain;
-        private protected int _str;
+        private int _attack;
+        private int _xpToGain;
 
-        public Rat(int HP, int LVL, string Name,int str) : base(HP, LVL, Name)
+        public Monster(EnemyFillModel model):base(model.HP,1,model.Name)
         {
-
-            _str = str;
-            _xpToGain = HP;
+            _attack = model.Attack;
+            _xpToGain = model.XPToGain;
         }
-
-        public int Attack => _str;
 
         public override int attackAmount()
         {
-            return Attack;
+            return _attack;
+        }
+
+        public override void MakeDmg(IDmgable dmgable)
+        {
+            dmgable.GetDamage(attackAmount());
         }
 
         public void GetDamage(int Amount)
@@ -39,15 +41,6 @@ namespace Izeron.Library.Persons.Enemies.Tier0
                     Death();
                 }
             }
-        }
-
-        public override void MakeDmg(IDmgable dmgable)
-        {
-            dmgable.GetDamage((int)Attack);
-        }
-        protected override void Death()
-        {
-            _isDead = true;
         }
 
         public void TransmitXP(IXPRecievable recievable)

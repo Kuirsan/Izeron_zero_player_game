@@ -6,7 +6,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
 {
     public class RewardModel
     {
-        public float xpReward;
+        public int xpReward;
         public int goldReward;
         public override string ToString()
         {

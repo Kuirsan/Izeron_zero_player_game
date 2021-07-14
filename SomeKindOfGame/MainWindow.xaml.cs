@@ -67,16 +67,13 @@ namespace SomeKindOfGame
                 new Rat(1, 1, "rat",1)
             };
             monsterRoster.AddMonsterToRoster(1, monstrRoast.ToArray());
-            monsterRoster.AddMonsterToRoster(1, new AbstractPerson[] {new Rat(1, 1, "rat",1),
-                new Rat(2, 1, "wolf",1),
-                new Rat(3, 1, "wolf",1),
-                new Rat(5, 1, "giant rat",1)});
+            monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 200).ToArray());
             quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10,goldReward=15 }));
             battleClass = new someclass(Pers, monsterRoster.getMonsterRoastForFloor(1).ToList());
             InitializeComponent();
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromSeconds(0.25);
             timer.Tick += timer_Tick;
             timer.Start();
             LoadGridHero();

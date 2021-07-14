@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <None Update="EnemiesLibrary\enemies.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="QuestLibrary\quests.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

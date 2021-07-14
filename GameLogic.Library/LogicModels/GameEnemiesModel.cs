@@ -10,7 +10,7 @@ namespace GameLogic.Library.LogicModels
     {
         public string Name { get; set; } = "defaultName";
         public ParameterRange AttackRange { get; set; } = new ParameterRange(1, 1);
-        public float XPToGain { get; set; } = 0f;
+        public int XPToGain { get; set; } = 0;
         public SpecialEnemyTag[] possibleTags { get; set; }
         public ParameterRange HPRange { get; set; }
         public ParameterRange FloorRange { get; set; }

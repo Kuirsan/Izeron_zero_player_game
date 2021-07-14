@@ -79,7 +79,7 @@ namespace Izeron.Library.Persons
         {
             return _money > 0;
         }
-        abstract public float attackAmount();
+        abstract public int attackAmount();
         public virtual void addMoneyAmount(int money)
         {
             _money += money;
