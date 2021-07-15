@@ -1,4 +1,5 @@
-﻿using Izeron.Library.Interfaces;
+﻿using Izeron.Library.Enums;
+using Izeron.Library.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,11 +10,50 @@ namespace Izeron.Library.Persons.Enemies
     {
         private int _attack;
         private int _xpToGain;
-
+        private protected HashSet<SpecialEnemyTags> _enemyTags;
+        private string _prefix = string.Empty;
         public Monster(EnemyFillModel model):base(model.HP,1,model.Name)
         {
             _attack = model.Attack;
             _xpToGain = model.XPToGain;
+            _enemyTags = model.EnemyTags;
+            initiateTags();
+        }
+
+        //TODO
+        private void initiateTags()
+        {
+            float expMultiplier = 1f;
+            foreach(var tag in _enemyTags)
+            {
+                if (tag == SpecialEnemyTags.Big)
+                {
+                    _health = (int)(_maxHealth * 1.3f);
+                    _maxHealth = (int)(_maxHealth * 1.3f);
+                    _prefix += "Big ";
+                    expMultiplier += 0.3f;
+                }
+                if (tag == SpecialEnemyTags.Small)
+                {
+                    _health = (int)(_maxHealth * 0.3f);
+                    _maxHealth = (int)(_maxHealth * 0.3f);
+                    _prefix += "Small ";
+                    expMultiplier -= 0.3f;
+                }
+                if (tag == SpecialEnemyTags.Strong)
+                {
+                    _attack++;
+                    _prefix += "Strong ";
+                    expMultiplier += 0.3f;
+                }
+                if (tag == SpecialEnemyTags.Weak)
+                {
+                    _attack =_attack==1 ? 1 : --_attack;
+                    _prefix += "Weak ";
+                    expMultiplier -= 0.3f;
+                }
+            }
+            _xpToGain = (int)(_xpToGain * expMultiplier);
         }
 
         public override int attackAmount()
@@ -46,6 +86,10 @@ namespace Izeron.Library.Persons.Enemies
         public void TransmitXP(IXPRecievable recievable)
         {
             recievable.ReceiveXP(_xpToGain);
+        }
+        public override string ToString()
+        {
+            return $"{_prefix}{base.ToString()}";
         }
     }
 }

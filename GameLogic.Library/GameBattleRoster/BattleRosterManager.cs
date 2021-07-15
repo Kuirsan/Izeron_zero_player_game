@@ -1,4 +1,5 @@
 ﻿using GameLogic.Library.LogicModels;
+using Izeron.Library.Enums;
 using Izeron.Library.Interfaces;
 using Izeron.Library.Notification;
 using Izeron.Library.Persons;
@@ -85,12 +86,18 @@ namespace GameLogic.Library.GameBattleRoster
 
         private AbstractPerson generateMonster(GameEnemiesModel monsterModel)
         {
+            HashSet<SpecialEnemyTags> enemyTags = new HashSet<SpecialEnemyTags>();
+            foreach(var tag in monsterModel.possibleTags)
+            {
+                if (new Random().Next(100) > 70) enemyTags.Add(tag.specialEnemyTag);
+            }
             EnemyFillModel enemyFillModel = new EnemyFillModel
             {
                 Attack = new Random().Next(monsterModel.AttackRange.minParameter, monsterModel.AttackRange.maxParameter),
                 HP = new Random().Next(monsterModel.HPRange.minParameter, monsterModel.HPRange.maxParameter),
                 Name = monsterModel.Name,
-                XPToGain = monsterModel.XPToGain
+                XPToGain = monsterModel.XPToGain,
+                EnemyTags=enemyTags
             };
 
             return new Monster(enemyFillModel);
