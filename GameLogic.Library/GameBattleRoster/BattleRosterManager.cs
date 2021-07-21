@@ -19,6 +19,9 @@ namespace GameLogic.Library.GameBattleRoster
         private Dictionary<int, List<AbstractPerson>> _battleRosterByFloor;
         private List<GameEnemiesModel> _enemiesModels;
 
+        public delegate void EnemiesLootHandle(int floorNumber, int enemiesNumber);
+        public event EnemiesLootHandle NotifyLootSystem;
+
         public BattleRosterManager()
         {
             Init();
@@ -107,10 +110,13 @@ namespace GameLogic.Library.GameBattleRoster
         {
             GameNotification gameNotification = new GameNotification
             {
-                gameNotificationState = Izeron.Library.Enums.GameNotificationState.Battle
+                gameNotificationState = GameNotificationState.Battle
             };
             foreach (var monsterByFloor in _battleRosterByFloor)
             {
+                int floor = monsterByFloor.Key;
+                int countDeadMonsters = monsterByFloor.Value.Where(x => x.isDead()).Count();
+                NotifyLootSystem?.Invoke(floor, countDeadMonsters);
                 monsterByFloor.Value.RemoveAll(x => x.isDead());
             }
             return gameNotification;

@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using GameCenter.Library.GameCenter;
 using GameLogic.Library.GameBattleRoster;
 using GameLogic.Library.GameStateLogic;
+using GameLogic.Library.LootManager;
 using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
@@ -31,33 +32,22 @@ namespace SomeKindOfGame
     {
         static CancellationTokenSource cancelToken = new CancellationTokenSource();
         AbstractPerson Pers;
-        AbstractPerson Enemy;
         someclass battleClass;
         QuestObserver quests;
         GameProcess gameProcess;
         BattleRosterManager monsterRoster=new BattleRosterManager();
+        LootManager lootManager = new LootManager();
 
         public MainWindow()
         {
+            monsterRoster.NotifyLootSystem += lootManager.generateLootAndAddByFloor;
 
             Dictionary<int, float> dict = new Dictionary<int, float>
             {
                 {0,11f},{1,20f},{2,30f},{3,40f},{4,50f},{5,60f},{6,70f},{7,80f},{8,90f},{9,100f},{10,130f}
             };
             Pers = new Peasant(1, dict);
-            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 1));
-            Pers.AddItemToInventory(new CommonLoot("Branch", 3));
-            Enemy = new Peasant(1, dict);
+
             quests = GameManager.InitiateQuestObserver(Pers);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
             var monstrRoast = new List<AbstractPerson>()
@@ -67,7 +57,7 @@ namespace SomeKindOfGame
                 new Rat(1, 1, "rat",1)
             };
             monsterRoster.AddMonsterToRoster(1, monstrRoast.ToArray());
-            monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 200).ToArray());
+            monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 10).ToArray());
             quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10,goldReward=15 }));
             battleClass = new someclass(Pers, monsterRoster.getMonsterRoastForFloor(1).ToList());
             InitializeComponent();
@@ -127,6 +117,10 @@ namespace SomeKindOfGame
             {
                 //anotherMessage = "Лечимся" + Environment.NewLine;
                 gameProcess.MoveNext(null);
+            }
+            else if(gameProcess.CurrentState==GameState.Looting)
+            {
+                gameProcess.MoveNext(lootManager.getNextLootableObject());
             }
             else
             {

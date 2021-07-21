@@ -17,7 +17,7 @@ namespace GameLogic.Library.GameStateLogic
             if (currentState == GameState.Healing) return HealingState(person);
             if (currentState == GameState.Explorirng) return GameState.Fighting;
             if (currentState == GameState.Fighting) return FightingState(person,opt);
-            if (currentState == GameState.Looting) return GameState.BackToTown;
+            if (currentState == GameState.Looting) return LootingState(person,opt);
             if (currentState == GameState.BackToTown) return GameState.InTown;
             return currentState;
         }
@@ -39,6 +39,16 @@ namespace GameLogic.Library.GameStateLogic
             }
             if (hero.CurrentHealth <= (hero.MaxHealth * 0.3)) return GameState.BackToTown;
             return GameState.Fighting;
+        }
+
+        private GameState LootingState(AbstractPerson hero, object opt)
+        {
+            if(opt is ILootable loot)
+            {
+                hero.AddItemToInventory(loot);
+                return GameState.Looting;
+            }
+            return GameState.BackToTown;
         }
 
         private GameState HealingState(AbstractPerson hero)
