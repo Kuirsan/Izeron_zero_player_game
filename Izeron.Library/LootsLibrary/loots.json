@@ -4,6 +4,21 @@
     "CostInGoldRange": {
       "minParameter": 1,
       "maxParameter": 3
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 2
+    }
+  },
+  {
+    "Name": "Iron Ingot",
+    "CostInGoldRange": {
+      "minParameter": 2,
+      "maxParameter": 5
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 2
     }
   }
 ]

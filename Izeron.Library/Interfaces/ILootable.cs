@@ -8,5 +8,6 @@ namespace Izeron.Library.Interfaces
     {
         void Loot();
         int Volume { get;}
+        string Name { get; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Izeron.Library.Interfaces;
+using Izeron.Library.Objects.LootableObjects;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,5 +16,6 @@ namespace Izeron.Library.InventorySystem
         public abstract bool tryToRemoveFromInventory(ILootable item);
         public abstract bool somethingInInventory();
         public abstract ILootable getItemForSale();
+        public abstract List<LootViewModel> GetInventoryList();
     }
 }

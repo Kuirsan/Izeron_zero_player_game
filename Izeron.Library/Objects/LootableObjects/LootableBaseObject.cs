@@ -15,6 +15,8 @@ namespace Izeron.Library.Objects.LootableObjects
 
         public int Volume => _costValue;
 
+        public string Name => _name;
+
         public abstract void Loot();
 
     }

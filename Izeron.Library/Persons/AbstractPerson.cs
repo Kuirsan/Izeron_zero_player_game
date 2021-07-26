@@ -2,6 +2,8 @@
 using Izeron.Library.Interfaces;
 using Izeron.Library.InventorySystem;
 using Izeron.Library.Objects;
+using Izeron.Library.Objects.LootableObjects;
+using System;
 using System.Collections.Generic;
 
 namespace Izeron.Library.Persons
@@ -17,6 +19,7 @@ namespace Izeron.Library.Persons
         private protected HashSet<PersonTags> _personTags;
         private protected bool _isDead = false;
         private protected int _money;
+        private protected InventoryBase _inventory;
         public int MaxHealth
         {
             get
@@ -55,6 +58,15 @@ namespace Izeron.Library.Persons
                 return valPairs;
             }
         }
+        virtual public List<LootViewModel> InventoryList
+        {
+            get
+            {
+                return _inventory.GetInventoryList();
+            }
+        }
+
+
         virtual public bool isDead()
         {
             return _isDead;

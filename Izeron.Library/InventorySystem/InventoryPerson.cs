@@ -1,4 +1,5 @@
 ﻿using Izeron.Library.Interfaces;
+using Izeron.Library.Objects.LootableObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,28 @@ namespace Izeron.Library.InventorySystem
             _capacity = capacity;
             _inventory = new List<ILootable>();
         }
+
+        public override List<LootViewModel> GetInventoryList()
+        {
+            Dictionary<string, LootViewModel> keyValPairs = new Dictionary<string, LootViewModel>();
+            foreach(var inv in _inventory)
+            {
+                if(inv is LootableBaseObject obj)
+                {
+                    if(keyValPairs.ContainsKey(obj.Name))
+                    {
+                        keyValPairs[obj.Name].Cost += obj.Volume;
+                        keyValPairs[obj.Name].qty++;
+                    }
+                    else
+                    {
+                        keyValPairs.Add(obj.Name, new LootViewModel(obj));
+                    }
+                }
+            }
+            return keyValPairs.Values.ToList();
+        }
+
 
         public override ILootable getItemForSale()
         {

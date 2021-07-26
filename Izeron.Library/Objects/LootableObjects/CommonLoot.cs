@@ -14,5 +14,10 @@ namespace Izeron.Library.Objects.LootableObjects
         {
             //TODO
         }
+
+        public CommonLoot(LootFillModel model):base(model.Name,model.Cost)
+        {
+
+        }
     }
 }

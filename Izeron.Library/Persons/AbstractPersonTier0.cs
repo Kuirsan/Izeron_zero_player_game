@@ -15,7 +15,6 @@ namespace Izeron.Library.Persons
         private float _lvlMultiple = 1;
         private float _curXP = 0f;
         private protected Dictionary<int, float> _lvlTable;
-        private protected InventoryBase _inventory;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
@@ -87,6 +86,7 @@ namespace Izeron.Library.Persons
 
         public override bool AddItemToInventory(ILootable item)
         {
+            OnPropertyChanged(nameof(InventoryList));
             return _inventory.tryToAddItemToInventory(item);
         }
         public override bool somethingInInventory()
@@ -99,7 +99,7 @@ namespace Izeron.Library.Persons
             var item = _inventory.getItemForSale();
             addMoneyAmount(item.Volume);
             _inventory.tryToRemoveFromInventory(item);
-        
+            OnPropertyChanged(nameof(InventoryList));
         }
         public override void setMoneyAmount(int value)
         {

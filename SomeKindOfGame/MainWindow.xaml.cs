@@ -88,6 +88,11 @@ namespace SomeKindOfGame
                 b2.Path = new PropertyPath(nameof(pp.CharacterList));
                 b2.Mode = BindingMode.OneWay;
                 this.gridHero.SetBinding(DataGrid.ItemsSourceProperty, b2);
+                Binding b3 = new Binding();
+                b3.Source = Pers;
+                b3.Path = new PropertyPath(nameof(pp.InventoryList));
+                b3.Mode = BindingMode.OneWay;
+                this.inventoryView.SetBinding(DataGrid.ItemsSourceProperty, b3);
             }
         }
 
@@ -213,7 +218,7 @@ namespace SomeKindOfGame
         }
         private void LoadGridInventory()
         {
-            this.inventoryView.HeadersVisibility = DataGridHeadersVisibility.None;
+            //this.inventoryView.HeadersVisibility = DataGridHeadersVisibility.None;
         }
 
         private void LoadGrids()
