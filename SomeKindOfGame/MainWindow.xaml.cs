@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +14,6 @@ using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using Izeron.Library.Notification;
-using Izeron.Library.Objects.LootableObjects;
 using Izeron.Library.Persons;
 using Izeron.Library.Persons.Enemies.Tier0;
 using Izeron.Library.Persons.Tier0;
@@ -35,11 +32,13 @@ namespace SomeKindOfGame
         someclass battleClass;
         QuestObserver quests;
         GameProcess gameProcess;
-        BattleRosterManager monsterRoster=new BattleRosterManager();
+        BattleRosterManager monsterRoster = new BattleRosterManager();
         LootManager lootManager = new LootManager();
 
         public MainWindow()
         {
+            InitializeComponent();
+
             monsterRoster.NotifyLootSystem += lootManager.generateLootAndAddByFloor;
 
             Dictionary<int, float> dict = new Dictionary<int, float>
@@ -58,15 +57,20 @@ namespace SomeKindOfGame
             };
             monsterRoster.AddMonsterToRoster(1, monstrRoast.ToArray());
             monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 10).ToArray());
-            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10,goldReward=15 }));
+            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10, goldReward = 15 }));
             battleClass = new someclass(Pers, monsterRoster.getMonsterRoastForFloor(1).ToList());
-            InitializeComponent();
+
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += timer_Tick;
             timer.Start();
-            LoadGridHero();
+            LoadGrids();
+            SetBindingsProperties();
+        }
+
+        private void SetBindingsProperties()
+        {
             if (Pers is AbstractPersonTier0 pp)
             {
                 Binding b = new Binding();
@@ -113,12 +117,12 @@ namespace SomeKindOfGame
                 //anotherMessage = "Возвращаемся в город" + Environment.NewLine;
                 gameProcess.MoveNext(null);
             }
-            else if(gameProcess.CurrentState==GameState.Healing)
+            else if (gameProcess.CurrentState == GameState.Healing)
             {
                 //anotherMessage = "Лечимся" + Environment.NewLine;
                 gameProcess.MoveNext(null);
             }
-            else if(gameProcess.CurrentState==GameState.Looting)
+            else if (gameProcess.CurrentState == GameState.Looting)
             {
                 gameProcess.MoveNext(lootManager.getNextLootableObject());
             }
@@ -169,12 +173,12 @@ namespace SomeKindOfGame
                     Pers.MakeDmg(dmg);
                     notification.body += @$"Наносим {Pers.attackAmount()} урона по противнику [{Enemy}]!" + Environment.NewLine;
                 }
-                if(Enemy.isDead())
+                if (Enemy.isDead())
                 {
                     notification.body += @$"Противник [{Enemy}] получает смертельную рану!" + Environment.NewLine;
-                    if(Enemy is IXPTransmittable xpTransmittable)
+                    if (Enemy is IXPTransmittable xpTransmittable)
                     {
-                        if(Pers is IXPRecievable xpRecievable)
+                        if (Pers is IXPRecievable xpRecievable)
                         {
                             xpTransmittable.TransmitXP(xpRecievable);
                         }
@@ -207,10 +211,20 @@ namespace SomeKindOfGame
             }
 
         }
+        private void LoadGridInventory()
+        {
+            this.inventoryView.HeadersVisibility = DataGridHeadersVisibility.None;
+        }
+
+        private void LoadGrids()
+        {
+            LoadGridHero();
+            LoadGridInventory();
+        }
 
         private void expBar_ToolTipOpening(object sender, ToolTipEventArgs e)
         {
-            if(Pers is AbstractPersonTier0 ap)
+            if (Pers is AbstractPersonTier0 ap)
             {
                 ((ProgressBar)e.Source).ToolTip = $"exp for next level: {ap.MaxXP - ap.CurrentXP} exp.";
             }

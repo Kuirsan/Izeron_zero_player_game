@@ -1,0 +1,9 @@
+[
+  {
+    "Name": "Branch",
+    "CostInGoldRange": {
+      "minParameter": 1,
+      "maxParameter": 3
+    }
+  }
+]

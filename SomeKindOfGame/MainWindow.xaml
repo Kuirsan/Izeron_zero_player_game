@@ -26,10 +26,13 @@
                 <GridSplitter Grid.Column="0" Width="3" Background="Gray"/>
                 <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
                 <StackPanel Grid.Row="0" Grid.Column="0">
+                    <Label Width="auto" HorizontalAlignment="Center">Hero attribute</Label>
                     <DataGrid x:Name="gridHero" Height="250" Margin="5 5" ColumnWidth="*"/>
                     <ProgressBar x:Name="expBar" Height="20" Margin="5 5" ToolTip="Xp for now: " ToolTipOpening="expBar_ToolTipOpening"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1">
+                    <Label Width="auto" HorizontalAlignment="Center">Inventory</Label>
+                    <DataGrid  x:Name="inventoryView" Height="250" Margin="5 5" ColumnWidth="*"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2">
                     <ListBox x:Name="somethingC" />
