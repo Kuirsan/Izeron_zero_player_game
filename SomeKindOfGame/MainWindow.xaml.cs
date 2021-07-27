@@ -56,7 +56,7 @@ namespace SomeKindOfGame
                 new Rat(1, 1, "rat",1)
             };
             monsterRoster.AddMonsterToRoster(1, monstrRoast.ToArray());
-            monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 10).ToArray());
+            monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 100).ToArray());
             quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10, goldReward = 15 }));
             battleClass = new someclass(Pers, monsterRoster.getMonsterRoastForFloor(1).ToList());
 

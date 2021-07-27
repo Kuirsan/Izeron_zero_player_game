@@ -86,8 +86,9 @@ namespace Izeron.Library.Persons
 
         public override bool AddItemToInventory(ILootable item)
         {
+            bool addedToInventory = _inventory.tryToAddItemToInventory(item);
             OnPropertyChanged(nameof(InventoryList));
-            return _inventory.tryToAddItemToInventory(item);
+            return addedToInventory;
         }
         public override bool somethingInInventory()
         {

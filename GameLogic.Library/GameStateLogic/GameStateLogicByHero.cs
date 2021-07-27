@@ -37,7 +37,7 @@ namespace GameLogic.Library.GameStateLogic
             {
                 if (enemies.Count == 0) return GameState.Looting;
             }
-            if (hero.CurrentHealth <= (hero.MaxHealth * 0.3)) return GameState.BackToTown;
+            if (hero.CurrentHealth <= (hero.MaxHealth * 0.3)) return GameState.Looting;
             return GameState.Fighting;
         }
 
