@@ -27,7 +27,7 @@ namespace Izeron.Library.Persons
             get => (int)_curXP;
         }
 
-        public int MaxXP
+        public int MaxXP 
         {
             get
             {
