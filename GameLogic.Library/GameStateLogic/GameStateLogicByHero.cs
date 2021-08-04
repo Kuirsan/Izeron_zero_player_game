@@ -1,5 +1,6 @@
 ﻿using Izeron.Library.Enums;
 using Izeron.Library.Interfaces;
+using Izeron.Library.Objects.Potions;
 using Izeron.Library.Persons;
 using System;
 using System.Collections.Generic;
@@ -9,15 +10,15 @@ namespace GameLogic.Library.GameStateLogic
 {
     public class GameStateLogicByHero : BaseGameStateLogic
     {
-        public override GameState GetNextGameStateByPerson(AbstractPerson person, GameState currentState,object opt)
+        public override GameState GetNextGameStateByPerson(AbstractPerson person, GameState currentState, object opt)
         {
             if (currentState == GameState.InTown) return InTownState(person);
             if (currentState == GameState.SellingLoot) return SellingLootState(person);
             if (currentState == GameState.BuyGears) return BuyingGearState(person);
             if (currentState == GameState.Healing) return HealingState(person);
             if (currentState == GameState.Explorirng) return GameState.Fighting;
-            if (currentState == GameState.Fighting) return FightingState(person,opt);
-            if (currentState == GameState.Looting) return LootingState(person,opt);
+            if (currentState == GameState.Fighting) return FightingState(person, opt);
+            if (currentState == GameState.Looting) return LootingState(person, opt);
             if (currentState == GameState.BackToTown) return GameState.InTown;
             return currentState;
         }
@@ -31,19 +32,30 @@ namespace GameLogic.Library.GameStateLogic
 
             return GameState.Explorirng;
         }
-        private GameState FightingState(AbstractPerson hero,object opt)
+        private GameState FightingState(AbstractPerson hero, object opt)
         {
-            if(opt is IList<AbstractPerson> enemies)
+            if (opt is IList<AbstractPerson> enemies)
             {
                 if (enemies.Count == 0) return GameState.Looting;
             }
-            if (hero.CurrentHealth <= (hero.MaxHealth * 0.3)) return GameState.Looting;
+            if (hero.CurrentHealth <= (hero.MaxHealth * 0.3))
+            {
+                if (hero.hasHealthPotion())
+                {
+                    hero.consumeHealthPotion();
+                    return GameState.Fighting;
+                }
+                else
+                {
+                    return GameState.Looting;
+                }
+            }
             return GameState.Fighting;
         }
 
         private GameState LootingState(AbstractPerson hero, object opt)
         {
-            if(opt is ILootable loot)
+            if (opt is ILootable loot)
             {
                 hero.AddItemToInventory(loot);
                 return GameState.Looting;
@@ -54,7 +66,7 @@ namespace GameLogic.Library.GameStateLogic
         private GameState HealingState(AbstractPerson hero)
         {
             if (hero.CurrentHealth == hero.MaxHealth) return GameState.InTown;
-            if(hero is IHealable healHero)
+            if (hero is IHealable healHero)
             {
                 healHero.getHeal(1 + (int)(hero.MaxHealth * 0.1));
             }
@@ -69,12 +81,22 @@ namespace GameLogic.Library.GameStateLogic
         }
         private GameState BuyingGearState(AbstractPerson hero)
         {
-            if (hero.isAnyMoney())
+            HealthPotionBase potion = new smallHealthPotion();
+
+            hero.addMoneyAmount(_bank);
+            _bank = 0;
+
+            if (potion.canBuy(hero) && hero.canAddAnotherHealthPotion())
             {
-                hero.setMoneyAmount(0);
+                potion.Buy(hero);
                 return GameState.BuyGears;
             }
-            return GameState.InTown;
+            else
+            {
+                _bank += hero.Money;
+                hero.setMoneyAmount(0);
+                return GameState.InTown;
+            }
         }
     }
 }
