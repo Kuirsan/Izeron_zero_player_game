@@ -2,6 +2,7 @@
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using Izeron.Library.InventorySystem;
+using Izeron.Library.Objects.Potions;
 using System;
 using System.Collections.Generic;
 
@@ -51,11 +52,19 @@ namespace Izeron.Library.Persons.Tier0
                 if (_health <= 0)
                 {
                     _health = 0;
-                    Death();
+                    if (_inventory.hasHealthPotions())
+                    {
+                        consumeHealthPotion();
+                    }
+                    else
+                    {
+                        Death();
+                    }
                 }
             }
             OnPropertyChanged("CharacterList");
         }
+
 
         protected override void Death()
         {
@@ -70,6 +79,7 @@ namespace Izeron.Library.Persons.Tier0
                 Dictionary<string, string> valPairs = base.CharacterList;
                 valPairs.Add("Урон", Attack.ToString());
                 valPairs.Add("Монеты", Money.ToString());
+                valPairs.Add("Лечебные зелья", _inventory.NumberOfHealthPotion.ToString());
                 return valPairs;
             }
         }
@@ -97,6 +107,23 @@ namespace Izeron.Library.Persons.Tier0
         public override int attackAmount()
         {
             return Attack;
+        }
+
+        public override void consumeHealthPotion()
+        {
+            var potion = _inventory.getHealthPotion();
+            if(potion!=null)
+            {
+                potion.HealPerson(this);
+                _inventory.tryToRemoveHealthPotion(potion);
+                OnPropertyChanged(nameof(CharacterList));
+            }
+        }
+
+        public override void addHealthPotion(HealthPotionBase healthPotion)
+        {
+            base.addHealthPotion(healthPotion);
+            OnPropertyChanged(nameof(CharacterList));
         }
     }
 }

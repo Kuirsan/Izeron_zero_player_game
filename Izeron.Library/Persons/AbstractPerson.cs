@@ -3,6 +3,7 @@ using Izeron.Library.Interfaces;
 using Izeron.Library.InventorySystem;
 using Izeron.Library.Objects;
 using Izeron.Library.Objects.LootableObjects;
+using Izeron.Library.Objects.Potions;
 using System;
 using System.Collections.Generic;
 
@@ -27,6 +28,8 @@ namespace Izeron.Library.Persons
                 return _maxHealth;
             }
         }
+
+
         public int CurrentHealth
         {
             get
@@ -102,5 +105,25 @@ namespace Izeron.Library.Persons
         }
         public virtual int Money => _money;
         public virtual void setMoneyAmount(int value) { }
+
+        public virtual void addHealthPotion(HealthPotionBase healthPotion)
+        {
+            _inventory.tryToAddHealthPotion(healthPotion);
+        }
+
+        public virtual void consumeHealthPotion() 
+        {
+            
+        }
+
+        public virtual bool hasHealthPotion()
+        {
+            return _inventory.hasHealthPotions();
+        }
+
+        public virtual bool canAddAnotherHealthPotion()
+        {
+            return !_inventory.isFullOfHealthPotions();
+        }
     }
 }
