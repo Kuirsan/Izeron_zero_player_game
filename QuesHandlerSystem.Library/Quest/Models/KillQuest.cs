@@ -30,6 +30,10 @@ namespace QuestHandlerSystem.Library.Quest.Models
             if (_enemies.Count == 0)
             {
                 isFinish = true;
+                if (_childQuests != null)
+                {
+                    foreach (var quest in _childQuests) quest.unBlockQuest();
+                }
                 notification=setNotificationText();
             }
             else
