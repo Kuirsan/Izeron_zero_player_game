@@ -8,9 +8,11 @@ namespace QuestHandlerSystem.Library.Quest.Models
 {
     public abstract class BaseQuestModel
     {
+        public delegate void UpdateQuestListHandle(BaseQuestModel[] childQuests);
+        public event UpdateQuestListHandle NotifyQuestListSystem;
+
         protected BaseQuestModel[] _childQuests;
 
-        private bool _isBlockedByParent;
         public string Title { get; set; }
 
         public string Description { get; set; }
@@ -23,30 +25,21 @@ namespace QuestHandlerSystem.Library.Quest.Models
             Description = description;
         }
 
-        public BaseQuestModel(string title,string description, BaseQuestModel[] childQuests):this(title,description)
+        public BaseQuestModel(string title,string description, BaseQuestModel[] childQuests, UpdateQuestListHandle updateQuestListHandle) :this(title,description)
         {
             _childQuests = childQuests;
-        }
-
-        public virtual bool isAvailable()
-        {
-            return !_isBlockedByParent;
-        }
-
-        public virtual void unBlockQuest()
-        {
-            _isBlockedByParent = false;
-        }
-
-        public virtual void BlockQuest()
-        {
-            _isBlockedByParent = true;
+            NotifyQuestListSystem += updateQuestListHandle;
         }
 
         public abstract void getReward(AbstractPerson pers);
 
         public abstract string UpdateQuest();
 
+        protected void InvokeNotifyQuestListSystem()
+        {
+            NotifyQuestListSystem?.Invoke(_childQuests);
+            _childQuests = null;
+        }
 
     }
 }

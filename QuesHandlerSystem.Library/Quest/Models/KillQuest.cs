@@ -9,7 +9,13 @@ namespace QuestHandlerSystem.Library.Quest.Models
         private List<AbstractPerson> _enemies;
         private RewardModel _reward;
 
-        public KillQuest(string title,string description, List<AbstractPerson> enemies,RewardModel reward):base(title,description)
+        public KillQuest(string title,string description, List<AbstractPerson> enemies,RewardModel reward) :base(title,description)
+        {
+            _enemies = enemies;
+            _reward = reward;
+        }
+
+        public KillQuest(string title, string description, List<AbstractPerson> enemies, RewardModel reward, BaseQuestModel[] childQuests, UpdateQuestListHandle updateQuestListHandle) :base(title, description, childQuests, updateQuestListHandle)
         {
             _enemies = enemies;
             _reward = reward;
@@ -32,7 +38,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
                 isFinish = true;
                 if (_childQuests != null)
                 {
-                    foreach (var quest in _childQuests) quest.unBlockQuest();
+                    InvokeNotifyQuestListSystem();
                 }
                 notification=setNotificationText();
             }

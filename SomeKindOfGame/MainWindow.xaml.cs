@@ -55,9 +55,19 @@ namespace SomeKindOfGame
                 new Rat(1, 1, "rat",1),
                 new Rat(1, 1, "rat",1)
             };
+            var monstrRoast2 = new List<AbstractPerson>()
+            {
+                new Rat(2, 1, "rat",1),
+                new Rat(1, 1, "rat",1),
+                new Rat(1, 1, "rat",1)
+            };
             monsterRoster.AddMonsterToRoster(1, monstrRoast.ToArray());
+            monsterRoster.AddMonsterToRoster(1, monstrRoast2.ToArray());
             monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 100).ToArray());
-            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10, goldReward = 15 }));
+            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10, goldReward = 15 },
+                new BaseQuestModel[]{
+                    new KillQuest("rats problem 2", "kill 3 rats", monstrRoast2, new RewardModel { xpReward = 100, goldReward = 115 })
+                },quests.updateQuestListFromChildQuests));
             battleClass = new someclass(Pers, monsterRoster.getMonsterRoastForFloor(1).ToList());
 
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";

@@ -29,7 +29,8 @@ namespace QuestHandlerSystem.Library
         protected string UpdateAllQuests()
         {
             string notification = string.Empty;
-            foreach (var quest in _activeQuests.Where(quest => !quest.isFinish))
+            var activeQuest = _activeQuests.Where(quest => !quest.isFinish).ToArray();
+            foreach (var quest in activeQuest)
             {
                 notification+=UpdateQuest(quest);
             }
@@ -59,6 +60,11 @@ namespace QuestHandlerSystem.Library
             };
             gameNotification.body = UpdateAllQuests();
             return gameNotification;
+        }
+
+        public void updateQuestListFromChildQuests(BaseQuestModel[] childQuests)
+        {
+            _activeQuests.AddRange(childQuests);
         }
     }
 }
