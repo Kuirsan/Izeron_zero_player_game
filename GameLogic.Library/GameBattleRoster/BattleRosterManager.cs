@@ -4,12 +4,10 @@ using Izeron.Library.Interfaces;
 using Izeron.Library.Notification;
 using Izeron.Library.Persons;
 using Izeron.Library.Persons.Enemies;
-using Izeron.Library.Persons.Enemies.Tier0;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 
 namespace GameLogic.Library.GameBattleRoster
@@ -57,6 +55,7 @@ namespace GameLogic.Library.GameBattleRoster
                 _battleRosterByFloor.Add(floor, monsters.ToList());
             }
         }
+
         public List<AbstractPerson> getMonsterRoastForFloor(int floor)
         {
             if (_battleRosterByFloor.ContainsKey(floor))
@@ -84,6 +83,21 @@ namespace GameLogic.Library.GameBattleRoster
                 }
                 monsters.Add(generateMonster(monsterModel));
             }
+            return monsters;
+        }
+
+        public List<AbstractPerson> generateMonstersByName(string[] monstersName)
+        {
+            List<AbstractPerson> monsters = new List<AbstractPerson>();
+            if (_enemiesModels == null) return monsters;
+
+            foreach(var mName in monstersName)
+            {
+                GameEnemiesModel monsterModel = _enemiesModels.Where(m => m.Name.ToLower() == mName.ToLower()).FirstOrDefault();
+                if (monsterModel == null) continue;
+                monsters.Add(generateMonster(monsterModel));
+            }
+
             return monsters;
         }
 

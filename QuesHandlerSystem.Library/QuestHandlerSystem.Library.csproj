@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GameLogic.Library\GameLogic.Library.csproj" />
     <ProjectReference Include="..\Izeron.Library\Izeron.Library.csproj" />
   </ItemGroup>
 

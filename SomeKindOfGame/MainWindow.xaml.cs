@@ -47,7 +47,7 @@ namespace SomeKindOfGame
             };
             Pers = new Peasant(1, dict);
 
-            quests = GameManager.InitiateQuestObserver(Pers);
+            quests = GameManager.InitiateQuestObserver(Pers,monsterRoster);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
             var monstrRoast = new List<AbstractPerson>()
             {
@@ -63,7 +63,7 @@ namespace SomeKindOfGame
             };
             monsterRoster.AddMonsterToRoster(1, monstrRoast.ToArray());
             monsterRoster.AddMonsterToRoster(1, monstrRoast2.ToArray());
-            monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 100).ToArray());
+            //monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 100).ToArray());
             quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10, goldReward = 15 },
                 new BaseQuestModel[]{
                     new KillQuest("rats problem 2", "kill 3 rats", monstrRoast2, new RewardModel { xpReward = 100, goldReward = 115 })
@@ -115,6 +115,7 @@ namespace SomeKindOfGame
             string FightMessage = string.Empty;
             string anotherMessage = string.Empty;
             string QuestMessage = string.Empty;
+
             if (gameProcess.CurrentState == GameState.Fighting)
             {
                 try
@@ -140,6 +141,15 @@ namespace SomeKindOfGame
             else if (gameProcess.CurrentState == GameState.Looting)
             {
                 gameProcess.MoveNext(lootManager.getNextLootableObject());
+            }
+            else if(gameProcess.CurrentState == GameState.Explorirng)
+            {
+                if (quests.ActiveQuests() == 0)
+                {
+                    quests.SignOnQuest(quests.GenerateQuest());
+                    battleClass.Enemies = monsterRoster.getMonsterRoastForFloor(1).ToList();
+                }
+                gameProcess.MoveNext(null);
             }
             else
             {
@@ -168,7 +178,7 @@ namespace SomeKindOfGame
         class someclass : IUpdatable
         {
             AbstractPerson Pers;
-            List<AbstractPerson> Enemies;
+            public List<AbstractPerson> Enemies;
 
             public someclass(AbstractPerson pers, List<AbstractPerson> enemies)
             {

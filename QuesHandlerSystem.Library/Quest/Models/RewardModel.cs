@@ -6,8 +6,8 @@ namespace QuestHandlerSystem.Library.Quest.Models
 {
     public class RewardModel
     {
-        public int xpReward;
-        public int goldReward;
+        public int xpReward { get; set; }
+        public int goldReward { get; set; }
         public override string ToString()
         {
             return @$"
