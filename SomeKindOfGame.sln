@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29424.173
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.31903.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SomeKindOfGame", "SomeKindOfGame\SomeKindOfGame.csproj", "{94513E9D-DEDC-4E30-A2C5-97D3CD5C861D}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "IzeronDATA", "IzeronDATA\IzeronDATA.sqlproj", "{78D190E2-91BA-4D31-8442-9E52A289CA33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Izeron.WPFClient", "SomeKindOfGame\Izeron.WPFClient.csproj", "{94513E9D-DEDC-4E30-A2C5-97D3CD5C861D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuestHandlerSystem.Library", "QuesHandlerSystem.Library\QuestHandlerSystem.Library.csproj", "{F30557F9-5450-40C5-AD8A-5682648B7C2C}"
 EndProject
@@ -19,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic.Library", "GameLo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Izeron.Library.Tests", "Izeron.Library.Tests\Izeron.Library.Tests.csproj", "{1916C73F-D4FD-4F06-B57E-B1F037D71C5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEditor", "GameEditor\GameEditor.csproj", "{60FC16D5-4CE3-4C1F-B056-DE03B496CC9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameEditor", "GameEditor\GameEditor.csproj", "{60FC16D5-4CE3-4C1F-B056-DE03B496CC9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,12 +29,6 @@ Global
 		{94513E9D-DEDC-4E30-A2C5-97D3CD5C861D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94513E9D-DEDC-4E30-A2C5-97D3CD5C861D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94513E9D-DEDC-4E30-A2C5-97D3CD5C861D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78D190E2-91BA-4D31-8442-9E52A289CA33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78D190E2-91BA-4D31-8442-9E52A289CA33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78D190E2-91BA-4D31-8442-9E52A289CA33}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{78D190E2-91BA-4D31-8442-9E52A289CA33}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78D190E2-91BA-4D31-8442-9E52A289CA33}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78D190E2-91BA-4D31-8442-9E52A289CA33}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{F30557F9-5450-40C5-AD8A-5682648B7C2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F30557F9-5450-40C5-AD8A-5682648B7C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F30557F9-5450-40C5-AD8A-5682648B7C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU

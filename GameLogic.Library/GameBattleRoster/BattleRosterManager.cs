@@ -41,7 +41,10 @@ namespace GameLogic.Library.GameBattleRoster
         private List<GameEnemiesModel> getEnemyModelsFromJSON(string path)
         {
             string jsonString = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<List<GameEnemiesModel>>(jsonString);
+            return JsonSerializer.Deserialize<List<GameEnemiesModel>>(jsonString,new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
         }
 
         public void AddMonsterToRoster(int floor, AbstractPerson[] monsters)
@@ -71,7 +74,7 @@ namespace GameLogic.Library.GameBattleRoster
             List<AbstractPerson> monsters = new List<AbstractPerson>();
             if (_enemiesModels == null) return monsters;
             List<GameEnemiesModel> monsterModels = _enemiesModels
-                                                    .Where(x => x.FloorRange.minParameter <= floor && x.FloorRange.maxParameter >= floor)
+                                                    .Where(x => x.FloorRange.MinParameter <= floor && x.FloorRange.MaxParameter >= floor)
                                                     .Select(x => x).ToList();
             for (int i = 0; i < amount; i++)
             {
@@ -90,14 +93,14 @@ namespace GameLogic.Library.GameBattleRoster
         private AbstractPerson generateMonster(GameEnemiesModel monsterModel)
         {
             HashSet<SpecialEnemyTags> enemyTags = new HashSet<SpecialEnemyTags>();
-            foreach(var tag in monsterModel.possibleTags)
+            foreach(var tag in monsterModel.PossibleTags)
             {
-                if (new Random().Next(100) > 70) enemyTags.Add(tag.specialEnemyTag);
+                if (new Random().Next(100) > 70) enemyTags.Add(tag.TypeOfSpecialEnemyTag);
             }
             EnemyFillModel enemyFillModel = new EnemyFillModel
             {
-                Attack = new Random().Next(monsterModel.AttackRange.minParameter, monsterModel.AttackRange.maxParameter),
-                HP = new Random().Next(monsterModel.HPRange.minParameter, monsterModel.HPRange.maxParameter),
+                Attack = new Random().Next(monsterModel.AttackRange.MinParameter, monsterModel.AttackRange.MaxParameter),
+                HP = new Random().Next(monsterModel.HPRange.MinParameter, monsterModel.HPRange.MaxParameter),
                 Name = monsterModel.Name,
                 XPToGain = monsterModel.XPToGain,
                 EnemyTags=enemyTags

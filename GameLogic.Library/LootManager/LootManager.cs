@@ -46,14 +46,17 @@ namespace GameLogic.Library.LootManager
         private List<GameLootModel> getLootsModelsFromJSON(string path)
         {
             string jsonString = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<List<GameLootModel>>(jsonString);
+            return JsonSerializer.Deserialize<List<GameLootModel>>(jsonString, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
         }
 
         private LootableBaseObject generateLoot(GameLootModel lootModel)
         {
             LootFillModel lootFillModel = new LootFillModel
             {
-                Cost = new Random().Next(lootModel.CostInGoldRange.minParameter, lootModel.CostInGoldRange.maxParameter),
+                Cost = new Random().Next(lootModel.CostInGoldRange.MinParameter, lootModel.CostInGoldRange.MaxParameter),
                 Name = lootModel.Name
             };
 
@@ -65,7 +68,7 @@ namespace GameLogic.Library.LootManager
             LootableBaseObject loot = null;
             if (_lootsModels == null) return null;
             List<GameLootModel> lootModels = _lootsModels
-                                                    .Where(x => x.FloorRange.minParameter <= floor && x.FloorRange.maxParameter >= floor)
+                                                    .Where(x => x.FloorRange.MinParameter <= floor && x.FloorRange.MaxParameter >= floor)
                                                     .Select(x => x).ToList();
             if (lootModels.Count == 0) return null;
             if (lootModels.Count == 1) loot = generateLoot(lootModels.First());

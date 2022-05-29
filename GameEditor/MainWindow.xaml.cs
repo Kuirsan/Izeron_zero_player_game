@@ -47,14 +47,14 @@ namespace GameEditor
                 WriteIndented = true
             };
             GameEnemiesModel enemyModel = new GameEnemiesModel
-               (possibleTags: new SpecialEnemyTag[] {new SpecialEnemyTag(SpecialEnemyTags.Big)
+               (PossibleTags: new SpecialEnemyTag[] {new SpecialEnemyTag(SpecialEnemyTags.Big)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Small)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Strong)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Weak)},
                 HPRange: new ParameterRange(1, 5),
                 FloorRange: new ParameterRange(1, 2));
             GameEnemiesModel enemyModel2 = new GameEnemiesModel
-              (possibleTags: new SpecialEnemyTag[] {new SpecialEnemyTag(SpecialEnemyTags.Big)
+              (PossibleTags: new SpecialEnemyTag[] {new SpecialEnemyTag(SpecialEnemyTags.Big)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Small)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Strong)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Weak)},
