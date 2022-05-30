@@ -12,8 +12,8 @@ namespace QuestHandlerSystem.Library
 {
     public class QuestObserver : IUpdatable
     {
-        private List<BaseQuestModel> _activeQuests;
-        private AbstractPerson _hero;
+        private readonly List<BaseQuestModel> _activeQuests;
+        private readonly AbstractPerson _hero;
 
         public QuestObserver(AbstractPerson Hero)
         {
@@ -29,9 +29,9 @@ namespace QuestHandlerSystem.Library
         protected string UpdateAllQuests()
         {
             string notification = string.Empty;
-            foreach (var quest in _activeQuests.Where(quest => !quest.isFinish))
+            foreach (var quest in _activeQuests.Where(quest => !quest.IsFinish))
             {
-                notification+=UpdateQuest(quest);
+                notification+= UpdateQuest(quest);
             }
             RemoveObsoleteQuests();
             return notification;
@@ -41,12 +41,12 @@ namespace QuestHandlerSystem.Library
         {
             foreach(var quest in _activeQuests)
             {
-                if(quest.isFinish) quest.getReward(_hero);
+                if(quest.IsFinish) quest.GetReward(_hero);
             }
-            _activeQuests.RemoveAll(quest => quest.isFinish);
+            _activeQuests.RemoveAll(quest => quest.IsFinish);
         }
 
-        protected string UpdateQuest(BaseQuestModel quest)
+        protected static string UpdateQuest(BaseQuestModel quest)
         {
             return quest.UpdateQuest();
         }
@@ -55,9 +55,9 @@ namespace QuestHandlerSystem.Library
         {
             GameNotification gameNotification = new GameNotification()
             {
-                gameNotificationState = GameNotificationState.Quest
+                GameNotificationState = GameNotificationState.Quest
             };
-            gameNotification.body = UpdateAllQuests();
+            gameNotification.Body = UpdateAllQuests();
             return gameNotification;
         }
     }

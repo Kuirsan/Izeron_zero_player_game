@@ -17,11 +17,11 @@ namespace Izeron.Library.Persons.Enemies
             _attack = model.Attack;
             _xpToGain = model.XPToGain;
             _enemyTags = model.EnemyTags;
-            initiateTags();
+            InitiateTags();
         }
 
         //TODO
-        private void initiateTags()
+        private void InitiateTags()
         {
             float expMultiplier = 1f;
             foreach(var tag in _enemyTags)
@@ -56,14 +56,14 @@ namespace Izeron.Library.Persons.Enemies
             _xpToGain = (int)(_xpToGain * expMultiplier);
         }
 
-        public override int attackAmount()
+        public override int AttackAmount()
         {
             return _attack;
         }
 
         public override void MakeDmg(IDmgable dmgable)
         {
-            dmgable.GetDamage(attackAmount());
+            dmgable.GetDamage(AttackAmount());
         }
 
         public void GetDamage(int Amount)

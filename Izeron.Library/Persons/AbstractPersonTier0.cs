@@ -12,12 +12,12 @@ namespace Izeron.Library.Persons
     public abstract class AbstractPersonTier0 : AbstractPerson, IXPRecievable, INotifyPropertyChanged
     {
         private protected int _lvlCup;
-        private float _lvlMultiple = 1;
+        private readonly float _lvlMultiple = 1;
         private float _curXP = 0f;
         private protected Dictionary<int, float> _lvlTable;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName]string prop = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
@@ -52,28 +52,28 @@ namespace Izeron.Library.Persons
         /// Gain amount of XP to person. When XP>=MaxXP then lvlUp
         /// </summary>
         /// <param name="Amount">amont of xp gained</param>
-        private void _gainXP(float Amount)
+        private void GainXP(float Amount)
         {
             if (_lvl >= _lvlCup) return;
             if (_curXP + (Amount * _lvlMultiple) >= _lvlTable[_lvl])
             {
-                _lvlUp();
+                LvlUp();
             }
             else
             {
                 _curXP += Amount;
             }
-            OnPropertyChanged("CurrentXP");
+            OnPropertyChanged(nameof(CurrentXP));
         }
         /// <summary>
         /// lvlUp the character.
         /// </summary>
-        protected virtual void _lvlUp()
+        protected virtual void LvlUp()
         {
             _lvl++;
             _curXP = 0;
-            OnPropertyChanged("MaxXP");
-            OnPropertyChanged("CharacterList");
+            OnPropertyChanged(nameof(MaxXP));
+            OnPropertyChanged(nameof(CharacterList));
         }
         /// <summary>
         /// Recieve amount of XP.
@@ -81,36 +81,36 @@ namespace Izeron.Library.Persons
         /// <param name="Amount">How many XP get chracter</param>
         public void ReceiveXP(int Amount)
         {
-            _gainXP(Amount);
+            GainXP(Amount);
         }
 
         public override bool AddItemToInventory(ILootable item)
         {
-            bool addedToInventory = _inventory.tryToAddItemToInventory(item);
+            bool addedToInventory = _inventory.TryToAddItemToInventory(item);
             OnPropertyChanged(nameof(InventoryList));
             return addedToInventory;
         }
-        public override bool somethingInInventory()
+        public override bool SomethingInInventory()
         {
-            return _inventory.somethingInInventory();
+            return _inventory.SomethingInInventory();
         }
 
-        public override void sellIteminInventory()
+        public override void SellItemInInventory()
         {
-            var item = _inventory.getItemForSale();
-            addMoneyAmount(item.Volume);
-            _inventory.tryToRemoveFromInventory(item);
+            var item = _inventory.GetItemForSale();
+            AddMoneyAmount(item.Volume);
+            _inventory.TryToRemoveFromInventory(item);
             OnPropertyChanged(nameof(InventoryList));
         }
-        public override void setMoneyAmount(int value)
+        public override void SetMoneyAmount(int value)
         {
             _money = value;
-            OnPropertyChanged("CharacterList");
+            OnPropertyChanged(nameof(CharacterList));
         }
-        public override void addMoneyAmount(int money)
+        public override void AddMoneyAmount(int money)
         {
-            base.addMoneyAmount(money);
-            OnPropertyChanged("CharacterList");
+            base.AddMoneyAmount(money);
+            OnPropertyChanged(nameof(CharacterList));
         }
     }
 }

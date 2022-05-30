@@ -29,16 +29,16 @@ namespace GameLogic.Library.GameBattleRoster
         private void Init()
         {
             _battleRosterByFloor = new Dictionary<int, List<AbstractPerson>>();
-            loadEnemiesModels();
+            LoadEnemiesModels();
         }
 
-        private void loadEnemiesModels()
+        private void LoadEnemiesModels()
         {
             string fileName = @"EnemiesLibrary\enemies.json";
-            _enemiesModels = getEnemyModelsFromJSON(fileName);
+            _enemiesModels = GetEnemyModelsFromJSON(fileName);
         }
 
-        private List<GameEnemiesModel> getEnemyModelsFromJSON(string path)
+        private List<GameEnemiesModel> GetEnemyModelsFromJSON(string path)
         {
             string jsonString = File.ReadAllText(path);
             return JsonSerializer.Deserialize<List<GameEnemiesModel>>(jsonString,new JsonSerializerOptions
@@ -51,7 +51,7 @@ namespace GameLogic.Library.GameBattleRoster
         {
             if (_battleRosterByFloor.ContainsKey(floor))
             {
-                var tmpRoster = getMonsterRoastForFloor(1);
+                var tmpRoster = GetMonsterRoastForFloor(1);
                 tmpRoster.AddRange(monsters);
                 _battleRosterByFloor[floor] = tmpRoster;
             }
@@ -60,7 +60,7 @@ namespace GameLogic.Library.GameBattleRoster
                 _battleRosterByFloor.Add(floor, monsters.ToList());
             }
         }
-        public List<AbstractPerson> getMonsterRoastForFloor(int floor)
+        public List<AbstractPerson> GetMonsterRoastForFloor(int floor)
         {
             if (_battleRosterByFloor.ContainsKey(floor))
             {
@@ -69,7 +69,7 @@ namespace GameLogic.Library.GameBattleRoster
             return null;
         }
 
-        public List<AbstractPerson> generateRandomMonsters(int floor, int amount)
+        public List<AbstractPerson> GenerateRandomMonsters(int floor, int amount)
         {
             List<AbstractPerson> monsters = new List<AbstractPerson>();
             if (_enemiesModels == null) return monsters;
@@ -85,12 +85,12 @@ namespace GameLogic.Library.GameBattleRoster
                 {
                     monsterModel = monsterModels[new Random().Next(0, monsterModels.Count)];
                 }
-                monsters.Add(generateMonster(monsterModel));
+                monsters.Add(GenerateMonster(monsterModel));
             }
             return monsters;
         }
 
-        private AbstractPerson generateMonster(GameEnemiesModel monsterModel)
+        private AbstractPerson GenerateMonster(GameEnemiesModel monsterModel)
         {
             HashSet<SpecialEnemyTags> enemyTags = new HashSet<SpecialEnemyTags>();
             foreach(var tag in monsterModel.PossibleTags)
@@ -113,14 +113,14 @@ namespace GameLogic.Library.GameBattleRoster
         {
             GameNotification gameNotification = new GameNotification
             {
-                gameNotificationState = GameNotificationState.Battle
+                GameNotificationState = GameNotificationState.Battle
             };
             foreach (var monsterByFloor in _battleRosterByFloor)
             {
                 int floor = monsterByFloor.Key;
-                int countDeadMonsters = monsterByFloor.Value.Where(x => x.isDead()).Count();
+                int countDeadMonsters = monsterByFloor.Value.Where(x => x.IsDead()).Count();
                 NotifyLootSystem?.Invoke(floor, countDeadMonsters);
-                monsterByFloor.Value.RemoveAll(x => x.isDead());
+                monsterByFloor.Value.RemoveAll(x => x.IsDead());
             }
             return gameNotification;
         }

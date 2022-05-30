@@ -10,11 +10,11 @@ namespace Izeron.Library.Objects.LootableObjects
         {
             Name = lootableBaseObject.Name;
             Cost = lootableBaseObject.Volume;
-            qty = 1;
+            Qty = 1;
         }
 
         public string Name { get; set; }
         public int Cost { get; set; }
-        public int qty { get; set; }
+        public int Qty { get; set; }
     }
 }

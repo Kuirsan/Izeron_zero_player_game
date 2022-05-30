@@ -9,11 +9,11 @@ namespace QuestHandlerSystem.Library.Quest.Models
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public bool isProfessionQuest { get; set; } = false;
-        public bool isBaseQuest { get; set; } = false;
+        public bool IsProfessionQuest { get; set; } = false;
+        public bool IsBaseQuest { get; set; } = false;
         public int? ParentID { get; set; }
 
-        public bool isFinish = false;
+        public bool IsFinish = false;
 
         public BaseQuestModel(string title,string description)
         {
@@ -21,7 +21,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
             Description = description;
         }
 
-        public abstract void getReward(AbstractPerson pers);
+        public abstract void GetReward(AbstractPerson pers);
 
         public abstract string UpdateQuest();
         

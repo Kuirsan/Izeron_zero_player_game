@@ -8,8 +8,8 @@ namespace GameCenter.Library.GameCenter
     public class GameProcess
     {
         public GameState CurrentState { get; private set; }
-        private AbstractPerson _hero;
-        private BaseGameStateLogic _gameStateLogic;
+        private readonly AbstractPerson _hero;
+        private readonly BaseGameStateLogic _gameStateLogic;
 
         public GameProcess(AbstractPerson Hero,BaseGameStateLogic gameStateLogic)
         {

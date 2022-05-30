@@ -52,9 +52,9 @@ namespace Izeron.Library.Persons.Tier0
                 if (_health <= 0)
                 {
                     _health = 0;
-                    if (_inventory.hasHealthPotions())
+                    if (_inventory.HasHealthPotions())
                     {
-                        consumeHealthPotion();
+                        ConsumeHealthPotion();
                     }
                     else
                     {
@@ -62,7 +62,7 @@ namespace Izeron.Library.Persons.Tier0
                     }
                 }
             }
-            OnPropertyChanged("CharacterList");
+            OnPropertyChanged(nameof(CharacterList));
         }
 
 
@@ -83,14 +83,14 @@ namespace Izeron.Library.Persons.Tier0
                 return valPairs;
             }
         }
-        protected override void _lvlUp()
+        protected override void LvlUp()
         {
             _str += (Int32)(new Random().NextDouble()+0.020f*_lvl* _str);
             _maxHealth += new Random().Next((int)(1 + 0.015f * _lvl), (int)(3*(1 + 0.015f * _lvl)));
-            base._lvlUp();
+            base.LvlUp();
         }
 
-        public void getHeal(int amount)
+        public void GetHeal(int amount)
         {
             if (amount < 0) return;
             if (_health + amount > _maxHealth)
@@ -101,28 +101,28 @@ namespace Izeron.Library.Persons.Tier0
             {
                 _health += amount;
             }
-            OnPropertyChanged("CharacterList");
+            OnPropertyChanged(nameof(CharacterList));
         }
 
-        public override int attackAmount()
+        public override int AttackAmount()
         {
             return Attack;
         }
 
-        public override void consumeHealthPotion()
+        public override void ConsumeHealthPotion()
         {
-            var potion = _inventory.getHealthPotion();
+            var potion = _inventory.GetHealthPotion();
             if(potion!=null)
             {
                 potion.HealPerson(this);
-                _inventory.tryToRemoveHealthPotion(potion);
+                _inventory.TryToRemoveHealthPotion(potion);
                 OnPropertyChanged(nameof(CharacterList));
             }
         }
 
-        public override void addHealthPotion(HealthPotionBase healthPotion)
+        public override void AddHealthPotion(HealthPotionBase healthPotion)
         {
-            base.addHealthPotion(healthPotion);
+            base.AddHealthPotion(healthPotion);
             OnPropertyChanged(nameof(CharacterList));
         }
     }

@@ -20,16 +20,16 @@ namespace Izeron.Library.Objects.Potions
 
         public virtual void Buy(AbstractPerson person)
         {
-            if (canBuy(person))
+            if (CanBuy(person))
             {
-                person.addMoneyAmount(-Cost);
-                person.addHealthPotion(this);
+                person.AddMoneyAmount(-Cost);
+                person.AddHealthPotion(this);
             }
         }
 
-        public virtual bool canBuy(AbstractPerson person)
+        public virtual bool CanBuy(AbstractPerson person)
         {
-            if (!person.isAnyMoney()) return false;
+            if (!person.IsAnyMoney()) return false;
             if (person.Money >= Cost)
             {
                 return true;

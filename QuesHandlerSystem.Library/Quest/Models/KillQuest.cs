@@ -6,39 +6,39 @@ namespace QuestHandlerSystem.Library.Quest.Models
 {
     public class KillQuest : BaseQuestModel
     {
-        private List<AbstractPerson> _enemies;
-        private RewardModel _reward;
+        private readonly List<AbstractPerson> _enemies;
+        private readonly RewardModel _reward;
 
         public KillQuest(string title,string description, List<AbstractPerson> enemies,RewardModel reward):base(title,description)
         {
             _enemies = enemies;
             _reward = reward;
         }
-        public override void getReward(AbstractPerson pers)
+        public override void GetReward(AbstractPerson pers)
         {
             if(pers is IXPRecievable hero)
             {
-                hero.ReceiveXP(_reward.xpReward);
+                hero.ReceiveXP(_reward.XpReward);
             }
-            pers.addMoneyAmount(_reward.goldReward);
+            pers.AddMoneyAmount(_reward.GoldReward);
         }
 
         public override string UpdateQuest()
         {
             string notification=string.Empty;
-            if (isFinish) return string.Empty;
+            if (IsFinish) return string.Empty;
             if (_enemies.Count == 0)
             {
-                isFinish = true;
-                notification=setNotificationText();
+                IsFinish = true;
+                notification=SetNotificationText();
             }
             else
             {
-                _enemies.RemoveAll(enemy => enemy.isDead());
+                _enemies.RemoveAll(enemy => enemy.IsDead());
             }
             return notification;
         }
-        private string setNotificationText()
+        private string SetNotificationText()
         {
             return $@"Квест {Title} завершен! Награда: {_reward}";
         }

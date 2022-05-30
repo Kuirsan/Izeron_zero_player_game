@@ -6,13 +6,13 @@ namespace QuestHandlerSystem.Library.Quest.Models
 {
     public class RewardModel
     {
-        public int xpReward;
-        public int goldReward;
+        public int XpReward;
+        public int GoldReward;
         public override string ToString()
         {
             return @$"
-                      Опыт = {xpReward}
-                      Золото = {goldReward}";
+                      Опыт = {XpReward}
+                      Золото = {GoldReward}";
 
         }
     }

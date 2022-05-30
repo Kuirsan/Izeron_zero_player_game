@@ -17,7 +17,7 @@ namespace Izeron.Library.InventorySystem
             _healthPotions = new List<HealthPotionBase>();
         }
 
-        public override HealthPotionBase getHealthPotion()
+        public override HealthPotionBase GetHealthPotion()
         {
             if (_healthPotions.Count > 0) return _healthPotions.First();
             return null;
@@ -33,7 +33,7 @@ namespace Izeron.Library.InventorySystem
                     if(keyValPairs.ContainsKey(obj.Name))
                     {
                         keyValPairs[obj.Name].Cost += obj.Volume;
-                        keyValPairs[obj.Name].qty++;
+                        keyValPairs[obj.Name].Qty++;
                     }
                     else
                     {
@@ -45,51 +45,51 @@ namespace Izeron.Library.InventorySystem
         }
 
 
-        public override ILootable getItemForSale()
+        public override ILootable GetItemForSale()
         {
-            if(somethingInInventory())
+            if(SomethingInInventory())
             {
                 return _inventory.First();
             }
             return null;
         }
 
-        public override bool hasHealthPotions()
+        public override bool HasHealthPotions()
         {
             return _healthPotions.Count > 0;
         }
 
-        public override bool somethingInInventory()
+        public override bool SomethingInInventory()
         {
             return _inventory.Count > 0;
         }
 
-        public override bool isFullOfHealthPotions()
+        public override bool IsFullOfHealthPotions()
         {
             return _healthPotions.Count >= _healthPotionCapacity;
         }
 
-        public override bool tryToAddHealthPotion(HealthPotionBase potion)
+        public override bool TryToAddHealthPotion(HealthPotionBase potion)
         {
             if (_healthPotions.Count >= _healthPotionCapacity) return false;
             _healthPotions.Add(potion);
             return true;
         }
 
-        public override bool tryToAddItemToInventory(ILootable item)
+        public override bool TryToAddItemToInventory(ILootable item)
         {
             if (_inventory.Count >= _capacity) return false;
             Add(item);
             return true;
         }
 
-        public override bool tryToRemoveFromInventory(ILootable item)
+        public override bool TryToRemoveFromInventory(ILootable item)
         {
             Remove(item);
             return true;
         }
 
-        public override bool tryToRemoveHealthPotion(HealthPotionBase potion)
+        public override bool TryToRemoveHealthPotion(HealthPotionBase potion)
         {
             return _healthPotions.Remove(potion);
         }

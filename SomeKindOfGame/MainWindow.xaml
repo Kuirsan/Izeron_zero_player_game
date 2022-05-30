@@ -35,7 +35,6 @@
                     <DataGrid  x:Name="inventoryView" Height="250" Margin="5 5" ColumnWidth="*"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2">
-                    <ListBox x:Name="somethingC" />
                 </StackPanel>
             </Grid>
         </DockPanel>

@@ -70,7 +70,7 @@ namespace Izeron.Library.Persons
         }
 
 
-        virtual public bool isDead()
+        virtual public bool IsDead()
         {
             return _isDead;
         }
@@ -80,7 +80,7 @@ namespace Izeron.Library.Persons
             _isDead = true;
         }
 
-        virtual public bool somethingInInventory()
+        virtual public bool SomethingInInventory()
         {
             return false;
         }
@@ -90,40 +90,43 @@ namespace Izeron.Library.Persons
             return false;
         }
 
-        virtual public bool isAnyMoney()
+        virtual public bool IsAnyMoney()
         {
             return _money > 0;
         }
-        abstract public int attackAmount();
-        public virtual void addMoneyAmount(int money)
+        abstract public int AttackAmount();
+        public virtual void AddMoneyAmount(int money)
         {
             _money += money;
         }
-        public virtual void sellIteminInventory()
+        public virtual void SellItemInInventory()
         {
-
+            return;
         }
         public virtual int Money => _money;
-        public virtual void setMoneyAmount(int value) { }
-
-        public virtual void addHealthPotion(HealthPotionBase healthPotion)
-        {
-            _inventory.tryToAddHealthPotion(healthPotion);
+        public virtual void SetMoneyAmount(int value) 
+        { 
+            return; 
         }
 
-        public virtual void consumeHealthPotion() 
+        public virtual void AddHealthPotion(HealthPotionBase healthPotion)
         {
-            
+            _inventory.TryToAddHealthPotion(healthPotion);
         }
 
-        public virtual bool hasHealthPotion()
+        public virtual void ConsumeHealthPotion() 
         {
-            return _inventory.hasHealthPotions();
+            return;
         }
 
-        public virtual bool canAddAnotherHealthPotion()
+        public virtual bool HasHealthPotion()
         {
-            return !_inventory.isFullOfHealthPotions();
+            return _inventory.HasHealthPotions();
+        }
+
+        public virtual bool CanAddAnotherHealthPotion()
+        {
+            return !_inventory.IsFullOfHealthPotions();
         }
     }
 }
