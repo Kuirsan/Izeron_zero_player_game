@@ -1,4 +1,5 @@
-﻿using GameLogic.Library.GameStateLogic;
+﻿using GameLogic.Library.GameBattleRoster;
+using GameLogic.Library.GameStateLogic;
 using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
@@ -110,11 +111,11 @@ namespace GameCenter.Library.GameCenter
             return sb.ToString();
         }
 
-        public static QuestObserver InitiateQuestObserver(AbstractPerson hero)
+        public static QuestObserver InitiateQuestObserver(AbstractPerson hero,BattleRosterManager monsterManager)
         {
             if(_questObserver==null)
             {
-                _questObserver = new QuestObserver(hero);
+                _questObserver = new QuestObserver(hero,monsterManager);
                 return _questObserver;
             }
             return _questObserver;

@@ -9,7 +9,13 @@ namespace QuestHandlerSystem.Library.Quest.Models
         private readonly List<AbstractPerson> _enemies;
         private readonly RewardModel _reward;
 
-        public KillQuest(string title,string description, List<AbstractPerson> enemies,RewardModel reward):base(title,description)
+        public KillQuest(string title,string description, List<AbstractPerson> enemies,RewardModel reward) :base(title,description)
+        {
+            _enemies = enemies;
+            _reward = reward;
+        }
+
+        public KillQuest(string title, string description, List<AbstractPerson> enemies, RewardModel reward, BaseQuestModel[] childQuests, UpdateQuestListHandle updateQuestListHandle) :base(title, description, childQuests, updateQuestListHandle)
         {
             _enemies = enemies;
             _reward = reward;
@@ -30,6 +36,10 @@ namespace QuestHandlerSystem.Library.Quest.Models
             if (_enemies.Count == 0)
             {
                 IsFinish = true;
+                if (_childQuests != null)
+                {
+                    InvokeNotifyQuestListSystem();
+                }
                 notification=SetNotificationText();
             }
             else

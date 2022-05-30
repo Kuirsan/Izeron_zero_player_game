@@ -1,0 +1,20 @@
+[
+  {
+    "Title": "rats problem",
+    "Description": "You must kill 3 rats",
+    "Enemies": ["rat","rat","rat"],
+    "Reward": {
+      "XpReward": 10,
+      "GoldReward": 15
+    }
+  },
+  {
+    "Title": "wolf and rat",
+    "Description": "Kill wolfs and rats",
+    "Enemies": [ "rat", "wolf", "rat","wolf" ],
+    "Reward": {
+      "XpReward": 15,
+      "GoldReward": 25
+    }
+  }
+]

@@ -4,12 +4,10 @@ using Izeron.Library.Interfaces;
 using Izeron.Library.Notification;
 using Izeron.Library.Persons;
 using Izeron.Library.Persons.Enemies;
-using Izeron.Library.Persons.Enemies.Tier0;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 
 namespace GameLogic.Library.GameBattleRoster
@@ -87,6 +85,21 @@ namespace GameLogic.Library.GameBattleRoster
                 }
                 monsters.Add(GenerateMonster(monsterModel));
             }
+            return monsters;
+        }
+
+        public List<AbstractPerson> GenerateMonstersByName(string[] monstersName)
+        {
+            List<AbstractPerson> monsters = new List<AbstractPerson>();
+            if (_enemiesModels == null) return monsters;
+
+            foreach(var mName in monstersName)
+            {
+                GameEnemiesModel monsterModel = _enemiesModels.Where(m => m.Name.ToLower() == mName.ToLower()).FirstOrDefault();
+                if (monsterModel == null) continue;
+                monsters.Add(GenerateMonster(monsterModel));
+            }
+
             return monsters;
         }
 
