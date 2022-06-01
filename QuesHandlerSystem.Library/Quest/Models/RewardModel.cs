@@ -11,9 +11,11 @@ namespace QuestHandlerSystem.Library.Quest.Models
         public override string ToString()
         {
             return @$"
-                      Опыт = {XpReward}
-                      Золото = {GoldReward}";
-
+                      ||============||
+                      ||___Опыт = {XpReward}_____||
+                      ||___Золото = {GoldReward}___||
+                      ||============||
+                    ";
         }
 
         public RewardModel()

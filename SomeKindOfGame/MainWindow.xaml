@@ -52,8 +52,8 @@
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="quest messages">
-                    <ScrollViewer x:Name="textQuestViewerScroll">
-                        <TextBlock x:Name="notificationQuestText" TextWrapping="Wrap" ></TextBlock>
+                    <ScrollViewer x:Name="textQuestViewerScroll" CanContentScroll="False">
+                        <TextBlock x:Name="notificationQuestText" TextWrapping="Wrap"></TextBlock>
                     </ScrollViewer>
                 </TabItem>
                 <TabItem Header="another messages">

@@ -57,7 +57,10 @@ namespace QuestHandlerSystem.Library
 
         public BaseQuestModel GenerateQuest()
         {
-            if (_questsModels.Count == 0) throw new Exception("There is now quest models!");
+            if (_questsModels.Count == 0)
+            {
+                return GenerateRandomKillQuest();
+            }
             var questModel = _questsModels[0];
             var monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
 
@@ -66,6 +69,49 @@ namespace QuestHandlerSystem.Library
 
             _questsModels.Remove(questModel);
             return quest;
+        }
+
+        private BaseQuestModel GenerateRandomKillQuest()
+        {
+            var monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+            var title = $"Monsters {GenerateVerb()} {GenerateSubject()}!";
+            var description = "You must kill them!";
+            var reward = new RewardModel
+            {
+                GoldReward = 15,
+                XpReward = 15
+            };
+            var quest = new KillQuest(title,description,monsters, reward);
+
+            _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+
+            return quest;
+        }
+
+        private string GenerateVerb()
+        {
+            var r = new Random(DateTime.Now.AddMilliseconds(100).Millisecond).Next(1, 4);
+            var verb =  r switch 
+            {
+                1 => "ate",
+                2 => "stole",
+                3 => "ruined",
+                _=>"default"
+            };
+            return verb;
+        }
+
+        private string GenerateSubject()
+        {
+        var r = new Random(DateTime.Now.Millisecond).Next(1, 4);
+        var subj = r switch
+            {
+                1 => "cake",
+                2 => "plates",
+                3 => "king's soul",
+                _ => "default"
+            };
+            return subj;
         }
 
         protected string UpdateAllQuests()
