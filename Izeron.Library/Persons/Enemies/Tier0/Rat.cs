@@ -19,7 +19,7 @@ namespace Izeron.Library.Persons.Enemies.Tier0
 
         public int Attack => _str;
 
-        public override int attackAmount()
+        public override int AttackAmount()
         {
             return Attack;
         }

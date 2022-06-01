@@ -6,14 +6,14 @@ namespace GameLogic.Library.LogicModels
 {
     public class ParameterRange
     {
-        public int minParameter { get; set; }
-        public int maxParameter { get; set; }
+        public int MinParameter { get; set; }
+        public int MaxParameter { get; set; }
         public ParameterRange(int min, int max)
         {
-            minParameter = min;
-            maxParameter = max;
+            MinParameter = min;
+            MaxParameter = max;
         }
-        private ParameterRange()
+        public ParameterRange()
         {
 
         }

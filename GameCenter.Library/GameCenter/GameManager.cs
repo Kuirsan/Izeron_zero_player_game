@@ -1,4 +1,5 @@
-﻿using GameLogic.Library.GameStateLogic;
+﻿using GameLogic.Library.GameBattleRoster;
+using GameLogic.Library.GameStateLogic;
 using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
@@ -24,7 +25,7 @@ namespace GameCenter.Library.GameCenter
 
         private GameManager() { }
 
-        public static GameManager getInstance()
+        public static GameManager GetInstance()
         {
             if (_instance == null)
             {
@@ -55,9 +56,9 @@ namespace GameCenter.Library.GameCenter
                         _gameLogs.Add(notification);
                         _gameLogs.Add(new GameNotification
                         {
-                            body = notification.body,
-                            gameNotificationState = GameNotificationState.All,
-                            isRead = false
+                            Body = notification.Body,
+                            GameNotificationState = GameNotificationState.All,
+                            IsRead = false
                         });
                     }
                 }
@@ -69,52 +70,52 @@ namespace GameCenter.Library.GameCenter
             }
             catch(Exception ex)
             {
-                throw ex;
+                throw new Exception(ex.Message);
             }
             finally
             {
                 _isRunTick = false;
-                updateLogs();
+                UpdateLogs();
             }
         }
 
-        private static void updateLogs()
+        private static void UpdateLogs()
         {
-            _gameLogs.RemoveAll(x => string.IsNullOrEmpty(x.body));
-            var keys = _gameLogs.GroupBy(x => x.gameNotificationState).Where(x => x.Count() > 10).Select(x => x.Key).ToList();
+            _gameLogs.RemoveAll(x => string.IsNullOrEmpty(x.Body));
+            var keys = _gameLogs.GroupBy(x => x.GameNotificationState).Where(x => x.Count() > 10).Select(x => x.Key).ToList();
             foreach(var key in keys)
             {
-                _gameLogs.Remove(_gameLogs.Where(x => x.gameNotificationState == key).FirstOrDefault());
+                _gameLogs.Remove(_gameLogs.Where(x => x.GameNotificationState == key).FirstOrDefault());
             }
         }
 
-        public static List<GameNotification> getUnreadLogs(GameNotificationState gameNotificationState)
+        public static List<GameNotification> GetUnreadLogs(GameNotificationState gameNotificationState)
         {
-            var notification = _gameLogs.Where(log => log.gameNotificationState == gameNotificationState && log.isRead == false).Select(log => log);
+            var notification = _gameLogs.Where(log => log.GameNotificationState == gameNotificationState && log.IsRead == false).Select(log => log);
             foreach(var not in notification)
             {
-                not.isRead = true;
+                not.IsRead = true;
             }
             return notification.ToList();
         }
 
-        public static string getUnreadLogsString(GameNotificationState gameNotificationState)
+        public static string GetUnreadLogsString(GameNotificationState gameNotificationState)
         {
-            var notification = _gameLogs.Where(log => log.gameNotificationState == gameNotificationState && log.isRead == false).Select(log => log);
+            var notification = _gameLogs.Where(log => log.GameNotificationState == gameNotificationState && log.IsRead == false).Select(log => log);
             StringBuilder sb = new StringBuilder();
             foreach (var not in notification)
             {
-                not.isRead = true;
-                sb.Append($"[{not.TimeStamp}] {not.body}");
+                not.IsRead = true;
+                sb.Append($"[{not.TimeStamp}] {not.Body}");
             }
             return sb.ToString();
         }
 
-        public static QuestObserver InitiateQuestObserver(AbstractPerson hero)
+        public static QuestObserver InitiateQuestObserver(AbstractPerson hero,BattleRosterManager monsterManager)
         {
             if(_questObserver==null)
             {
-                _questObserver = new QuestObserver(hero);
+                _questObserver = new QuestObserver(hero,monsterManager);
                 return _questObserver;
             }
             return _questObserver;

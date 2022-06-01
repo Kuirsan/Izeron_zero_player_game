@@ -5,13 +5,13 @@ using System.Text;
 
 namespace Izeron.Library.Objects.Potions
 {
-    public class smallHealthPotion : HealthPotionBase
+    public class SmallHealthPotion : HealthPotionBase
     {
         public override void HealPerson(IHealable healable)
         {
-            healable.getHeal(_healAmount);
+            healable.GetHeal(_healAmount);
         }
-        public smallHealthPotion() : base(nameof(smallHealthPotion), 5, 30)
+        public SmallHealthPotion() : base(nameof(SmallHealthPotion), 5, 30)
         {
 
         }

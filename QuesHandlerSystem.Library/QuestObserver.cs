@@ -1,12 +1,15 @@
-﻿using Izeron.Library.Enums;
+﻿using GameLogic.Library.GameBattleRoster;
+using Izeron.Library.Enums;
 using Izeron.Library.Interfaces;
 using Izeron.Library.Notification;
 using Izeron.Library.Persons;
 using QuestHandlerSystem.Library.Quest.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace QuestHandlerSystem.Library
 {
@@ -14,11 +17,32 @@ namespace QuestHandlerSystem.Library
     {
         private List<BaseQuestModel> _activeQuests;
         private AbstractPerson _hero;
+        private List<QuestLoadModel> _questsModels;
+        private int _maxActiveQuests;
+        private BattleRosterManager _monsterManager;
 
-        public QuestObserver(AbstractPerson Hero)
+        public QuestObserver(AbstractPerson Hero,BattleRosterManager monsterManager)
         {
             _activeQuests = new List<BaseQuestModel>();
             _hero = Hero;
+            LoadQuestModels();
+            _maxActiveQuests = 5;
+            _monsterManager = monsterManager;
+        }
+
+        private void LoadQuestModels()
+        {
+            string fileName = @"QuestLibrary\quests.json";
+            _questsModels = GetQuestModelsFromJSON(fileName);
+        }
+
+        private List<QuestLoadModel> GetQuestModelsFromJSON(string path)
+        {
+            string jsonString = File.ReadAllText(path);
+            return JsonSerializer.Deserialize<List<QuestLoadModel>>(jsonString, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
         }
 
         public void SignOnQuest(BaseQuestModel quest)
@@ -26,12 +50,77 @@ namespace QuestHandlerSystem.Library
             _activeQuests.Add(quest);
         }
 
+        public int ActiveQuests()
+        {
+            return _activeQuests.Count;
+        }
+
+        public BaseQuestModel GenerateQuest()
+        {
+            if (_questsModels.Count == 0)
+            {
+                return GenerateRandomKillQuest();
+            }
+            var questModel = _questsModels[0];
+            var monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
+
+            _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+            var quest = new KillQuest(questModel.Title, questModel.Description, monsters, questModel.Reward);
+
+            _questsModels.Remove(questModel);
+            return quest;
+        }
+
+        private BaseQuestModel GenerateRandomKillQuest()
+        {
+            var monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+            var title = $"Monsters {GenerateVerb()} {GenerateSubject()}!";
+            var description = "You must kill them!";
+            var reward = new RewardModel
+            {
+                GoldReward = 15,
+                XpReward = 15
+            };
+            var quest = new KillQuest(title,description,monsters, reward);
+
+            _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+
+            return quest;
+        }
+
+        private string GenerateVerb()
+        {
+            var r = new Random(DateTime.Now.AddMilliseconds(100).Millisecond).Next(1, 4);
+            var verb =  r switch 
+            {
+                1 => "ate",
+                2 => "stole",
+                3 => "ruined",
+                _=>"default"
+            };
+            return verb;
+        }
+
+        private string GenerateSubject()
+        {
+        var r = new Random(DateTime.Now.Millisecond).Next(1, 4);
+        var subj = r switch
+            {
+                1 => "cake",
+                2 => "plates",
+                3 => "king's soul",
+                _ => "default"
+            };
+            return subj;
+        }
+
         protected string UpdateAllQuests()
         {
             string notification = string.Empty;
-            foreach (var quest in _activeQuests.Where(quest => !quest.isFinish))
+            var activeQuest = _activeQuests.Where(quest => !quest.IsFinish).ToArray();
+            foreach (var quest in activeQuest)
             {
-                notification+=UpdateQuest(quest);
+                notification+= UpdateQuest(quest);
             }
             RemoveObsoleteQuests();
             return notification;
@@ -41,12 +130,12 @@ namespace QuestHandlerSystem.Library
         {
             foreach(var quest in _activeQuests)
             {
-                if(quest.isFinish) quest.getReward(_hero);
+                if(quest.IsFinish) quest.GetReward(_hero);
             }
-            _activeQuests.RemoveAll(quest => quest.isFinish);
+            _activeQuests.RemoveAll(quest => quest.IsFinish);
         }
 
-        protected string UpdateQuest(BaseQuestModel quest)
+        protected static string UpdateQuest(BaseQuestModel quest)
         {
             return quest.UpdateQuest();
         }
@@ -55,10 +144,15 @@ namespace QuestHandlerSystem.Library
         {
             GameNotification gameNotification = new GameNotification()
             {
-                gameNotificationState = GameNotificationState.Quest
+                GameNotificationState = GameNotificationState.Quest
             };
-            gameNotification.body = UpdateAllQuests();
+            gameNotification.Body = UpdateAllQuests();
             return gameNotification;
+        }
+
+        public void UpdateQuestListFromChildQuests(BaseQuestModel[] childQuests)
+        {
+            _activeQuests.AddRange(childQuests);
         }
     }
 }

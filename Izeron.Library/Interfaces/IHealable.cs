@@ -6,6 +6,6 @@ namespace Izeron.Library.Interfaces
 {
     public interface IHealable
     {
-        public void getHeal(int amount);
+        public void GetHeal(int amount);
     }
 }

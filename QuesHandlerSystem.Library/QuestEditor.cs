@@ -7,8 +7,6 @@ namespace QuestHandlerSystem.Library
 {
     public static class QuestEditor
     {
-        private static List<BaseQuestModel> quests;
-
         public static List<BaseQuestModel> GetQuests()
         {
             //TODO getQuests

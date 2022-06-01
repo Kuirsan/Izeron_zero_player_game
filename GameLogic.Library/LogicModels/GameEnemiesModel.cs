@@ -7,16 +7,16 @@ namespace GameLogic.Library.LogicModels
         public string Name { get; set; } = "defaultName";
         public ParameterRange AttackRange { get; set; } = new ParameterRange(1, 1);
         public int XPToGain { get; set; } = 0;
-        public SpecialEnemyTag[] possibleTags { get; set; }
+        public SpecialEnemyTag[] PossibleTags { get; set; }
         public ParameterRange HPRange { get; set; }
         public ParameterRange FloorRange { get; set; }
         private GameEnemiesModel()
         {
 
         }
-        public GameEnemiesModel(SpecialEnemyTag[] possibleTags, ParameterRange HPRange,ParameterRange FloorRange)
+        public GameEnemiesModel(SpecialEnemyTag[] PossibleTags, ParameterRange HPRange,ParameterRange FloorRange)
         {
-            this.possibleTags = possibleTags;
+            this.PossibleTags = PossibleTags;
             this.HPRange = HPRange;
             this.FloorRange = FloorRange;
         }
@@ -24,13 +24,13 @@ namespace GameLogic.Library.LogicModels
 
     public class SpecialEnemyTag
     {
-        public SpecialEnemyTags specialEnemyTag { get; set; }
-        public string SpecialTagString => specialEnemyTag.ToString();
+        public SpecialEnemyTags TypeOfSpecialEnemyTag { get; set; }
+        public string SpecialTagString => TypeOfSpecialEnemyTag.ToString();
         public SpecialEnemyTag(SpecialEnemyTags tag)
         {
-            specialEnemyTag = tag;
+            TypeOfSpecialEnemyTag = tag;
         }
-        private SpecialEnemyTag()
+        public SpecialEnemyTag()
         {
 
         }

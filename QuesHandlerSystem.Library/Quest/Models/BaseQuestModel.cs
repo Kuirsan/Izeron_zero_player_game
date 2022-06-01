@@ -1,19 +1,23 @@
 ﻿using Izeron.Library.Persons;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace QuestHandlerSystem.Library.Quest.Models
 {
     public abstract class BaseQuestModel
     {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public bool isProfessionQuest { get; set; } = false;
-        public bool isBaseQuest { get; set; } = false;
-        public int? ParentID { get; set; }
+        public delegate void UpdateQuestListHandle(BaseQuestModel[] childQuests);
+        public event UpdateQuestListHandle NotifyQuestListSystem;
 
-        public bool isFinish = false;
+        protected BaseQuestModel[] _childQuests;
+
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public bool IsFinish = false;
 
         public BaseQuestModel(string title,string description)
         {
@@ -21,9 +25,21 @@ namespace QuestHandlerSystem.Library.Quest.Models
             Description = description;
         }
 
-        public abstract void getReward(AbstractPerson pers);
+        public BaseQuestModel(string title,string description, BaseQuestModel[] childQuests, UpdateQuestListHandle updateQuestListHandle) :this(title,description)
+        {
+            _childQuests = childQuests;
+            NotifyQuestListSystem += updateQuestListHandle;
+        }
+
+        public abstract void GetReward(AbstractPerson pers);
 
         public abstract string UpdateQuest();
-        
+
+        protected void InvokeNotifyQuestListSystem()
+        {
+            NotifyQuestListSystem?.Invoke(_childQuests);
+            _childQuests = null;
+        }
+
     }
 }

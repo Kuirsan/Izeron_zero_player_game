@@ -20,22 +20,22 @@ namespace Izeron.Library.InventorySystem
         protected abstract void Add(ILootable item);
         protected abstract void Remove(ILootable item);
 
-        public abstract HealthPotionBase getHealthPotion();
+        public abstract HealthPotionBase GetHealthPotion();
 
-        public abstract bool tryToAddItemToInventory(ILootable item);
-        public abstract bool tryToRemoveFromInventory(ILootable item);
+        public abstract bool TryToAddItemToInventory(ILootable item);
+        public abstract bool TryToRemoveFromInventory(ILootable item);
 
-        public abstract bool tryToAddHealthPotion(HealthPotionBase potion);
-        public abstract bool tryToRemoveHealthPotion(HealthPotionBase potion);
+        public abstract bool TryToAddHealthPotion(HealthPotionBase potion);
+        public abstract bool TryToRemoveHealthPotion(HealthPotionBase potion);
 
-        public abstract bool somethingInInventory();
+        public abstract bool SomethingInInventory();
 
-        public abstract bool hasHealthPotions();
+        public abstract bool HasHealthPotions();
 
-        public abstract ILootable getItemForSale();
+        public abstract ILootable GetItemForSale();
         public abstract List<LootViewModel> GetInventoryList();
 
-        public abstract bool isFullOfHealthPotions();
+        public abstract bool IsFullOfHealthPotions();
 
         public int NumberOfHealthPotion => _healthPotions.Count;
     }

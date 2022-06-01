@@ -39,7 +39,7 @@ namespace SomeKindOfGame
         {
             InitializeComponent();
 
-            monsterRoster.NotifyLootSystem += lootManager.generateLootAndAddByFloor;
+            monsterRoster.NotifyLootSystem += lootManager.GenerateLootAndAddByFloor;
 
             Dictionary<int, float> dict = new Dictionary<int, float>
             {
@@ -47,7 +47,7 @@ namespace SomeKindOfGame
             };
             Pers = new Peasant(1, dict);
 
-            quests = GameManager.InitiateQuestObserver(Pers);
+            quests = GameManager.InitiateQuestObserver(Pers,monsterRoster);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
             var monstrRoast = new List<AbstractPerson>()
             {
@@ -55,10 +55,20 @@ namespace SomeKindOfGame
                 new Rat(1, 1, "rat",1),
                 new Rat(1, 1, "rat",1)
             };
+            var monstrRoast2 = new List<AbstractPerson>()
+            {
+                new Rat(2, 1, "rat",1),
+                new Rat(1, 1, "rat",1),
+                new Rat(1, 1, "rat",1)
+            };
             monsterRoster.AddMonsterToRoster(1, monstrRoast.ToArray());
-            monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 100).ToArray());
-            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { xpReward = 10, goldReward = 15 }));
-            battleClass = new someclass(Pers, monsterRoster.getMonsterRoastForFloor(1).ToList());
+            monsterRoster.AddMonsterToRoster(1, monstrRoast2.ToArray());
+            //monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 100).ToArray());
+            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { XpReward = 10, GoldReward = 15 },
+                new BaseQuestModel[]{
+                    new KillQuest("rats problem 2", "kill 3 rats", monstrRoast2, new RewardModel { XpReward = 100, GoldReward = 115 })
+                },quests.UpdateQuestListFromChildQuests));
+            battleClass = new someclass(Pers, monsterRoster.GetMonsterRoastForFloor(1).ToList());
 
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             DispatcherTimer timer = new DispatcherTimer();
@@ -105,6 +115,7 @@ namespace SomeKindOfGame
             string FightMessage = string.Empty;
             string anotherMessage = string.Empty;
             string QuestMessage = string.Empty;
+
             if (gameProcess.CurrentState == GameState.Fighting)
             {
                 try
@@ -115,7 +126,7 @@ namespace SomeKindOfGame
                 {
                     MessageBox.Show(ex.Message);
                 }
-                gameProcess.MoveNext(monsterRoster.getMonsterRoastForFloor(1));
+                gameProcess.MoveNext(monsterRoster.GetMonsterRoastForFloor(1));
             }
             else if (gameProcess.CurrentState == GameState.BackToTown)
             {
@@ -129,17 +140,26 @@ namespace SomeKindOfGame
             }
             else if (gameProcess.CurrentState == GameState.Looting)
             {
-                gameProcess.MoveNext(lootManager.getNextLootableObject());
+                gameProcess.MoveNext(lootManager.GetNextLootableObject());
+            }
+            else if(gameProcess.CurrentState == GameState.Explorirng)
+            {
+                if (quests.ActiveQuests() == 0)
+                {
+                    quests.SignOnQuest(quests.GenerateQuest());
+                    battleClass.Enemies = monsterRoster.GetMonsterRoastForFloor(1).ToList();
+                }
+                gameProcess.MoveNext(null);
             }
             else
             {
                 GameManager.GameTick(new IUpdatable[] { quests });
                 gameProcess.MoveNext(null);
             }
-            FightMessage = GameManager.getUnreadLogsString(GameNotificationState.Battle);
-            QuestMessage = GameManager.getUnreadLogsString(GameNotificationState.Quest);
-            anotherMessage = GameManager.getUnreadLogsString(GameNotificationState.Other);
-            allMessage = GameManager.getUnreadLogsString(GameNotificationState.All);
+            FightMessage = GameManager.GetUnreadLogsString(GameNotificationState.Battle);
+            QuestMessage = GameManager.GetUnreadLogsString(GameNotificationState.Quest);
+            anotherMessage = GameManager.GetUnreadLogsString(GameNotificationState.Other);
+            allMessage = GameManager.GetUnreadLogsString(GameNotificationState.All);
 
             this.notificationAllText.Text += allMessage;
             this.textAllViewerScroll.ScrollToEnd();
@@ -158,7 +178,7 @@ namespace SomeKindOfGame
         class someclass : IUpdatable
         {
             AbstractPerson Pers;
-            List<AbstractPerson> Enemies;
+            public List<AbstractPerson> Enemies;
 
             public someclass(AbstractPerson pers, List<AbstractPerson> enemies)
             {
@@ -169,18 +189,18 @@ namespace SomeKindOfGame
             {
                 GameNotification notification = new GameNotification()
                 {
-                    gameNotificationState = GameNotificationState.Battle
+                    GameNotificationState = GameNotificationState.Battle
                 };
                 if (Enemies.Count == 0) return notification;
                 var Enemy = Enemies.First();
                 if (Enemy is IDmgable dmg)
                 {
                     Pers.MakeDmg(dmg);
-                    notification.body += @$"Наносим {Pers.attackAmount()} урона по противнику [{Enemy}]!" + Environment.NewLine;
+                    notification.Body += @$"Наносим {Pers.AttackAmount()} урона по противнику [{Enemy}]!" + Environment.NewLine;
                 }
-                if (Enemy.isDead())
+                if (Enemy.IsDead())
                 {
-                    notification.body += @$"Противник [{Enemy}] получает смертельную рану!" + Environment.NewLine;
+                    notification.Body += @$"Противник [{Enemy}] получает смертельную рану!" + Environment.NewLine;
                     if (Enemy is IXPTransmittable xpTransmittable)
                     {
                         if (Pers is IXPRecievable xpRecievable)
@@ -194,10 +214,10 @@ namespace SomeKindOfGame
                     if (Pers is IDmgable pdmg)
                     {
                         Enemy.MakeDmg(pdmg);
-                        notification.body += $@"Противник [{Enemy}] наносит {Enemy.attackAmount()} урона по герою!" + Environment.NewLine;
+                        notification.Body += $@"Противник [{Enemy}] наносит {Enemy.AttackAmount()} урона по герою!" + Environment.NewLine;
                     }
                 }
-                Enemies.RemoveAll(x => x.isDead());
+                Enemies.RemoveAll(x => x.IsDead());
                 return notification;
             }
         }
