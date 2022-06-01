@@ -6,8 +6,8 @@ namespace Izeron.Library.Interfaces
 {
     public interface ILootable
     {
-        void Loot();
-        int Volume { get;}
-        string Name { get; }
+        public void Loot();
+        public int Volume { get;}
+        public string Name { get; }
     }
 }

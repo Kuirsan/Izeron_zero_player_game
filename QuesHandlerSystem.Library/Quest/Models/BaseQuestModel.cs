@@ -17,7 +17,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
 
         public string Description { get; set; }
 
-        public bool isFinish { get; set; }
+        public bool IsFinish = false;
 
         public BaseQuestModel(string title,string description)
         {
@@ -31,7 +31,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
             NotifyQuestListSystem += updateQuestListHandle;
         }
 
-        public abstract void getReward(AbstractPerson pers);
+        public abstract void GetReward(AbstractPerson pers);
 
         public abstract string UpdateQuest();
 

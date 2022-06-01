@@ -25,21 +25,24 @@ namespace QuestHandlerSystem.Library
         {
             _activeQuests = new List<BaseQuestModel>();
             _hero = Hero;
-            loadQuestModels();
+            LoadQuestModels();
             _maxActiveQuests = 5;
             _monsterManager = monsterManager;
         }
 
-        private void loadQuestModels()
+        private void LoadQuestModels()
         {
             string fileName = @"QuestLibrary\quests.json";
-            _questsModels = getQuestModelsFromJSON(fileName);
+            _questsModels = GetQuestModelsFromJSON(fileName);
         }
 
-        private List<QuestLoadModel> getQuestModelsFromJSON(string path)
+        private List<QuestLoadModel> GetQuestModelsFromJSON(string path)
         {
             string jsonString = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<List<QuestLoadModel>>(jsonString);
+            return JsonSerializer.Deserialize<List<QuestLoadModel>>(jsonString, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
         }
 
         public void SignOnQuest(BaseQuestModel quest)
@@ -54,9 +57,12 @@ namespace QuestHandlerSystem.Library
 
         public BaseQuestModel GenerateQuest()
         {
-            if (_questsModels.Count() == 0) throw new Exception("There is now quest models!");
+            if (_questsModels.Count == 0)
+            {
+                return GenerateRandomKillQuest();
+            }
             var questModel = _questsModels[0];
-            var monsters = _monsterManager.generateMonstersByName(questModel.Enemies);
+            var monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
 
             _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
             var quest = new KillQuest(questModel.Title, questModel.Description, monsters, questModel.Reward);
@@ -65,13 +71,56 @@ namespace QuestHandlerSystem.Library
             return quest;
         }
 
+        private BaseQuestModel GenerateRandomKillQuest()
+        {
+            var monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+            var title = $"Monsters {GenerateVerb()} {GenerateSubject()}!";
+            var description = "You must kill them!";
+            var reward = new RewardModel
+            {
+                GoldReward = 15,
+                XpReward = 15
+            };
+            var quest = new KillQuest(title,description,monsters, reward);
+
+            _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+
+            return quest;
+        }
+
+        private string GenerateVerb()
+        {
+            var r = new Random(DateTime.Now.AddMilliseconds(100).Millisecond).Next(1, 4);
+            var verb =  r switch 
+            {
+                1 => "ate",
+                2 => "stole",
+                3 => "ruined",
+                _=>"default"
+            };
+            return verb;
+        }
+
+        private string GenerateSubject()
+        {
+        var r = new Random(DateTime.Now.Millisecond).Next(1, 4);
+        var subj = r switch
+            {
+                1 => "cake",
+                2 => "plates",
+                3 => "king's soul",
+                _ => "default"
+            };
+            return subj;
+        }
+
         protected string UpdateAllQuests()
         {
             string notification = string.Empty;
-            var activeQuest = _activeQuests.Where(quest => !quest.isFinish).ToArray();
+            var activeQuest = _activeQuests.Where(quest => !quest.IsFinish).ToArray();
             foreach (var quest in activeQuest)
             {
-                notification+=UpdateQuest(quest);
+                notification+= UpdateQuest(quest);
             }
             RemoveObsoleteQuests();
             return notification;
@@ -81,12 +130,12 @@ namespace QuestHandlerSystem.Library
         {
             foreach(var quest in _activeQuests)
             {
-                if(quest.isFinish) quest.getReward(_hero);
+                if(quest.IsFinish) quest.GetReward(_hero);
             }
-            _activeQuests.RemoveAll(quest => quest.isFinish);
+            _activeQuests.RemoveAll(quest => quest.IsFinish);
         }
 
-        protected string UpdateQuest(BaseQuestModel quest)
+        protected static string UpdateQuest(BaseQuestModel quest)
         {
             return quest.UpdateQuest();
         }
@@ -95,13 +144,13 @@ namespace QuestHandlerSystem.Library
         {
             GameNotification gameNotification = new GameNotification()
             {
-                gameNotificationState = GameNotificationState.Quest
+                GameNotificationState = GameNotificationState.Quest
             };
-            gameNotification.body = UpdateAllQuests();
+            gameNotification.Body = UpdateAllQuests();
             return gameNotification;
         }
 
-        public void updateQuestListFromChildQuests(BaseQuestModel[] childQuests)
+        public void UpdateQuestListFromChildQuests(BaseQuestModel[] childQuests)
         {
             _activeQuests.AddRange(childQuests);
         }

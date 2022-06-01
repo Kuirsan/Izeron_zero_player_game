@@ -4,8 +4,8 @@
     "Description": "You must kill 3 rats",
     "Enemies": ["rat","rat","rat"],
     "Reward": {
-      "xpReward": 10,
-      "goldReward": 15
+      "XpReward": 10,
+      "GoldReward": 15
     }
   },
   {
@@ -13,8 +13,8 @@
     "Description": "Kill wolfs and rats",
     "Enemies": [ "rat", "wolf", "rat","wolf" ],
     "Reward": {
-      "xpReward": 15,
-      "goldReward": 25
+      "XpReward": 15,
+      "GoldReward": 25
     }
   }
 ]
