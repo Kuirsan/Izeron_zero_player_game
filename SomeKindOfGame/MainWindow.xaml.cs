@@ -49,26 +49,26 @@ namespace SomeKindOfGame
 
             quests = GameManager.InitiateQuestObserver(Pers,monsterRoster);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
-            var monstrRoast = new List<AbstractPerson>()
+            var monstrRoster = new List<AbstractPerson>()
             {
                 new Rat(2, 1, "rat",1),
                 new Rat(1, 1, "rat",1),
                 new Rat(1, 1, "rat",1)
             };
-            var monstrRoast2 = new List<AbstractPerson>()
+            var monstrRoster2 = new List<AbstractPerson>()
             {
                 new Rat(2, 1, "rat",1),
                 new Rat(1, 1, "rat",1),
                 new Rat(1, 1, "rat",1)
             };
-            monsterRoster.AddMonsterToRoster(1, monstrRoast.ToArray());
-            monsterRoster.AddMonsterToRoster(1, monstrRoast2.ToArray());
+            monsterRoster.AddMonsterToRoster(1, monstrRoster.ToArray());
+            monsterRoster.AddMonsterToRoster(1, monstrRoster2.ToArray());
             //monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 100).ToArray());
-            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoast, new RewardModel { XpReward = 10, GoldReward = 15 },
+            quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoster, new RewardModel { XpReward = 10, GoldReward = 15 },
                 new BaseQuestModel[]{
-                    new KillQuest("rats problem 2", "kill 3 rats", monstrRoast2, new RewardModel { XpReward = 100, GoldReward = 115 })
+                    new KillQuest("rats problem 2", "kill 3 rats", monstrRoster2, new RewardModel { XpReward = 100, GoldReward = 115 })
                 },quests.UpdateQuestListFromChildQuests));
-            battleClass = new someclass(Pers, monsterRoster.GetMonsterRoastForFloor(1).ToList());
+            battleClass = new someclass(Pers, monsterRoster.GetMonsterRosterForFloor(1).ToList());
 
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             DispatcherTimer timer = new DispatcherTimer();
@@ -126,7 +126,7 @@ namespace SomeKindOfGame
                 {
                     MessageBox.Show(ex.Message);
                 }
-                gameProcess.MoveNext(monsterRoster.GetMonsterRoastForFloor(1));
+                gameProcess.MoveNext(monsterRoster.GetMonsterRosterForFloor(1));
             }
             else if (gameProcess.CurrentState == GameState.BackToTown)
             {
@@ -147,7 +147,7 @@ namespace SomeKindOfGame
                 if (quests.ActiveQuests() == 0)
                 {
                     quests.SignOnQuest(quests.GenerateQuest());
-                    battleClass.Enemies = monsterRoster.GetMonsterRoastForFloor(1).ToList();
+                    battleClass.Enemies = monsterRoster.GetMonsterRosterForFloor(1).ToList();
                 }
                 gameProcess.MoveNext(null);
             }
