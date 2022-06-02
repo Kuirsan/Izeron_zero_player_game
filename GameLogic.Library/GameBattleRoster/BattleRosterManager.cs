@@ -49,7 +49,7 @@ namespace GameLogic.Library.GameBattleRoster
         {
             if (_battleRosterByFloor.ContainsKey(floor))
             {
-                var tmpRoster = GetMonsterRoastForFloor(1);
+                var tmpRoster = GetMonsterRosterForFloor(1);
                 tmpRoster.AddRange(monsters);
                 _battleRosterByFloor[floor] = tmpRoster;
             }
@@ -58,7 +58,7 @@ namespace GameLogic.Library.GameBattleRoster
                 _battleRosterByFloor.Add(floor, monsters.ToList());
             }
         }
-        public List<AbstractPerson> GetMonsterRoastForFloor(int floor)
+        public List<AbstractPerson> GetMonsterRosterForFloor(int floor)
         {
             if (_battleRosterByFloor.ContainsKey(floor))
             {
