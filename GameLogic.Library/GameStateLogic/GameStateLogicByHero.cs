@@ -10,6 +10,7 @@ namespace GameLogic.Library.GameStateLogic
 {
     public class GameStateLogicByHero : BaseGameStateLogic
     {
+        public int ShowBankScore => _bank;
         public override GameState GetNextGameStateByPerson(AbstractPerson person, GameState currentState, object opt)
         {
             if (currentState == GameState.InTown) return InTownState(person);

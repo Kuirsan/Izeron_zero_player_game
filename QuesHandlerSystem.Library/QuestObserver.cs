@@ -21,6 +21,17 @@ namespace QuestHandlerSystem.Library
         private int _maxActiveQuests;
         private BattleRosterManager _monsterManager;
 
+        public List<QuestViewModel> QuestsList
+        {
+            get
+            {
+                return _activeQuests.Select(q => new QuestViewModel
+                {
+                    Name = q.Title
+                }).ToList();
+            }
+        }
+
         public QuestObserver(AbstractPerson Hero,BattleRosterManager monsterManager)
         {
             _activeQuests = new List<BaseQuestModel>();
