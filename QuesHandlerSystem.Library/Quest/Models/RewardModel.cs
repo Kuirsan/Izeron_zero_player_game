@@ -15,7 +15,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
                       ||___Опыт = {XpReward}_____||
                       ||___Золото = {GoldReward}___||
                       ||============||
-                    ";
+";
         }
 
         public RewardModel()

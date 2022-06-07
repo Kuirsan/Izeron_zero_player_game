@@ -25,16 +25,26 @@
                 </Grid.ColumnDefinitions>
                 <GridSplitter Grid.Column="0" Width="3" Background="Gray"/>
                 <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
-                <StackPanel Grid.Row="0" Grid.Column="0">
+                <StackPanel Grid.Row="1" Grid.Column="0">
                     <Label Width="auto" HorizontalAlignment="Center">Hero attribute</Label>
                     <DataGrid x:Name="gridHero" Height="250" Margin="5 5" ColumnWidth="*"/>
                     <ProgressBar x:Name="expBar" Height="20" Margin="5 5" ToolTip="Xp for now: " ToolTipOpening="expBar_ToolTipOpening"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="100" Width="100"/>
+                            <ColumnDefinition MinWidth="100" Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Width="100" HorizontalAlignment="Left">Money in Bank:</Label>
+                        <Label x:Name="BankScore" Grid.Column="1" Width="100" HorizontalAlignment="Left">0</Label>
+                    </Grid>
                 </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="1">
-                    <Label Width="auto" HorizontalAlignment="Center">Inventory</Label>
-                    <DataGrid  x:Name="inventoryView" Height="250" Margin="5 5" ColumnWidth="*"/>
+                <StackPanel Grid.Row="1" Grid.Column="1">
+                    <Label Width="auto" HorizontalAlignment="Center">Quests</Label>
+                    <DataGrid x:Name="QuestsView" Height="170" ColumnWidth="*" Margin="5 5"/>
+                    <Label Width="auto" HorizontalAlignment="Center">Backpack</Label>
+                    <DataGrid  x:Name="inventoryView" Height="130" ColumnWidth="*"/>
                 </StackPanel>
-                <StackPanel Grid.Row="0" Grid.Column="2">
+                <StackPanel Grid.Row="1" Grid.Column="2">
                 </StackPanel>
             </Grid>
         </DockPanel>

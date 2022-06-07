@@ -34,6 +34,7 @@ namespace SomeKindOfGame
         GameProcess gameProcess;
         BattleRosterManager monsterRoster = new BattleRosterManager();
         LootManager lootManager = new LootManager();
+        GameStateLogicByHero gamelogic = new GameStateLogicByHero();
 
         public MainWindow()
         {
@@ -48,7 +49,7 @@ namespace SomeKindOfGame
             Pers = new Peasant(1, dict);
 
             quests = GameManager.InitiateQuestObserver(Pers,monsterRoster);
-            gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
+            gameProcess = GameManager.InitiateGameProcess(Pers, gamelogic);
             var monstrRoster = new List<AbstractPerson>()
             {
                 new Rat(2, 1, "rat",1),
@@ -111,6 +112,7 @@ namespace SomeKindOfGame
 
             string dateTime = DateTime.Now.ToShortTimeString();
             this.timeNow.Content = $"Сейчас: {dateTime}";
+            this.BankScore.Content = gamelogic.ShowBankScore;
             string allMessage = string.Empty;
             string FightMessage = string.Empty;
             string anotherMessage = string.Empty;
@@ -142,7 +144,7 @@ namespace SomeKindOfGame
             {
                 gameProcess.MoveNext(lootManager.GetNextLootableObject());
             }
-            else if(gameProcess.CurrentState == GameState.Explorirng)
+            else if (gameProcess.CurrentState == GameState.Explorirng)
             {
                 if (quests.ActiveQuests() == 0)
                 {
@@ -161,18 +163,33 @@ namespace SomeKindOfGame
             anotherMessage = GameManager.GetUnreadLogsString(GameNotificationState.Other);
             allMessage = GameManager.GetUnreadLogsString(GameNotificationState.All);
 
-            this.notificationAllText.Text += allMessage;
-            this.textAllViewerScroll.ScrollToEnd();
+            GameLogMessage(allMessage, FightMessage, anotherMessage, QuestMessage);
 
-            this.notificationFightText.Text += FightMessage;
-            this.textFightViewerScroll.ScrollToEnd();
+            this.QuestsView.ItemsSource = quests.QuestsList;
+        }
 
-            this.notificationQuestText.Text += QuestMessage;
-            this.textQuestViewerScroll.ScrollToEnd();
-
-            this.notificationAnotherText.Text += anotherMessage;
-            this.textAnotherViewerScroll.ScrollToEnd();
-
+        private void GameLogMessage(string allMessage, string FightMessage, string anotherMessage, string QuestMessage)
+        {
+            if (allMessage.Length > 0)
+            {
+                this.notificationAllText.Text += allMessage;
+                this.textAllViewerScroll.ScrollToEnd();
+            }
+            if (FightMessage.Length > 0)
+            {
+                this.notificationFightText.Text += FightMessage;
+                this.textFightViewerScroll.ScrollToEnd();
+            }
+            if (QuestMessage.Length > 0)
+            {
+                this.notificationQuestText.Text += QuestMessage;
+                this.textQuestViewerScroll.ScrollToEnd();
+            }
+            if (anotherMessage.Length > 0)
+            {
+                this.notificationAnotherText.Text += anotherMessage;
+                this.textAnotherViewerScroll.ScrollToEnd();
+            }
         }
 
         class someclass : IUpdatable
@@ -239,12 +256,23 @@ namespace SomeKindOfGame
         private void LoadGridInventory()
         {
             //this.inventoryView.HeadersVisibility = DataGridHeadersVisibility.None;
+            this.inventoryView.IsReadOnly = true;
         }
 
         private void LoadGrids()
         {
             LoadGridHero();
             LoadGridInventory();
+            LoadGridQuest();
+        }
+
+        private void LoadGridQuest()
+        {
+            this.QuestsView.HeadersVisibility = DataGridHeadersVisibility.None;
+            this.QuestsView.ItemsSource = quests.QuestsList;
+            this.QuestsView.CanUserAddRows = false;
+            this.QuestsView.CanUserDeleteRows = false;
+            this.QuestsView.IsReadOnly = true;
         }
 
         private void expBar_ToolTipOpening(object sender, ToolTipEventArgs e)
