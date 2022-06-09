@@ -62,7 +62,6 @@ namespace Izeron.Library.Persons.Tier0
                     }
                 }
             }
-            OnPropertyChanged(nameof(CharacterList));
         }
 
 
@@ -101,7 +100,6 @@ namespace Izeron.Library.Persons.Tier0
             {
                 _health += amount;
             }
-            OnPropertyChanged(nameof(CharacterList));
         }
 
         public override int AttackAmount()
@@ -116,14 +114,12 @@ namespace Izeron.Library.Persons.Tier0
             {
                 potion.HealPerson(this);
                 _inventory.TryToRemoveHealthPotion(potion);
-                OnPropertyChanged(nameof(CharacterList));
             }
         }
 
         public override void AddHealthPotion(HealthPotionBase healthPotion)
         {
             base.AddHealthPotion(healthPotion);
-            OnPropertyChanged(nameof(CharacterList));
         }
     }
 }

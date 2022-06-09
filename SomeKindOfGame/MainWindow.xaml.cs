@@ -113,6 +113,7 @@ namespace SomeKindOfGame
             string dateTime = DateTime.Now.ToShortTimeString();
             this.timeNow.Content = $"Сейчас: {dateTime}";
             this.BankScore.Content = gamelogic.ShowBankScore;
+            UpdatePersInfo();
             string allMessage = string.Empty;
             string FightMessage = string.Empty;
             string anotherMessage = string.Empty;
@@ -166,6 +167,17 @@ namespace SomeKindOfGame
             GameLogMessage(allMessage, FightMessage, anotherMessage, QuestMessage);
 
             this.QuestsView.ItemsSource = quests.QuestsList;
+        }
+
+        private void UpdatePersInfo()
+        {
+            if (Pers is AbstractPersonTier0 pp)
+            {
+                this.expBar.Maximum = pp.MaxXP;
+                this.expBar.Value = pp.CurrentXP;
+                this.gridHero.ItemsSource = pp.CharacterList;
+                this.inventoryView.ItemsSource = pp.InventoryList;
+            }
         }
 
         private void GameLogMessage(string allMessage, string FightMessage, string anotherMessage, string QuestMessage)

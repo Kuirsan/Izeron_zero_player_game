@@ -9,18 +9,12 @@ namespace Izeron.Library.Persons
     /// <summary>
     /// Base class for another persons tier 0
     /// </summary>
-    public abstract class AbstractPersonTier0 : AbstractPerson, IXPRecievable, INotifyPropertyChanged
+    public abstract class AbstractPersonTier0 : AbstractPerson, IXPRecievable
     {
         private protected int _lvlCup;
         private readonly float _lvlMultiple = 1;
         private float _curXP = 0f;
         private protected Dictionary<int, float> _lvlTable;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
 
         public int CurrentXP
         {
@@ -63,7 +57,6 @@ namespace Izeron.Library.Persons
             {
                 _curXP += Amount;
             }
-            OnPropertyChanged(nameof(CurrentXP));
         }
         /// <summary>
         /// lvlUp the character.
@@ -72,8 +65,6 @@ namespace Izeron.Library.Persons
         {
             _lvl++;
             _curXP = 0;
-            OnPropertyChanged(nameof(MaxXP));
-            OnPropertyChanged(nameof(CharacterList));
         }
         /// <summary>
         /// Recieve amount of XP.
@@ -87,7 +78,6 @@ namespace Izeron.Library.Persons
         public override bool AddItemToInventory(ILootable item)
         {
             bool addedToInventory = _inventory.TryToAddItemToInventory(item);
-            OnPropertyChanged(nameof(InventoryList));
             return addedToInventory;
         }
         public override bool SomethingInInventory()
@@ -100,17 +90,14 @@ namespace Izeron.Library.Persons
             var item = _inventory.GetItemForSale();
             AddMoneyAmount(item.Volume);
             _inventory.TryToRemoveFromInventory(item);
-            OnPropertyChanged(nameof(InventoryList));
         }
         public override void SetMoneyAmount(int value)
         {
             _money = value;
-            OnPropertyChanged(nameof(CharacterList));
         }
         public override void AddMoneyAmount(int money)
         {
             base.AddMoneyAmount(money);
-            OnPropertyChanged(nameof(CharacterList));
         }
     }
 }
