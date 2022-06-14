@@ -7,13 +7,13 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 using GameCenter.Library.GameCenter;
+using GameLogic.Library.GameBattleLogic;
 using GameLogic.Library.GameBattleRoster;
 using GameLogic.Library.GameStateLogic;
 using GameLogic.Library.LootManager;
 using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
-using Izeron.Library.Notification;
 using Izeron.Library.Persons;
 using Izeron.Library.Persons.Enemies.Tier0;
 using Izeron.Library.Persons.Tier0;
@@ -29,7 +29,7 @@ namespace SomeKindOfGame
     {
         static CancellationTokenSource cancelToken = new CancellationTokenSource();
         AbstractPerson Pers;
-        someclass battleClass;
+        GameBattleLogic battleClass;
         QuestObserver quests;
         GameProcess gameProcess;
         BattleRosterManager monsterRoster = new BattleRosterManager();
@@ -69,7 +69,7 @@ namespace SomeKindOfGame
                 new BaseQuestModel[]{
                     new KillQuest("rats problem 2", "kill 3 rats", monstrRoster2, new RewardModel { XpReward = 100, GoldReward = 115 })
                 },quests.UpdateQuestListFromChildQuests));
-            battleClass = new someclass(Pers, monsterRoster.GetMonsterRosterForFloor(1).ToList());
+            battleClass = new GameBattleLogic(Pers, monsterRoster.GetMonsterRosterForFloor(1).ToList());
 
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
             DispatcherTimer timer = new DispatcherTimer();
@@ -150,7 +150,7 @@ namespace SomeKindOfGame
                 if (quests.ActiveQuests() == 0)
                 {
                     quests.SignOnQuest(quests.GenerateQuest());
-                    battleClass.Enemies = monsterRoster.GetMonsterRosterForFloor(1).ToList();
+                    battleClass.SetMonsters(monsterRoster.GetMonsterRosterForFloor(1).ToList());
                 }
                 gameProcess.MoveNext(null);
             }
@@ -203,54 +203,6 @@ namespace SomeKindOfGame
                 this.textAnotherViewerScroll.ScrollToEnd();
             }
         }
-
-        class someclass : IUpdatable
-        {
-            AbstractPerson Pers;
-            public List<AbstractPerson> Enemies;
-
-            public someclass(AbstractPerson pers, List<AbstractPerson> enemies)
-            {
-                this.Pers = pers;
-                this.Enemies = enemies;
-            }
-            public GameNotification Update()
-            {
-                GameNotification notification = new GameNotification()
-                {
-                    GameNotificationState = GameNotificationState.Battle
-                };
-                if (Enemies.Count == 0) return notification;
-                var Enemy = Enemies.First();
-                if (Enemy is IDmgable dmg)
-                {
-                    Pers.MakeDmg(dmg);
-                    notification.Body += @$"Наносим {Pers.AttackAmount()} урона по противнику [{Enemy}]!" + Environment.NewLine;
-                }
-                if (Enemy.IsDead())
-                {
-                    notification.Body += @$"Противник [{Enemy}] получает смертельную рану!" + Environment.NewLine;
-                    if (Enemy is IXPTransmittable xpTransmittable)
-                    {
-                        if (Pers is IXPRecievable xpRecievable)
-                        {
-                            xpTransmittable.TransmitXP(xpRecievable);
-                        }
-                    }
-                }
-                else
-                {
-                    if (Pers is IDmgable pdmg)
-                    {
-                        Enemy.MakeDmg(pdmg);
-                        notification.Body += $@"Противник [{Enemy}] наносит {Enemy.AttackAmount()} урона по герою!" + Environment.NewLine;
-                    }
-                }
-                Enemies.RemoveAll(x => x.IsDead());
-                return notification;
-            }
-        }
-
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
