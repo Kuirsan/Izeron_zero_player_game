@@ -11,12 +11,14 @@ namespace Izeron.Library.Persons.Enemies
         private int _attack;
         private int _xpToGain;
         private protected HashSet<SpecialEnemyTags> _enemyTags;
+        private protected HashSet<PersonTags> _enemyTypeTags;
         private string _prefix = string.Empty;
         public Monster(EnemyFillModel model):base(model.HP,1,model.Name)
         {
             _attack = model.Attack;
             _xpToGain = model.XPToGain;
             _enemyTags = model.EnemyTags;
+            _enemyTypeTags = model.EnemyTypeTags;
             InitiateTags();
         }
 

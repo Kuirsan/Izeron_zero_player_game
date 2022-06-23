@@ -52,14 +52,16 @@ namespace GameEditor
                     ,new SpecialEnemyTag(SpecialEnemyTags.Strong)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Weak)},
                 HPRange: new ParameterRange(1, 5),
-                FloorRange: new ParameterRange(1, 2));
+                FloorRange: new ParameterRange(1, 2),
+                enemyTypetags: null);
             GameEnemiesModel enemyModel2 = new GameEnemiesModel
               (PossibleTags: new SpecialEnemyTag[] {new SpecialEnemyTag(SpecialEnemyTags.Big)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Small)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Strong)
                     ,new SpecialEnemyTag(SpecialEnemyTags.Weak)},
                HPRange: new ParameterRange(1, 5),
-               FloorRange: new ParameterRange(1, 2));
+               FloorRange: new ParameterRange(1, 2),
+               enemyTypetags: null);
             List<GameEnemiesModel> enemyList = new List<GameEnemiesModel>();
             enemyList.Add(enemyModel); enemyList.Add(enemyModel2);
             string jsonString = JsonSerializer.Serialize(enemyList, options);

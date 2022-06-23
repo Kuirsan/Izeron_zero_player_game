@@ -76,7 +76,7 @@ namespace GameLogic.Library.GameBattleRoster
                                                     .Select(x => x).ToList();
             for (int i = 0; i < amount; i++)
             {
-                GameEnemiesModel monsterModel=new GameEnemiesModel(null,null,null);
+                GameEnemiesModel monsterModel=new GameEnemiesModel(null,null,null,null);
                 if (monsterModels.Count == 0) return monsters;
                 if (monsterModels.Count == 1) monsterModel = monsterModels[0];
                 if (monsterModels.Count > 1)

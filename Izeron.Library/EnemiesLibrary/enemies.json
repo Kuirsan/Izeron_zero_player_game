@@ -16,6 +16,12 @@
         "SpecialTagString": "Weak"
       }
     ],
+    "EnemyTypeTags": [
+      {
+        "TypeOfEnemyTypeTag": 1,
+        "EnemyTypeTagString" : "Rat"
+      }
+    ],
     "HPRange": {
       "minParameter": 1,
       "maxParameter": 4
@@ -50,6 +56,12 @@
         "SpecialTagString": "Weak"
       }
     ],
+    "EnemyTypeTags": [
+      {
+        "TypeOfEnemyTypeTag": 2,
+        "EnemyTypeTagString": "Wolf"
+      }
+    ],
     "HPRange": {
       "minParameter": 1,
       "maxParameter": 5
@@ -78,6 +90,12 @@
       {
         "TypeOfSpecialEnemyTag": 1,
         "SpecialTagString": "Weak"
+      }
+    ],
+    "EnemyTypeTags": [
+      {
+        "TypeOfEnemyTypeTag": 2,
+        "EnemyTypeTagString": "Wolf"
       }
     ],
     "HPRange": {

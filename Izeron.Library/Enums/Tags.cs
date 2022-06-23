@@ -6,7 +6,9 @@ namespace Izeron.Library.Enums
 {
     public enum PersonTags
     {
-        Human
+        Human,
+        Rat,
+        Wolf
     }
 
     public enum WeaponTags

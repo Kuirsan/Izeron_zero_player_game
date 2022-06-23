@@ -34,10 +34,10 @@ namespace GameLogic.Library.LootManager
         }
         public LootManager() : base()
         {
-            LoadEnemiesModels();
+            LoadLootsModels();
         }
 
-        private void LoadEnemiesModels()
+        private void LoadLootsModels()
         {
             string fileName = @"LootsLibrary\loots.json";
             _lootsModels = GetLootsModelsFromJSON(fileName);

@@ -12,5 +12,6 @@ namespace Izeron.Library.Persons.Enemies
         public string Name { get; set; }
         public int XPToGain { get; set; }
         public  HashSet<SpecialEnemyTags> EnemyTags { get; set; }
+        public HashSet<PersonTags> EnemyTypeTags { get; set; }
     }
 }

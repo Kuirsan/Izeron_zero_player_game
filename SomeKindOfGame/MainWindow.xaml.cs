@@ -67,7 +67,7 @@ namespace SomeKindOfGame
             //monsterRoster.AddMonsterToRoster(1, monsterRoster.generateRandomMonsters(1, 100).ToArray());
             quests.SignOnQuest(new KillQuest("rats problem", "kill 3 rats", monstrRoster, new RewardModel { XpReward = 10, GoldReward = 15 },
                 new BaseQuestModel[]{
-                    new KillQuest("rats problem 2", "kill 3 rats", monstrRoster2, new RewardModel { XpReward = 100, GoldReward = 115 })
+                    new KillQuest("rats problem 2", "kill 3 rats", monstrRoster2, new RewardModel { XpReward = 11, GoldReward = 16 })
                 },quests.UpdateQuestListFromChildQuests));
             battleClass = new GameBattleLogic(Pers, monsterRoster.GetMonsterRosterForFloor(1).ToList());
 
