@@ -62,10 +62,30 @@ namespace QuestHandlerSystem.Library
                 return GenerateRandomKillQuest();
             }
             var questModel = _questsModels[0];
-            var monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
-
-            _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
-            var quest = new KillQuest(questModel.Title, questModel.Description, monsters, questModel.Reward);
+            
+            // Проверяем тип квеста
+            string questType = questModel.QuestType ?? "Kill";
+            
+            BaseQuestModel quest;
+            if (questType.Equals("CollectLoot", StringComparison.OrdinalIgnoreCase))
+            {
+                // Создаем квест на сбор лута
+                quest = new CollectLootQuest(
+                    questModel.Title,
+                    questModel.Description,
+                    questModel.RequiredLootName,
+                    questModel.RequiredLootQuantity,
+                    questModel.Reward,
+                    _hero
+                );
+            }
+            else
+            {
+                // Создаем обычный квест на убийство
+                var monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
+                _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+                quest = new KillQuest(questModel.Title, questModel.Description, monsters, questModel.Reward);
+            }
 
             _questsModels.Remove(questModel);
             return quest;

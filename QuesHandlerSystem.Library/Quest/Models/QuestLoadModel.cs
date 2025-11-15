@@ -13,5 +13,11 @@ namespace QuestHandlerSystem.Library.Quest.Models
         public string[] Enemies { get; set; }
 
         public RewardModel Reward {get;set;}
+
+        public string QuestType { get; set; } = "Kill"; // "Kill" или "CollectLoot"
+
+        public string RequiredLootName { get; set; }
+
+        public int RequiredLootQuantity { get; set; }
     }
 }

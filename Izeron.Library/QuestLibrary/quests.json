@@ -16,5 +16,27 @@
       "XpReward": 15,
       "GoldReward": 25
     }
+  },
+  {
+    "Title": "Collect Branches",
+    "Description": "Collect 5 branches",
+    "QuestType": "CollectLoot",
+    "RequiredLootName": "Branch",
+    "RequiredLootQuantity": 5,
+    "Reward": {
+      "XpReward": 20,
+      "GoldReward": 30
+    }
+  },
+  {
+    "Title": "Iron Ingots Needed",
+    "Description": "Gather 3 iron ingots",
+    "QuestType": "CollectLoot",
+    "RequiredLootName": "Iron Ingot",
+    "RequiredLootQuantity": 3,
+    "Reward": {
+      "XpReward": 25,
+      "GoldReward": 40
+    }
   }
 ]
