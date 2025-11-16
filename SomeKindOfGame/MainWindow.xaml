@@ -35,6 +35,14 @@
                     <DataGrid  x:Name="inventoryView" Height="250" Margin="5 5" ColumnWidth="*"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2">
+                    <Label Width="auto" HorizontalAlignment="Center">Quests</Label>
+                    <DataGrid x:Name="questsView" Height="250" Margin="5 5" ColumnWidth="*" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*"/>
+                            <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*"/>
+                            <DataGridTextColumn Header="Progress" Binding="{Binding ProgressInfo}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </StackPanel>
             </Grid>
         </DockPanel>

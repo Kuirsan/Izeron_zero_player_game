@@ -15,6 +15,15 @@ namespace QuestHandlerSystem.Library.Quest.Models
             _reward = reward;
         }
 
+        public override string ProgressInfo
+        {
+            get
+            {
+                if (IsFinish) return "Завершен";
+                return $"Осталось врагов: {_enemies.Count}";
+            }
+        }
+
         public KillQuest(string title, string description, List<AbstractPerson> enemies, RewardModel reward, BaseQuestModel[] childQuests, UpdateQuestListHandle updateQuestListHandle) :base(title, description, childQuests, updateQuestListHandle)
         {
             _enemies = enemies;

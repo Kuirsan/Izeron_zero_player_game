@@ -173,6 +173,10 @@ namespace SomeKindOfGame
             this.notificationAnotherText.Text += anotherMessage;
             this.textAnotherViewerScroll.ScrollToEnd();
 
+            // Обновляем список активных квестов
+            this.questsView.ItemsSource = quests.GetActiveQuests();
+            this.questsView.Items.Refresh();
+
         }
 
         class someclass : IUpdatable

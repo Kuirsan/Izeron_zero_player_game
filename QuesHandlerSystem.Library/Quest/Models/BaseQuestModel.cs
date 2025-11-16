@@ -19,6 +19,8 @@ namespace QuestHandlerSystem.Library.Quest.Models
 
         public bool IsFinish = false;
 
+        public abstract string ProgressInfo { get; }
+
         public BaseQuestModel(string title,string description)
         {
             Title = title;

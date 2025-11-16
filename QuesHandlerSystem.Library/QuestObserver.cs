@@ -174,5 +174,10 @@ namespace QuestHandlerSystem.Library
         {
             _activeQuests.AddRange(childQuests);
         }
+
+        public List<BaseQuestModel> GetActiveQuests()
+        {
+            return _activeQuests.Where(quest => !quest.IsFinish).ToList();
+        }
     }
 }

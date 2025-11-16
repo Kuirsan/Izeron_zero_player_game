@@ -20,6 +20,18 @@ namespace QuestHandlerSystem.Library.Quest.Models
             _hero = hero;
         }
 
+        public override string ProgressInfo
+        {
+            get
+            {
+                if (IsFinish) return "Завершен";
+                var inventoryList = _hero.InventoryList;
+                var lootItem = inventoryList.FirstOrDefault(item => item.Name == _requiredLootName);
+                int collectedQuantity = lootItem?.Qty ?? 0;
+                return $"{collectedQuantity}/{_requiredQuantity} {_requiredLootName}";
+            }
+        }
+
         public CollectLootQuest(string title, string description, string requiredLootName, int requiredQuantity, RewardModel reward, AbstractPerson hero, 
             BaseQuestModel[] childQuests, UpdateQuestListHandle updateQuestListHandle) 
             : base(title, description, childQuests, updateQuestListHandle)
