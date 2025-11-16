@@ -36,6 +36,11 @@ namespace QuestHandlerSystem.Library
             _questsModels = GetQuestModelsFromJSON(fileName);
         }
 
+        public void ReloadQuestModels()
+        {
+            LoadQuestModels();
+        }
+
         private List<QuestLoadModel> GetQuestModelsFromJSON(string path)
         {
             string jsonString = File.ReadAllText(path);
@@ -57,9 +62,15 @@ namespace QuestHandlerSystem.Library
 
         public BaseQuestModel GenerateQuest()
         {
+            // Если квесты закончились, перезагружаем их из JSON
             if (_questsModels.Count == 0)
             {
-                return GenerateRandomKillQuest();
+                ReloadQuestModels();
+                // Если после перезагрузки все еще пусто, генерируем случайный квест на убийство
+                if (_questsModels.Count == 0)
+                {
+                    return GenerateRandomKillQuest();
+                }
             }
             var questModel = _questsModels[0];
             
