@@ -45,11 +45,16 @@ namespace Izeron.Library.InventorySystem
         }
 
 
-        public override ILootable GetItemForSale()
+        public override ILootable GetItemForSale(Func<string, bool> isQuestItem = null)
         {
             if(SomethingInInventory())
             {
-                return _inventory.First();
+                if (isQuestItem == null)
+                {
+                    return _inventory.First();
+                }
+                
+                return _inventory.FirstOrDefault(item => !isQuestItem(item.Name));
             }
             return null;
         }
@@ -59,9 +64,15 @@ namespace Izeron.Library.InventorySystem
             return _healthPotions.Count > 0;
         }
 
-        public override bool SomethingInInventory()
+        public override bool SomethingInInventory(Func<string, bool> isQuestItem = null)
         {
-            return _inventory.Count > 0;
+            if (isQuestItem == null)
+            {
+                return _inventory.Count > 0;
+            }
+            
+            // Check if there are any non-quest items
+            return _inventory.Any(item => !isQuestItem(item.Name));
         }
 
         public override bool IsFullOfHealthPotions()

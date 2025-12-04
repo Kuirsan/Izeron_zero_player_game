@@ -10,6 +10,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
         private readonly int _requiredQuantity;
         private readonly RewardModel _reward;
         private readonly AbstractPerson _hero;
+        public string RequiredLootName => _requiredLootName;
 
         public CollectLootQuest(string title, string description, string requiredLootName, int requiredQuantity, RewardModel reward, AbstractPerson hero) 
             : base(title, description)

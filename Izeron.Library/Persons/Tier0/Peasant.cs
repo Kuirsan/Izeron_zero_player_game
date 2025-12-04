@@ -14,7 +14,7 @@ namespace Izeron.Library.Persons.Tier0
     public class Peasant : AbstractPersonTier0, IDmgable,IHealable
     {
         private protected int _attackModifier = 0;
-        public int Attack => _str  + _attackModifier;
+        public int Attack => _str + _attackModifier + GetDamageBonus();
 
         private protected int _str;
         private Peasant(Dictionary<int, float> LVLTable) : base(5, 0, "Peasant", LVLTable,new InventoryPerson(15))
@@ -48,7 +48,9 @@ namespace Izeron.Library.Persons.Tier0
             }
             else
             {
-                _health -= Amount;
+                // Применяем защиту от перков
+                int actualDamage = Math.Max(1, Amount - GetDefenseBonus());
+                _health -= actualDamage;
                 if (_health <= 0)
                 {
                     _health = 0;
@@ -85,7 +87,7 @@ namespace Izeron.Library.Persons.Tier0
         }
         protected override void LvlUp()
         {
-            _str += (Int32)(new Random().NextDouble()+0.020f*_lvl* _str);
+            _str += (Int32)(new Random().NextDouble()+0.020f*_lvl* _str + 0.1f);
             _maxHealth += new Random().Next((int)(1 + 0.015f * _lvl), (int)(3*(1 + 0.015f * _lvl)));
             base.LvlUp();
         }

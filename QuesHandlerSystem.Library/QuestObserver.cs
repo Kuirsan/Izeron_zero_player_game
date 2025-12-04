@@ -62,15 +62,10 @@ namespace QuestHandlerSystem.Library
 
         public BaseQuestModel GenerateQuest()
         {
-            // Если квесты закончились, перезагружаем их из JSON
+            // Если квесты закончились, генерируем случайный квест
             if (_questsModels.Count == 0)
             {
-                ReloadQuestModels();
-                // Если после перезагрузки все еще пусто, генерируем случайный квест на убийство
-                if (_questsModels.Count == 0)
-                {
-                    return GenerateRandomKillQuest();
-                }
+                return GenerateRandomQuest();
             }
             var questModel = _questsModels[0];
             
@@ -80,6 +75,17 @@ namespace QuestHandlerSystem.Library
             BaseQuestModel quest;
             if (questType.Equals("CollectLoot", StringComparison.OrdinalIgnoreCase))
             {
+                List<AbstractPerson> monsters;
+                if (questModel.Enemies != null && questModel.Enemies.Length > 0)
+                {
+                    monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
+                }
+                else
+                {
+                    monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+                }
+                _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+
                 // Создаем квест на сбор лута
                 quest = new CollectLootQuest(
                     questModel.Title,
@@ -100,6 +106,91 @@ namespace QuestHandlerSystem.Library
 
             _questsModels.Remove(questModel);
             return quest;
+        }
+
+        public BaseQuestModel GenerateQuestByType(string type)
+        {
+             // Try to find in models
+             var questModel = _questsModels.FirstOrDefault(q => (q.QuestType ?? "Kill").Equals(type, StringComparison.OrdinalIgnoreCase));
+             
+             if (questModel != null)
+             {
+                 _questsModels.Remove(questModel);
+                 if (type.Equals("CollectLoot", StringComparison.OrdinalIgnoreCase))
+                 {
+                    List<AbstractPerson> monsters;
+                    if (questModel.Enemies != null && questModel.Enemies.Length > 0)
+                    {
+                        monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
+                    }
+                    else
+                    {
+                        monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+                    }
+                    _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+
+                    return new CollectLootQuest(
+                        questModel.Title,
+                        questModel.Description,
+                        questModel.RequiredLootName,
+                        questModel.RequiredLootQuantity,
+                        questModel.Reward,
+                        _hero
+                    );
+                 }
+                 else
+                 {
+                    var monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
+                    _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+                    return new KillQuest(questModel.Title, questModel.Description, monsters, questModel.Reward);
+                 }
+             }
+
+             // If not found, generate random
+             if (type.Equals("CollectLoot", StringComparison.OrdinalIgnoreCase))
+             {
+                 return GenerateRandomCollectQuest();
+             }
+             else
+             {
+                 return GenerateRandomKillQuest();
+             }
+        }
+
+        private BaseQuestModel GenerateRandomQuest()
+        {
+            var r = new Random();
+            if (r.Next(0, 2) == 0)
+            {
+                return GenerateRandomKillQuest();
+            }
+            else
+            {
+                return GenerateRandomCollectQuest();
+            }
+        }
+
+        private BaseQuestModel GenerateRandomCollectQuest()
+        {
+            var lootNames = new[] { "Branch", "Iron Ingot" };
+            var r = new Random();
+            var lootName = lootNames[r.Next(lootNames.Length)];
+            var quantity = r.Next(1, 6);
+            
+            var title = $"Collect {quantity} {lootName}s";
+            var description = $"We need {lootName}s for the town!";
+            
+            var reward = new RewardModel
+            {
+                GoldReward = 10 * quantity,
+                XpReward = 10 * quantity
+            };
+
+            // Spawn monsters to drop loot
+            var monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+            _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+
+            return new CollectLootQuest(title, description, lootName, quantity, reward, _hero);
         }
 
         private BaseQuestModel GenerateRandomKillQuest()

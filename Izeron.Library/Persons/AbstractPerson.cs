@@ -21,6 +21,7 @@ namespace Izeron.Library.Persons
         private protected bool _isDead = false;
         private protected int _money;
         private protected InventoryBase _inventory;
+        public Func<string, bool> IsQuestItem { get; set; }
         public int MaxHealth
         {
             get

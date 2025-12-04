@@ -31,8 +31,16 @@
                     <ProgressBar x:Name="expBar" Height="20" Margin="5 5" ToolTip="Xp for now: " ToolTipOpening="expBar_ToolTipOpening"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1">
+                    <Label Width="auto" HorizontalAlignment="Center">Perks</Label>
+                    <DataGrid x:Name="perksView" Height="120" Margin="5 5" ColumnWidth="*" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                            <DataGridTextColumn Header="Бонус" Binding="{Binding Bonus}" Width="*"/>
+                            <DataGridTextColumn Header="Ур." Binding="{Binding Level}" Width="30"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
                     <Label Width="auto" HorizontalAlignment="Center">Inventory</Label>
-                    <DataGrid  x:Name="inventoryView" Height="250" Margin="5 5" ColumnWidth="*"/>
+                    <DataGrid  x:Name="inventoryView" Height="120" Margin="5 5" ColumnWidth="*"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2">
                     <Label Width="auto" HorizontalAlignment="Center">Quests</Label>
@@ -79,6 +87,7 @@
 
 
         <Label x:Name="timeNow" Grid.Column="0" Grid.Row="0"/>
+        <Label x:Name="gameStateLabel" Grid.Column="0" Grid.Row="0" Margin="200,0,0,0" FontWeight="Bold" FontSize="14"/>
         <Label x:Name="doSomething" Grid.Column="0" Grid.Row="0" Margin="200,0,200,0"/>
     </Grid>
 </Window>

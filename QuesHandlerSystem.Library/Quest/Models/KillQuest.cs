@@ -42,6 +42,10 @@ namespace QuestHandlerSystem.Library.Quest.Models
         {
             string notification=string.Empty;
             if (IsFinish) return string.Empty;
+            
+            // Удаляем мертвых врагов из списка
+            _enemies.RemoveAll(enemy => enemy.IsDead());
+            
             if (_enemies.Count == 0)
             {
                 IsFinish = true;
@@ -51,10 +55,7 @@ namespace QuestHandlerSystem.Library.Quest.Models
                 }
                 notification=SetNotificationText();
             }
-            else
-            {
-                _enemies.RemoveAll(enemy => enemy.IsDead());
-            }
+            
             return notification;
         }
         private string SetNotificationText()

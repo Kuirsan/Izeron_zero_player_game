@@ -120,6 +120,18 @@ namespace GameCenter.Library.GameCenter
             }
             return _questObserver;
         }
+        
+        public static void AddNotification(GameNotification notification)
+        {
+            _gameLogs.Add(notification);
+            _gameLogs.Add(new GameNotification
+            {
+                Body = notification.Body,
+                GameNotificationState = GameNotificationState.All,
+                IsRead = false
+            });
+        }
+        
         public static GameProcess InitiateGameProcess(AbstractPerson hero, BaseGameStateLogic logic)
         {
             if(_gameProcess==null)

@@ -14,6 +14,7 @@ using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using Izeron.Library.Notification;
+using Izeron.Library.Perks;
 using Izeron.Library.Persons;
 using Izeron.Library.Persons.Enemies.Tier0;
 using Izeron.Library.Persons.Tier0;
@@ -34,6 +35,7 @@ namespace SomeKindOfGame
         GameProcess gameProcess;
         BattleRosterManager monsterRoster = new BattleRosterManager();
         LootManager lootManager = new LootManager();
+        PerkManager perkManager = new PerkManager();
 
         public MainWindow()
         {
@@ -64,6 +66,27 @@ namespace SomeKindOfGame
             timer.Tick += timer_Tick;
             timer.Start();
             LoadGrids();
+            Pers.IsQuestItem = (itemName) => {
+                var activeQuests = quests.GetActiveQuests();
+                foreach (var quest in activeQuests)
+                {
+                    if (quest is CollectLootQuest collectQuest)
+                    {
+                        if (collectQuest.RequiredLootName == itemName && !collectQuest.IsFinish)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            };
+            
+            // Подписываемся на событие повышения уровня
+            if (Pers is AbstractPersonTier0 heroTier0)
+            {
+                heroTier0.LeveledUp += OnHeroLeveledUp;
+            }
+            
             SetBindingsProperties();
         }
 
@@ -91,6 +114,12 @@ namespace SomeKindOfGame
                 b3.Path = new PropertyPath(nameof(pp.InventoryList));
                 b3.Mode = BindingMode.OneWay;
                 this.inventoryView.SetBinding(DataGrid.ItemsSourceProperty, b3);
+                
+                Binding b4 = new Binding();
+                b4.Source = Pers;
+                b4.Path = new PropertyPath(nameof(pp.PerksList));
+                b4.Mode = BindingMode.OneWay;
+                this.perksView.SetBinding(DataGrid.ItemsSourceProperty, b4);
             }
         }
 
@@ -99,6 +128,7 @@ namespace SomeKindOfGame
 
             string dateTime = DateTime.Now.ToShortTimeString();
             this.timeNow.Content = $"Сейчас: {dateTime}";
+            this.gameStateLabel.Content = $"Состояние: {GetGameStateRussianName(gameProcess.CurrentState)}";
             string allMessage = string.Empty;
             string FightMessage = string.Empty;
             string anotherMessage = string.Empty;
@@ -134,39 +164,41 @@ namespace SomeKindOfGame
             else if(gameProcess.CurrentState == GameState.Explorirng)
             {
                 // Если нет активных квестов, генерируем новый
-                if (quests.ActiveQuests() == 0)
+                var activeQuests = quests.GetActiveQuests();
+                bool hasKillQuest = activeQuests.Any(q => q is KillQuest);
+                bool hasCollectQuest = activeQuests.Any(q => q is CollectLootQuest);
+
+                if (!hasKillQuest)
                 {
-                    var newQuest = quests.GenerateQuest();
+                    var newQuest = quests.GenerateQuestByType("Kill");
                     quests.SignOnQuest(newQuest);
-                    
-                    // Обновляем список врагов для боя (если квест на убийство, враги уже добавлены в роастер)
-                    var currentMonsters = monsterRoster.GetMonsterRoastForFloor(1);
-                    if (currentMonsters != null && currentMonsters.Count > 0)
-                    {
-                        battleClass.Enemies = currentMonsters.ToList();
-                    }
+                }
+
+                if (!hasCollectQuest)
+                {
+                    var newQuest = quests.GenerateQuestByType("CollectLoot");
+                    quests.SignOnQuest(newQuest);
+                }
+
+                var currentMonsters = monsterRoster.GetMonsterRoastForFloor(1);
+                if (currentMonsters != null && currentMonsters.Count > 0)
+                {
+                    battleClass.Enemies = currentMonsters.ToList();
                 }
                 else
                 {
-                    // Если есть активные квесты, но нет врагов на этаже, обновляем список врагов
-                    var currentMonsters = monsterRoster.GetMonsterRoastForFloor(1);
-                    if (currentMonsters != null && currentMonsters.Count > 0)
-                    {
-                        battleClass.Enemies = currentMonsters.ToList();
-                    }
-                    else
-                    {
-                        // Если нет врагов, но есть квесты (например, на сбор лута), продолжаем игру
-                        battleClass.Enemies = new List<AbstractPerson>();
-                    }
+                    battleClass.Enemies = new List<AbstractPerson>();
                 }
                 gameProcess.MoveNext(null);
             }
             else
             {
-                GameManager.GameTick(new IUpdatable[] { quests });
                 gameProcess.MoveNext(null);
             }
+            
+            // Обновляем квесты на каждом тике
+            GameManager.GameTick(new IUpdatable[] { quests });
+            
             FightMessage = GameManager.GetUnreadLogsString(GameNotificationState.Battle);
             QuestMessage = GameManager.GetUnreadLogsString(GameNotificationState.Quest);
             anotherMessage = GameManager.GetUnreadLogsString(GameNotificationState.Other);
@@ -269,6 +301,43 @@ namespace SomeKindOfGame
                 ((ProgressBar)e.Source).ToolTip = $"exp for next level: {ap.MaxXP - ap.CurrentXP} exp.";
             }
 
+
+        }
+
+        private void OnHeroLeveledUp(object sender, int newLevel)
+        {
+            if (Pers is AbstractPersonTier0 hero)
+            {
+                var perk = perkManager.GetRandomPerkForLevel(newLevel);
+                if (perk != null)
+                {
+                    hero.AddPerk(perk);
+                    
+                    // Логируем получение перка
+                    var notification = new GameNotification
+                    {
+                        GameNotificationState = GameNotificationState.Other,
+                        Body = $"Получен новый перк: {perk.Name} (+{perk.Value} {perk.Type})!" + Environment.NewLine
+                    };
+                    GameManager.AddNotification(notification);
+                }
+            }
+        }
+
+        private string GetGameStateRussianName(GameState state)
+        {
+            return state switch
+            {
+                GameState.InTown => "В городе",
+                GameState.Fighting => "Бой",
+                GameState.Explorirng => "Исследование",
+                GameState.Looting => "Сбор добычи",
+                GameState.BackToTown => "Возвращение в город",
+                GameState.Healing => "Лечение",
+                GameState.SellingLoot => "Продажа добычи",
+                GameState.BuyGears => "Покупка снаряжения",
+                _ => state.ToString()
+            };
         }
     }
 }

@@ -1,0 +1,74 @@
+[
+  {
+    "Name": "Крепкое здоровье",
+    "Description": "Увеличивает максимальное здоровье",
+    "Type": "Health",
+    "Value": 10,
+    "MinLevel": 1,
+    "MaxLevel": 0,
+    "Rarity": 2
+  },
+  {
+    "Name": "Сила воина",
+    "Description": "Увеличивает урон от атак",
+    "Type": "Damage",
+    "Value": 2,
+    "MinLevel": 1,
+    "MaxLevel": 0,
+    "Rarity": 2
+  },
+  {
+    "Name": "Железная кожа",
+    "Description": "Уменьшает получаемый урон",
+    "Type": "Defense",
+    "Value": 1,
+    "MinLevel": 2,
+    "MaxLevel": 0,
+    "Rarity": 3
+  },
+  {
+    "Name": "Богатырское здоровье",
+    "Description": "Значительно увеличивает максимальное здоровье",
+    "Type": "Health",
+    "Value": 25,
+    "MinLevel": 5,
+    "MaxLevel": 0,
+    "Rarity": 4
+  },
+  {
+    "Name": "Мощный удар",
+    "Description": "Значительно увеличивает урон от атак",
+    "Type": "Damage",
+    "Value": 5,
+    "MinLevel": 5,
+    "MaxLevel": 0,
+    "Rarity": 4
+  },
+  {
+    "Name": "Стальная броня",
+    "Description": "Значительно уменьшает получаемый урон",
+    "Type": "Defense",
+    "Value": 3,
+    "MinLevel": 7,
+    "MaxLevel": 0,
+    "Rarity": 5
+  },
+  {
+    "Name": "Выносливость новичка",
+    "Description": "Небольшое увеличение здоровья для начинающих",
+    "Type": "Health",
+    "Value": 5,
+    "MinLevel": 1,
+    "MaxLevel": 3,
+    "Rarity": 1
+  },
+  {
+    "Name": "Ловкость",
+    "Description": "Увеличивает урон",
+    "Type": "Damage",
+    "Value": 1,
+    "MinLevel": 1,
+    "MaxLevel": 0,
+    "Rarity": 1
+  }
+]

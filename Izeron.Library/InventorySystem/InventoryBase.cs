@@ -28,11 +28,11 @@ namespace Izeron.Library.InventorySystem
         public abstract bool TryToAddHealthPotion(HealthPotionBase potion);
         public abstract bool TryToRemoveHealthPotion(HealthPotionBase potion);
 
-        public abstract bool SomethingInInventory();
+        public abstract bool SomethingInInventory(Func<string, bool> isQuestItem = null);
 
         public abstract bool HasHealthPotions();
 
-        public abstract ILootable GetItemForSale();
+        public abstract ILootable GetItemForSale(Func<string, bool> isQuestItem = null);
         public abstract List<LootViewModel> GetInventoryList();
 
         public abstract bool IsFullOfHealthPotions();

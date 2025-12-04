@@ -1,7 +1,10 @@
 ﻿using Izeron.Library.Interfaces;
 using Izeron.Library.InventorySystem;
+using Izeron.Library.Perks;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Izeron.Library.Persons
@@ -15,6 +18,9 @@ namespace Izeron.Library.Persons
         private readonly float _lvlMultiple = 1;
         private float _curXP = 0f;
         private protected Dictionary<int, float> _lvlTable;
+        private protected List<ActivePerk> _perks;
+        
+        public event EventHandler<int> LeveledUp;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = null)
@@ -47,6 +53,7 @@ namespace Izeron.Library.Persons
             _lvlTable = LVLTable;
             _lvlCup = _lvlTable.Count-1;
             _inventory = inventory;
+            _perks = new List<ActivePerk>();
         }
         /// <summary>
         /// Gain amount of XP to person. When XP>=MaxXP then lvlUp
@@ -74,6 +81,9 @@ namespace Izeron.Library.Persons
             _curXP = 0;
             OnPropertyChanged(nameof(MaxXP));
             OnPropertyChanged(nameof(CharacterList));
+            
+            // Вызываем событие повышения уровня
+            LeveledUp?.Invoke(this, _lvl);
         }
         /// <summary>
         /// Recieve amount of XP.
@@ -92,12 +102,13 @@ namespace Izeron.Library.Persons
         }
         public override bool SomethingInInventory()
         {
-            return _inventory.SomethingInInventory();
+            return _inventory.SomethingInInventory(IsQuestItem);
         }
 
         public override void SellItemInInventory()
         {
-            var item = _inventory.GetItemForSale();
+            var item = _inventory.GetItemForSale(IsQuestItem);
+            if (item == null) return;
             AddMoneyAmount(item.Volume);
             _inventory.TryToRemoveFromInventory(item);
             OnPropertyChanged(nameof(InventoryList));
@@ -111,6 +122,71 @@ namespace Izeron.Library.Persons
         {
             base.AddMoneyAmount(money);
             OnPropertyChanged(nameof(CharacterList));
+        }
+        
+        /// <summary>
+        /// Добавить перк персонажу
+        /// </summary>
+        public virtual void AddPerk(ActivePerk perk)
+        {
+            _perks.Add(perk);
+            ApplyPerk(perk);
+            OnPropertyChanged(nameof(PerksList));
+        }
+        
+        /// <summary>
+        /// Применить эффекты перка
+        /// </summary>
+        protected virtual void ApplyPerk(ActivePerk perk)
+        {
+            switch (perk.Type.ToLower())
+            {
+                case "health":
+                    _maxHealth += perk.Value;
+                    _health += perk.Value; // Также восстанавливаем здоровье
+                    OnPropertyChanged(nameof(CharacterList));
+                    break;
+                case "damage":
+                    // Урон будет применяться в методе AttackAmount
+                    break;
+                case "defense":
+                    // Защита будет применяться при получении урона
+                    break;
+            }
+        }
+        
+        /// <summary>
+        /// Получить бонус к урону от перков
+        /// </summary>
+        public int GetDamageBonus()
+        {
+            return _perks.Where(p => p.Type.Equals("Damage", StringComparison.OrdinalIgnoreCase))
+                         .Sum(p => p.Value);
+        }
+        
+        /// <summary>
+        /// Получить бонус к защите от перков
+        /// </summary>
+        public int GetDefenseBonus()
+        {
+            return _perks.Where(p => p.Type.Equals("Defense", StringComparison.OrdinalIgnoreCase))
+                         .Sum(p => p.Value);
+        }
+        
+        /// <summary>
+        /// Список перков для отображения
+        /// </summary>
+        public virtual List<PerkViewModel> PerksList
+        {
+            get
+            {
+                var perkList = new List<PerkViewModel>();
+                foreach (var perk in _perks)
+                {
+                    perkList.Add(new PerkViewModel(perk));
+                }
+                return perkList;
+            }
         }
     }
 }
