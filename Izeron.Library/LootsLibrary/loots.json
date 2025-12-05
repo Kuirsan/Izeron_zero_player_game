@@ -7,18 +7,73 @@
     },
     "FloorRange": {
       "minParameter": 1,
-      "maxParameter": 2
+      "maxParameter": 3
     }
   },
   {
     "Name": "Iron Ingot",
     "CostInGoldRange": {
-      "minParameter": 2,
-      "maxParameter": 5
+      "minParameter": 3,
+      "maxParameter": 6
     },
     "FloorRange": {
       "minParameter": 1,
-      "maxParameter": 2
+      "maxParameter": 4
+    }
+  },
+  {
+    "Name": "Wolf Pelt",
+    "CostInGoldRange": {
+      "minParameter": 4,
+      "maxParameter": 8
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 5
+    }
+  },
+  {
+    "Name": "Goblin Ear",
+    "CostInGoldRange": {
+      "minParameter": 5,
+      "maxParameter": 10
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 6
+    }
+  },
+  {
+    "Name": "Precious Gem",
+    "CostInGoldRange": {
+      "minParameter": 8,
+      "maxParameter": 15
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 8
+    }
+  },
+  {
+    "Name": "Dragon Scale",
+    "CostInGoldRange": {
+      "minParameter": 15,
+      "maxParameter": 30
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 10
+    }
+  },
+  {
+    "Name": "Ancient Rune",
+    "CostInGoldRange": {
+      "minParameter": 12,
+      "maxParameter": 25
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 10
     }
   }
 ]

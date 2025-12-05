@@ -26,9 +26,12 @@
                 <GridSplitter Grid.Column="0" Width="3" Background="Gray"/>
                 <GridSplitter Grid.Column="1" Width="3" Background="Gray"/>
                 <StackPanel Grid.Row="0" Grid.Column="0">
+                    <Label x:Name="heroNameLabel" Width="auto" HorizontalAlignment="Center" FontWeight="Bold" FontSize="14">Hero</Label>
                     <Label Width="auto" HorizontalAlignment="Center">Hero attribute</Label>
-                    <DataGrid x:Name="gridHero" Height="250" Margin="5 5" ColumnWidth="*"/>
+                    <DataGrid x:Name="gridHero" Height="200" Margin="5 5" ColumnWidth="*"/>
                     <ProgressBar x:Name="expBar" Height="20" Margin="5 5" ToolTip="Xp for now: " ToolTipOpening="expBar_ToolTipOpening"/>
+                    <Label Width="auto" HorizontalAlignment="Center" FontWeight="Bold">Current Enemy</Label>
+                    <Label x:Name="currentEnemyLabel" Width="auto" HorizontalAlignment="Center" Foreground="DarkRed">-</Label>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1">
                     <Label Width="auto" HorizontalAlignment="Center">Perks</Label>
@@ -88,6 +91,7 @@
 
         <Label x:Name="timeNow" Grid.Column="0" Grid.Row="0"/>
         <Label x:Name="gameStateLabel" Grid.Column="0" Grid.Row="0" Margin="200,0,0,0" FontWeight="Bold" FontSize="14"/>
+        <Label x:Name="floorInfoLabel" Grid.Column="0" Grid.Row="0" Margin="450,0,0,0" FontWeight="Bold" FontSize="14" Foreground="DarkBlue"/>
         <Label x:Name="doSomething" Grid.Column="0" Grid.Row="0" Margin="200,0,200,0"/>
     </Grid>
 </Window>

@@ -10,6 +10,7 @@ namespace GameLogic.Library.LogicModels
         public SpecialEnemyTag[] PossibleTags { get; set; }
         public ParameterRange HPRange { get; set; }
         public ParameterRange FloorRange { get; set; }
+        public int PowerRating { get; set; } = 1;
         private GameEnemiesModel()
         {
 

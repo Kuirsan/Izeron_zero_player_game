@@ -10,6 +10,7 @@ using GameCenter.Library.GameCenter;
 using GameLogic.Library.GameBattleRoster;
 using GameLogic.Library.GameStateLogic;
 using GameLogic.Library.LootManager;
+using GameLogic.Library.FloorSystem;
 using Izeron.Library.Enums;
 using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
@@ -30,24 +31,62 @@ namespace SomeKindOfGame
     {
         static CancellationTokenSource cancelToken = new CancellationTokenSource();
         AbstractPerson Pers;
-        someclass battleClass;
+        BattleController battleClass;
         QuestObserver quests;
         GameProcess gameProcess;
         BattleRosterManager monsterRoster = new BattleRosterManager();
         LootManager lootManager = new LootManager();
         PerkManager perkManager = new PerkManager();
+        FloorManager floorManager = new FloorManager();
+        DispatcherTimer gameTimer;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            InitializeGame();
+        }
+
+        private void InitializeGame()
+        {
             monsterRoster.NotifyLootSystem += lootManager.GenerateLootAndAddByFloor;
+            monsterRoster.OnMonstersKilled += (count) => 
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    floorManager.RegisterMonsterKill();
+                }
+            };
+            
+            // Подписываемся на переход на новый этаж для генерации врагов
+            floorManager.OnFloorAdvanced += (newFloor) =>
+            {
+                int heroPower = 0;
+                if (Pers is AbstractPersonTier0 heroTier0)
+                {
+                    heroPower = HeroPowerCalculator.CalculatePowerRating(Pers);
+                }
+                
+                // Генерируем 20-30 монстров на новом этаже
+                var monstersToSpawn = new Random().Next(20, 31);
+                var newMonsters = monsterRoster.GenerateRandomMonstersByPower(newFloor, monstersToSpawn, heroPower);
+                monsterRoster.AddMonsterToRoster(newFloor, newMonsters.ToArray());
+                
+                // Уведомляем в логах
+                var notification = new GameNotification
+                {
+                    GameNotificationState = GameNotificationState.Other,
+                    Body = $"Вы спустились на {newFloor} этаж! Враги становятся сильнее..." + Environment.NewLine
+                };
+                GameManager.AddNotification(notification);
+            };
 
             Dictionary<int, float> dict = new Dictionary<int, float>
             {
                 {0,11f},{1,20f},{2,30f},{3,40f},{4,50f},{5,60f},{6,70f},{7,80f},{8,90f},{9,100f},{10,130f}
             };
-            Pers = new Peasant(1, dict);
+            Pers = new Peasant(2, dict); // Начинаем с 2 силы для лучшего баланса
+
 
             quests = GameManager.InitiateQuestObserver(Pers,monsterRoster);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
@@ -56,15 +95,16 @@ namespace SomeKindOfGame
             var initialQuest = quests.GenerateQuest();
             quests.SignOnQuest(initialQuest);
             
-            // Инициализируем battleClass с врагами с этажа (если они есть)
-            var initialMonsters = monsterRoster.GetMonsterRoastForFloor(1);
-            battleClass = new someclass(Pers, initialMonsters != null ? initialMonsters.ToList() : new List<AbstractPerson>());
+            // Инициализируем battleClass с врагами с текущего этажа (если они есть)
+            var initialMonsters = monsterRoster.GetMonsterRoastForFloor(floorManager.CurrentFloor);
+            battleClass = new BattleController(Pers, initialMonsters != null ? initialMonsters.ToList() : new List<AbstractPerson>());
+
 
             this.timeNow.Content = $"Сейчас: {DateTime.Now.ToShortTimeString()}";
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += timer_Tick;
-            timer.Start();
+            gameTimer = new DispatcherTimer();
+            gameTimer.Interval = TimeSpan.FromSeconds(1);
+            gameTimer.Tick += timer_Tick;
+            gameTimer.Start();
             LoadGrids();
             Pers.IsQuestItem = (itemName) => {
                 var activeQuests = quests.GetActiveQuests();
@@ -86,6 +126,12 @@ namespace SomeKindOfGame
             {
                 heroTier0.LeveledUp += OnHeroLeveledUp;
             }
+            
+            // Отображаем имя героя с регистрацией
+            string baseName = HeroNameGenerator.Generate();
+            string heroName = HeroRegistry.RegisterHero(baseName);
+            Pers.Name = heroName;
+            heroNameLabel.Content = heroName;
             
             SetBindingsProperties();
         }
@@ -129,6 +175,7 @@ namespace SomeKindOfGame
             string dateTime = DateTime.Now.ToShortTimeString();
             this.timeNow.Content = $"Сейчас: {dateTime}";
             this.gameStateLabel.Content = $"Состояние: {GetGameStateRussianName(gameProcess.CurrentState)}";
+            this.floorInfoLabel.Content = floorManager.GetFloorInfo();
             string allMessage = string.Empty;
             string FightMessage = string.Empty;
             string anotherMessage = string.Empty;
@@ -142,9 +189,16 @@ namespace SomeKindOfGame
                 }
                 catch (YouDeadException ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    gameTimer.Stop();
+                    var result = MessageBox.Show(ex.Message + "\n\nStart a new game?", "Game Over", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        ResetGame();
+                    }
+                    return;
                 }
-                var monstersForFloor = monsterRoster.GetMonsterRoastForFloor(1);
+                var monstersForFloor = monsterRoster.GetMonsterRoastForFloor(floorManager.CurrentFloor);
+                UpdateCurrentEnemy();
                 gameProcess.MoveNext(monstersForFloor ?? new List<AbstractPerson>());
             }
             else if (gameProcess.CurrentState == GameState.BackToTown)
@@ -222,12 +276,15 @@ namespace SomeKindOfGame
 
         }
 
-        class someclass : IUpdatable
+        /// <summary>
+        /// Контроллер боевой системы - управляет сражением между героем и врагами
+        /// </summary>
+        class BattleController : IUpdatable
         {
             AbstractPerson Pers;
             public List<AbstractPerson> Enemies;
 
-            public someclass(AbstractPerson pers, List<AbstractPerson> enemies)
+            public BattleController(AbstractPerson pers, List<AbstractPerson> enemies)
             {
                 this.Pers = pers;
                 this.Enemies = enemies;
@@ -338,6 +395,47 @@ namespace SomeKindOfGame
                 GameState.BuyGears => "Покупка снаряжения",
                 _ => state.ToString()
             };
+        }
+
+        private void ResetGame()
+        {
+            // Очищаем старые данные
+            monsterRoster = new BattleRosterManager();
+            lootManager = new LootManager();
+            perkManager = new PerkManager();
+            floorManager.Reset();
+            
+            // Реинициализируем игру
+            InitializeGame();
+            
+            // Перезапускаем таймер
+            gameTimer.Start();
+            
+            // Обновляем UI
+            LoadGrids();
+        }
+
+        private void UpdateCurrentEnemy()
+        {
+            if (battleClass != null && battleClass.Enemies != null && battleClass.Enemies.Count > 0)
+            {
+                var currentEnemy = battleClass.Enemies.FirstOrDefault(e => !e.IsDead());
+                if (currentEnemy != null)
+                {
+                    int currentHealth = currentEnemy.CurrentHealth;
+                    int maxHealth = currentEnemy.MaxHealth;
+                    int enemyDamage = currentEnemy.AttackAmount();
+                    currentEnemyLabel.Content = $"{currentEnemy.Name} (HP: {currentHealth}/{maxHealth}, DMG: {enemyDamage})";
+                }
+                else
+                {
+                    currentEnemyLabel.Content = "No enemy";
+                }
+            }
+            else
+            {
+                currentEnemyLabel.Content = "-";
+            }
         }
     }
 }

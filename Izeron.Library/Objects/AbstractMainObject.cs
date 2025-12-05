@@ -5,7 +5,13 @@
     /// </summary>
     public abstract class AbstractMainObject
     {
-        private readonly protected string _name;
+        private protected string _name;
+
+        public string Name
+        {
+            get => _name;
+            set => _name = value;
+        }
 
         private protected AbstractMainObject(string Name)
         {

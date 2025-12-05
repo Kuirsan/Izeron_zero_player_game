@@ -3,9 +3,10 @@
     "Name": "Rat",
     "AttackRange": {
       "minParameter": 1,
-      "maxParameter": 1
+      "maxParameter": 2
     },
-    "XPToGain": 1,
+    "XPToGain": 2,
+    "PowerRating": 1,
     "PossibleTags": [
       {
         "TypeOfSpecialEnemyTag": 2,
@@ -17,8 +18,8 @@
       }
     ],
     "HPRange": {
-      "minParameter": 1,
-      "maxParameter": 4
+      "minParameter": 2,
+      "maxParameter": 5
     },
     "FloorRange": {
       "minParameter": 1,
@@ -28,10 +29,11 @@
   {
     "Name": "Wolf",
     "AttackRange": {
-      "minParameter": 1,
-      "maxParameter": 2
+      "minParameter": 2,
+      "maxParameter": 3
     },
-    "XPToGain": 2,
+    "XPToGain": 3,
+    "PowerRating": 4,
     "PossibleTags": [
       {
         "TypeOfSpecialEnemyTag": 2,
@@ -51,8 +53,8 @@
       }
     ],
     "HPRange": {
-      "minParameter": 1,
-      "maxParameter": 5
+      "minParameter": 4,
+      "maxParameter": 8
     },
     "FloorRange": {
       "minParameter": 1,
@@ -62,10 +64,11 @@
   {
     "Name": "Warg",
     "AttackRange": {
-      "minParameter": 1,
-      "maxParameter": 3
+      "minParameter": 2,
+      "maxParameter": 4
     },
-    "XPToGain": 4,
+    "XPToGain": 5,
+    "PowerRating": 7,
     "PossibleTags": [
       {
         "TypeOfSpecialEnemyTag": 2,
@@ -81,12 +84,147 @@
       }
     ],
     "HPRange": {
-      "minParameter": 2,
-      "maxParameter": 6
+      "minParameter": 6,
+      "maxParameter": 10
     },
     "FloorRange": {
       "minParameter": 1,
       "maxParameter": 4
+    }
+  },
+  {
+    "Name": "Goblin",
+    "AttackRange": {
+      "minParameter": 3,
+      "maxParameter": 5
+    },
+    "XPToGain": 7,
+    "PowerRating": 10,
+    "PossibleTags": [
+      {
+        "TypeOfSpecialEnemyTag": 0,
+        "SpecialTagString": "Strong"
+      },
+      {
+        "TypeOfSpecialEnemyTag": 2,
+        "SpecialTagString": "Big"
+      }
+    ],
+    "HPRange": {
+      "minParameter": 8,
+      "maxParameter": 12
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 5
+    }
+  },
+  {
+    "Name": "Orc",
+    "AttackRange": {
+      "minParameter": 4,
+      "maxParameter": 7
+    },
+    "XPToGain": 10,
+    "PowerRating": 14,
+    "PossibleTags": [
+      {
+        "TypeOfSpecialEnemyTag": 0,
+        "SpecialTagString": "Strong"
+      },
+      {
+        "TypeOfSpecialEnemyTag": 2,
+        "SpecialTagString": "Big"
+      }
+    ],
+    "HPRange": {
+      "minParameter": 12,
+      "maxParameter": 18
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 6
+    }
+  },
+  {
+    "Name": "Troll",
+    "AttackRange": {
+      "minParameter": 5,
+      "maxParameter": 9
+    },
+    "XPToGain": 15,
+    "PowerRating": 20,
+    "PossibleTags": [
+      {
+        "TypeOfSpecialEnemyTag": 0,
+        "SpecialTagString": "Strong"
+      },
+      {
+        "TypeOfSpecialEnemyTag": 2,
+        "SpecialTagString": "Big"
+      }
+    ],
+    "HPRange": {
+      "minParameter": 18,
+      "maxParameter": 25
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 8
+    }
+  },
+  {
+    "Name": "Ogre",
+    "AttackRange": {
+      "minParameter": 7,
+      "maxParameter": 12
+    },
+    "XPToGain": 22,
+    "PowerRating": 28,
+    "PossibleTags": [
+      {
+        "TypeOfSpecialEnemyTag": 0,
+        "SpecialTagString": "Strong"
+      },
+      {
+        "TypeOfSpecialEnemyTag": 2,
+        "SpecialTagString": "Big"
+      }
+    ],
+    "HPRange": {
+      "minParameter": 25,
+      "maxParameter": 35
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 10
+    }
+  },
+  {
+    "Name": "Dragon",
+    "AttackRange": {
+      "minParameter": 10,
+      "maxParameter": 18
+    },
+    "XPToGain": 35,
+    "PowerRating": 40,
+    "PossibleTags": [
+      {
+        "TypeOfSpecialEnemyTag": 0,
+        "SpecialTagString": "Strong"
+      },
+      {
+        "TypeOfSpecialEnemyTag": 2,
+        "SpecialTagString": "Big"
+      }
+    ],
+    "HPRange": {
+      "minParameter": 35,
+      "maxParameter": 50
+    },
+    "FloorRange": {
+      "minParameter": 1,
+      "maxParameter": 10
     }
   }
 ]

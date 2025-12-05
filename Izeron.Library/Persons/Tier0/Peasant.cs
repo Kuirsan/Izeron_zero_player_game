@@ -17,7 +17,7 @@ namespace Izeron.Library.Persons.Tier0
         public int Attack => _str + _attackModifier + GetDamageBonus();
 
         private protected int _str;
-        private Peasant(Dictionary<int, float> LVLTable) : base(5, 0, "Peasant", LVLTable,new InventoryPerson(15))
+        private Peasant(Dictionary<int, float> LVLTable) : base(5, 0, "Крестьянин", LVLTable,new InventoryPerson(15))
         {
             //TODO rewrite
             _personTags.Add(PersonTags.Human);

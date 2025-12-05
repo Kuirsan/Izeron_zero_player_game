@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using GameLogic.Library.GameBattleRoster;
 
 namespace QuestHandlerSystem.Library
 {
@@ -172,7 +173,7 @@ namespace QuestHandlerSystem.Library
 
         private BaseQuestModel GenerateRandomCollectQuest()
         {
-            var lootNames = new[] { "Branch", "Iron Ingot" };
+            var lootNames = new[] { "Branch", "Iron Ingot", "Wolf Pelt", "Goblin Ear", "Precious Gem", "Dragon Scale", "Ancient Rune" };
             var r = new Random();
             var lootName = lootNames[r.Next(lootNames.Length)];
             var quantity = r.Next(1, 6);
@@ -182,12 +183,13 @@ namespace QuestHandlerSystem.Library
             
             var reward = new RewardModel
             {
-                GoldReward = 10 * quantity,
-                XpReward = 10 * quantity
+                GoldReward = 8 * quantity,
+                XpReward = 8 * quantity
             };
 
-            // Spawn monsters to drop loot
-            var monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+            // Spawn monsters to drop loot (с учетом силы героя)
+            int heroPower = HeroPowerCalculator.CalculatePowerRating(_hero);
+            var monsters = _monsterManager.GenerateRandomMonstersByPower(1, 10, heroPower);
             _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
 
             return new CollectLootQuest(title, description, lootName, quantity, reward, _hero);
@@ -195,13 +197,14 @@ namespace QuestHandlerSystem.Library
 
         private BaseQuestModel GenerateRandomKillQuest()
         {
-            var monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+            int heroPower = HeroPowerCalculator.CalculatePowerRating(_hero);
+            var monsters = _monsterManager.GenerateRandomMonstersByPower(1, 10, heroPower);
             var title = $"Monsters {GenerateVerb()} {GenerateSubject()}!";
             var description = "You must kill them!";
             var reward = new RewardModel
             {
-                GoldReward = 15,
-                XpReward = 15
+                GoldReward = 10 + (monsters.Count * 2),
+                XpReward = 10 + (monsters.Count * 2)
             };
             var quest = new KillQuest(title,description,monsters, reward);
 

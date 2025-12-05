@@ -19,6 +19,9 @@ namespace GameLogic.Library.GameBattleRoster
 
         public delegate void EnemiesLootHandle(int floorNumber, int enemiesNumber);
         public event EnemiesLootHandle NotifyLootSystem;
+        
+        public delegate void MonsterKilledHandle(int count);
+        public event MonsterKilledHandle OnMonstersKilled;
 
         public BattleRosterManager()
         {
@@ -69,23 +72,93 @@ namespace GameLogic.Library.GameBattleRoster
 
         public List<AbstractPerson> GenerateRandomMonsters(int floor, int amount)
         {
+            return GenerateRandomMonstersByPower(floor, amount, 0);
+        }
+
+        public List<AbstractPerson> GenerateRandomMonstersByPower(int floor, int amount, int heroPowerRating)
+        {
             List<AbstractPerson> monsters = new List<AbstractPerson>();
             if (_enemiesModels == null) return monsters;
+            
+            // Фильтруем врагов по этажу
             List<GameEnemiesModel> monsterModels = _enemiesModels
-                                                    .Where(x => x.FloorRange.MinParameter <= floor && x.FloorRange.MaxParameter >= floor)
-                                                    .Select(x => x).ToList();
+                .Where(x => x.FloorRange.MinParameter <= floor && x.FloorRange.MaxParameter >= floor)
+                .ToList();
+
+            if (monsterModels.Count == 0) return monsters;
+
             for (int i = 0; i < amount; i++)
             {
-                GameEnemiesModel monsterModel=new GameEnemiesModel(null,null,null);
-                if (monsterModels.Count == 0) return monsters;
-                if (monsterModels.Count == 1) monsterModel = monsterModels[0];
-                if (monsterModels.Count > 1)
-                {
-                    monsterModel = monsterModels[new Random().Next(0, monsterModels.Count)];
-                }
+                GameEnemiesModel monsterModel = SelectMonsterByPower(monsterModels, heroPowerRating);
                 monsters.Add(GenerateMonster(monsterModel));
             }
             return monsters;
+        }
+
+        private GameEnemiesModel SelectMonsterByPower(List<GameEnemiesModel> availableMonsters, int heroPowerRating)
+        {
+            if (availableMonsters.Count == 1) return availableMonsters[0];
+
+            // Создаем взвешенный список на основе силы героя
+            var weightedMonsters = new List<GameEnemiesModel>();
+            
+            foreach (var monster in availableMonsters)
+            {
+                // Рассчитываем вес на основе разницы между силой героя и врага
+                int powerDiff = heroPowerRating - monster.PowerRating;
+                int weight;
+
+                // Если враг слишком силен для героя, исключаем его полностью
+                if (powerDiff < -15)
+                {
+                    // Враг на 15+ пунктов сильнее - не появляется совсем
+                    continue;
+                }
+                else if (powerDiff < -10)
+                {
+                    // Враг на 10-15 пунктов сильнее - очень редко
+                    weight = 1;
+                }
+                else if (powerDiff >= 10)
+                {
+                    // Герой намного сильнее - низкий шанс слабого врага
+                    weight = 2;
+                }
+                else if (powerDiff >= 5)
+                {
+                    // Герой сильнее - средний шанс
+                    weight = 3;
+                }
+                else if (powerDiff >= 0)
+                {
+                    // Примерно равны - высокий шанс
+                    weight = 10;
+                }
+                else if (powerDiff >= -5)
+                {
+                    // Враг немного сильнее - очень высокий шанс (челлендж)
+                    weight = 8;
+                }
+                else // powerDiff >= -10
+                {
+                    // Враг значительно сильнее - средний шанс
+                    weight = 3;
+                }
+
+                for (int i = 0; i < weight; i++)
+                {
+                    weightedMonsters.Add(monster);
+                }
+            }
+
+            // Если после фильтрации не осталось монстров, берем самого слабого
+            if (weightedMonsters.Count == 0)
+            {
+                var weakestMonster = availableMonsters.OrderBy(m => m.PowerRating).First();
+                return weakestMonster;
+            }
+
+            return weightedMonsters[new Random().Next(weightedMonsters.Count)];
         }
 
         public List<AbstractPerson> GenerateMonstersByName(string[] monstersName)
@@ -133,6 +206,10 @@ namespace GameLogic.Library.GameBattleRoster
                 int floor = monsterByFloor.Key;
                 int countDeadMonsters = monsterByFloor.Value.Where(x => x.IsDead()).Count();
                 NotifyLootSystem?.Invoke(floor, countDeadMonsters);
+                if (countDeadMonsters > 0)
+                {
+                    OnMonstersKilled?.Invoke(countDeadMonsters);
+                }
                 monsterByFloor.Value.RemoveAll(x => x.IsDead());
             }
             return gameNotification;

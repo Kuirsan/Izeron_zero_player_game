@@ -1,42 +1,142 @@
 [
   {
-    "Title": "rats problem",
-    "Description": "You must kill 3 rats",
-    "Enemies": ["rat","rat","rat"],
+    "Title": "Rat Infestation",
+    "Description": "The tavern is overrun with rats!",
+    "Enemies": [
+      "rat",
+      "rat",
+      "rat"
+    ],
     "Reward": {
-      "XpReward": 10,
-      "GoldReward": 15
+      "XpReward": 12,
+      "GoldReward": 18
     }
   },
   {
-    "Title": "wolf and rat",
-    "Description": "Kill wolfs and rats",
-    "Enemies": [ "rat", "wolf", "rat","wolf" ],
+    "Title": "Wolf Pack",
+    "Description": "A pack of wolves threatens the village",
+    "Enemies": [
+      "wolf",
+      "wolf",
+      "wolf",
+      "wolf"
+    ],
+    "Reward": {
+      "XpReward": 18,
+      "GoldReward": 28
+    }
+  },
+  {
+    "Title": "Goblin Raiders",
+    "Description": "Goblins are raiding nearby farms",
+    "Enemies": [
+      "goblin",
+      "goblin",
+      "goblin"
+    ],
+    "Reward": {
+      "XpReward": 30,
+      "GoldReward": 50
+    }
+  },
+  {
+    "Title": "Orc Warband",
+    "Description": "An orc warband is approaching",
+    "Enemies": [
+      "orc",
+      "orc"
+    ],
+    "Reward": {
+      "XpReward": 40,
+      "GoldReward": 70
+    }
+  },
+  {
+    "Title": "Troll Hunt",
+    "Description": "A troll is terrorizing travelers",
+    "Enemies": [
+      "troll"
+    ],
+    "Reward": {
+      "XpReward": 50,
+      "GoldReward": 90
+    }
+  },
+  {
+    "Title": "Collect Firewood",
+    "Description": "Gather branches for winter",
+    "QuestType": "CollectLoot",
+    "RequiredLootName": "Branch",
+    "RequiredLootQuantity": 5,
     "Reward": {
       "XpReward": 15,
       "GoldReward": 25
     }
   },
   {
-    "Title": "Collect Branches",
-    "Description": "Collect 5 branches",
-    "QuestType": "CollectLoot",
-    "RequiredLootName": "Branch",
-    "RequiredLootQuantity": 5,
-    "Reward": {
-      "XpReward": 20,
-      "GoldReward": 30
-    }
-  },
-  {
-    "Title": "Iron Ingots Needed",
-    "Description": "Gather 3 iron ingots",
+    "Title": "Blacksmith's Order",
+    "Description": "The blacksmith needs iron ingots",
     "QuestType": "CollectLoot",
     "RequiredLootName": "Iron Ingot",
     "RequiredLootQuantity": 3,
     "Reward": {
+      "XpReward": 20,
+      "GoldReward": 35
+    }
+  },
+  {
+    "Title": "Wolf Pelts for Winter",
+    "Description": "Collect wolf pelts for warm clothing",
+    "QuestType": "CollectLoot",
+    "RequiredLootName": "Wolf Pelt",
+    "RequiredLootQuantity": 4,
+    "Reward": {
       "XpReward": 25,
-      "GoldReward": 40
+      "GoldReward": 45
+    }
+  },
+  {
+    "Title": "Goblin Bounty",
+    "Description": "Bring goblin ears as proof of kills",
+    "QuestType": "CollectLoot",
+    "RequiredLootName": "Goblin Ear",
+    "RequiredLootQuantity": 3,
+    "Reward": {
+      "XpReward": 35,
+      "GoldReward": 60
+    }
+  },
+  {
+    "Title": "Precious Gems",
+    "Description": "Find precious gems in the dungeon",
+    "QuestType": "CollectLoot",
+    "RequiredLootName": "Precious Gem",
+    "RequiredLootQuantity": 2,
+    "Reward": {
+      "XpReward": 40,
+      "GoldReward": 75
+    }
+  },
+  {
+    "Title": "Dragon Scales",
+    "Description": "Collect dragon scales for the mage",
+    "QuestType": "CollectLoot",
+    "RequiredLootName": "Dragon Scale",
+    "RequiredLootQuantity": 1,
+    "Reward": {
+      "XpReward": 60,
+      "GoldReward": 120
+    }
+  },
+  {
+    "Title": "Ancient Runes",
+    "Description": "Gather ancient runes for research",
+    "QuestType": "CollectLoot",
+    "RequiredLootName": "Ancient Rune",
+    "RequiredLootQuantity": 2,
+    "Reward": {
+      "XpReward": 50,
+      "GoldReward": 100
     }
   }
 ]

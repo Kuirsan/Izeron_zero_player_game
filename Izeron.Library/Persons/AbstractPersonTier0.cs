@@ -129,13 +129,24 @@ namespace Izeron.Library.Persons
         /// </summary>
         public virtual void AddPerk(ActivePerk perk)
         {
-            _perks.Add(perk);
-            ApplyPerk(perk);
+            var existingPerk = _perks.FirstOrDefault(p => p.Name == perk.Name);
+            if (existingPerk != null)
+            {
+                // Если перк уже есть, стакаем его
+                existingPerk.Stack();
+                ApplyPerkStack(existingPerk);
+            }
+            else
+            {
+                // Если перка нет, добавляем новый
+                _perks.Add(perk);
+                ApplyPerk(perk);
+            }
             OnPropertyChanged(nameof(PerksList));
         }
         
         /// <summary>
-        /// Применить эффекты перка
+        /// Применить эффекты нового перка
         /// </summary>
         protected virtual void ApplyPerk(ActivePerk perk)
         {
@@ -143,15 +154,26 @@ namespace Izeron.Library.Persons
             {
                 case "health":
                     _maxHealth += perk.Value;
-                    _health += perk.Value; // Также восстанавливаем здоровье
+                    _health += perk.Value;
                     OnPropertyChanged(nameof(CharacterList));
                     break;
-                case "damage":
-                    // Урон будет применяться в методе AttackAmount
+                // Остальные типы применяются динамически
+            }
+        }
+
+        /// <summary>
+        /// Применить эффекты от стака перка
+        /// </summary>
+        protected virtual void ApplyPerkStack(ActivePerk perk)
+        {
+            switch (perk.Type.ToLower())
+            {
+                case "health":
+                    _maxHealth += perk.BaseValue;
+                    _health += perk.BaseValue;
+                    OnPropertyChanged(nameof(CharacterList));
                     break;
-                case "defense":
-                    // Защита будет применяться при получении урона
-                    break;
+                // Остальные типы применяются динамически
             }
         }
         

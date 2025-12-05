@@ -14,7 +14,7 @@ namespace Izeron.Library.Perks
             Name = perk.Name;
             Description = perk.Description;
             Bonus = $"+{perk.Value} {GetPerkTypeRussian(perk.Type)}";
-            Level = perk.AcquiredAtLevel;
+            Level = perk.Level;
         }
 
         private string GetPerkTypeRussian(string type)
