@@ -23,7 +23,7 @@
     },
     "FloorRange": {
       "minParameter": 1,
-      "maxParameter": 2
+      "maxParameter": 10
     }
   },
   {
@@ -57,8 +57,8 @@
       "maxParameter": 8
     },
     "FloorRange": {
-      "minParameter": 1,
-      "maxParameter": 3
+      "minParameter": 2,
+      "maxParameter": 12
     }
   },
   {
@@ -88,8 +88,8 @@
       "maxParameter": 10
     },
     "FloorRange": {
-      "minParameter": 1,
-      "maxParameter": 4
+      "minParameter": 3,
+      "maxParameter": 15
     }
   },
   {
@@ -115,8 +115,8 @@
       "maxParameter": 12
     },
     "FloorRange": {
-      "minParameter": 1,
-      "maxParameter": 5
+      "minParameter": 4,
+      "maxParameter": 18
     }
   },
   {
@@ -142,8 +142,8 @@
       "maxParameter": 18
     },
     "FloorRange": {
-      "minParameter": 1,
-      "maxParameter": 6
+      "minParameter": 6,
+      "maxParameter": 20
     }
   },
   {
@@ -169,8 +169,8 @@
       "maxParameter": 25
     },
     "FloorRange": {
-      "minParameter": 1,
-      "maxParameter": 8
+      "minParameter": 8,
+      "maxParameter": 25
     }
   },
   {
@@ -196,8 +196,8 @@
       "maxParameter": 35
     },
     "FloorRange": {
-      "minParameter": 1,
-      "maxParameter": 10
+      "minParameter": 12,
+      "maxParameter": 30
     }
   },
   {
@@ -223,8 +223,8 @@
       "maxParameter": 50
     },
     "FloorRange": {
-      "minParameter": 1,
-      "maxParameter": 10
+      "minParameter": 15,
+      "maxParameter": 50
     }
   }
 ]

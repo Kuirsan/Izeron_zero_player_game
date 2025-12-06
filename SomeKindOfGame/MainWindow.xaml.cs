@@ -133,6 +133,9 @@ namespace SomeKindOfGame
             Pers.Name = heroName;
             heroNameLabel.Content = heroName;
             
+            // Связываем проверку квестовых предметов для лут-менеджера
+            lootManager.IsQuestItem = Pers.IsQuestItem;
+
             SetBindingsProperties();
         }
 

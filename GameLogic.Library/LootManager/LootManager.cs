@@ -13,6 +13,10 @@ namespace GameLogic.Library.LootManager
     public class LootManager : LootManagerBase
     {
         private List<GameLootModel> _lootsModels;
+        
+        // Делегат для проверки, является ли предмет квестовым
+        public Func<string, bool> IsQuestItem { get; set; }
+
         public override void AddLoot(ILootable loot)
         {
             _lootableObjects.Enqueue(loot);
@@ -67,10 +71,40 @@ namespace GameLogic.Library.LootManager
         {
             LootableBaseObject loot = null;
             if (_lootsModels == null) return null;
+
+            // 1. Сначала ищем квестовые предметы
+            List<GameLootModel> questLootModels = new List<GameLootModel>();
+            if (IsQuestItem != null)
+            {
+                questLootModels = _lootsModels.Where(x => IsQuestItem(x.Name)).ToList();
+            }
+
+            // 2. Если есть квестовые предметы, с 50% шансом пытаемся выбрать один из них
+            // Игнорируем требования по этажу для квестовых предметов
+            if (questLootModels.Count > 0 && new Random().NextDouble() < 0.5)
+            {
+                return GenerateLoot(questLootModels[new Random().Next(questLootModels.Count)]);
+            }
+
+            // 3. Обычная генерация по этажу
             List<GameLootModel> lootModels = _lootsModels
                                                     .Where(x => x.FloorRange.MinParameter <= floor && x.FloorRange.MaxParameter >= floor)
                                                     .Select(x => x).ToList();
-            if (lootModels.Count == 0) return null;
+            
+            // Fallback если ничего не найдено для этажа
+            if (lootModels.Count == 0 && questLootModels.Count == 0) return null;
+            
+            // Если для этажа нет лута, но есть квестовый (который не выпал по шансу выше), берем квестовый
+            if (lootModels.Count == 0 && questLootModels.Count > 0)
+            {
+                 return GenerateLoot(questLootModels[new Random().Next(questLootModels.Count)]);
+            }
+            else if (lootModels.Count == 0)
+            {
+                 // Если вообще ничего нет
+                 return null;
+            }
+
             if (lootModels.Count == 1) loot = GenerateLoot(lootModels.First());
             if (lootModels.Count > 1)
             {

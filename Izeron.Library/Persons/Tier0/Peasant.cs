@@ -3,6 +3,7 @@ using Izeron.Library.Exceptions;
 using Izeron.Library.Interfaces;
 using Izeron.Library.InventorySystem;
 using Izeron.Library.Objects.Potions;
+using Izeron.Library.Objects.Equipment;
 using System;
 using System.Collections.Generic;
 
@@ -14,19 +15,28 @@ namespace Izeron.Library.Persons.Tier0
     public class Peasant : AbstractPersonTier0, IDmgable,IHealable
     {
         private protected int _attackModifier = 0;
-        public int Attack => _str + _attackModifier + GetDamageBonus();
+        public int Attack => _str + _attackModifier + GetDamageBonus() + GetTotalEquipmentAttack();
 
         private protected int _str;
+        
+        public override string ClassName => "Крестьянин";
+
         private Peasant(Dictionary<int, float> LVLTable) : base(5, 0, "Крестьянин", LVLTable,new InventoryPerson(15))
         {
             //TODO rewrite
             _personTags.Add(PersonTags.Human);
+            
+            // Starter equipment
+            Equip(new Armor("Old Shirt", 1, EquipmentSlot.Chest, 1, new[] { "Крестьянин" }));
+            Equip(new Weapon("Rusty Pitchfork", 1, 1, 2, new[] { "Крестьянин" }));
         }
         public Peasant(int Str, Dictionary<int, float> LVLTable) : this(LVLTable)
         {
             //TODO rewrite
             _str = Str;
-
+            // The this() call handles the base initialization including starter items, 
+            // but if we wanted custom starter items we could override here. 
+            // For now, chaining is enough.
         }
         /// <summary>
         /// Make damage to instance of IDmgable
@@ -48,8 +58,8 @@ namespace Izeron.Library.Persons.Tier0
             }
             else
             {
-                // Применяем защиту от перков
-                int actualDamage = Math.Max(1, Amount - GetDefenseBonus());
+                // Применяем защиту от перков и экипировки
+                int actualDamage = Math.Max(1, Amount - GetDefenseBonus() - GetTotalEquipmentDefense());
                 _health -= actualDamage;
                 if (_health <= 0)
                 {

@@ -52,7 +52,7 @@ namespace GameLogic.Library.GameBattleRoster
         {
             if (_battleRosterByFloor.ContainsKey(floor))
             {
-                var tmpRoster = GetMonsterRoastForFloor(1);
+                var tmpRoster = GetMonsterRoastForFloor(floor);
                 tmpRoster.AddRange(monsters);
                 _battleRosterByFloor[floor] = tmpRoster;
             }
@@ -85,6 +85,12 @@ namespace GameLogic.Library.GameBattleRoster
                 .Where(x => x.FloorRange.MinParameter <= floor && x.FloorRange.MaxParameter >= floor)
                 .ToList();
 
+            // Если для этажа нет врагов, берем любых (fallback)
+            if (monsterModels.Count == 0)
+            {
+                monsterModels = _enemiesModels.ToList();
+            }
+
             if (monsterModels.Count == 0) return monsters;
 
             for (int i = 0; i < amount; i++)
@@ -108,16 +114,16 @@ namespace GameLogic.Library.GameBattleRoster
                 int powerDiff = heroPowerRating - monster.PowerRating;
                 int weight;
 
-                // Если враг слишком силен для героя, исключаем его полностью
+                // Изменена логика: всегда даем шанс появления, даже если враг сильный
                 if (powerDiff < -15)
                 {
-                    // Враг на 15+ пунктов сильнее - не появляется совсем
-                    continue;
+                    // Враг на 15+ пунктов сильнее - очень редкий (босс этажа?)
+                    weight = 1; 
                 }
                 else if (powerDiff < -10)
                 {
-                    // Враг на 10-15 пунктов сильнее - очень редко
-                    weight = 1;
+                    // Враг на 10-15 пунктов сильнее - редко
+                    weight = 2;
                 }
                 else if (powerDiff >= 10)
                 {
@@ -127,7 +133,7 @@ namespace GameLogic.Library.GameBattleRoster
                 else if (powerDiff >= 5)
                 {
                     // Герой сильнее - средний шанс
-                    weight = 3;
+                    weight = 4;
                 }
                 else if (powerDiff >= 0)
                 {
@@ -151,11 +157,10 @@ namespace GameLogic.Library.GameBattleRoster
                 }
             }
 
-            // Если после фильтрации не осталось монстров, берем самого слабого
+            // Если после фильтрации не осталось монстров, берем всех
             if (weightedMonsters.Count == 0)
             {
-                var weakestMonster = availableMonsters.OrderBy(m => m.PowerRating).First();
-                return weakestMonster;
+                weightedMonsters = availableMonsters;
             }
 
             return weightedMonsters[new Random().Next(weightedMonsters.Count)];
@@ -201,7 +206,11 @@ namespace GameLogic.Library.GameBattleRoster
             {
                 GameNotificationState = GameNotificationState.Battle
             };
-            foreach (var monsterByFloor in _battleRosterByFloor)
+            
+            // Создаем копию, чтобы избежать ошибки модификации во время итерации
+            var floorsCopy = _battleRosterByFloor.ToList();
+            
+            foreach (var monsterByFloor in floorsCopy)
             {
                 int floor = monsterByFloor.Key;
                 int countDeadMonsters = monsterByFloor.Value.Where(x => x.IsDead()).Count();

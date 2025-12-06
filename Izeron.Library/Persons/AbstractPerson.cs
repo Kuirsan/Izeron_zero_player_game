@@ -4,6 +4,7 @@ using Izeron.Library.InventorySystem;
 using Izeron.Library.Objects;
 using Izeron.Library.Objects.LootableObjects;
 using Izeron.Library.Objects.Potions;
+using Izeron.Library.Objects.Equipment;
 using System;
 using System.Collections.Generic;
 
@@ -50,15 +51,23 @@ namespace Izeron.Library.Persons
         /// </summary>
         /// <param name="dmgable">Instance of interface</param>
         abstract public void MakeDmg(IDmgable dmgable);
+        public virtual string ClassName => "Unknown";
+
         virtual public Dictionary<string, string> CharacterList
         {
             get
             {
                 Dictionary<string, string> valPairs = new Dictionary<string, string>();
-                valPairs.Add("Класс", this.ToString());
+                valPairs.Add("Класс", this.ClassName);
                 valPairs.Add("Уровень", this._lvl.ToString());
                 valPairs.Add("Здоровье", $"{this._health}\\{this._maxHealth}");
                 valPairs.Add("Тэги", string.Join("; ", _personTags));
+                
+                foreach (var item in _equipment)
+                {
+                    valPairs.Add(item.Key.ToString(), item.Value.Name);
+                }
+                
                 return valPairs;
             }
         }
@@ -128,6 +137,55 @@ namespace Izeron.Library.Persons
         public virtual bool CanAddAnotherHealthPotion()
         {
             return !_inventory.IsFullOfHealthPotions();
+        }
+        // Equipment
+        private protected Dictionary<EquipmentSlot, EquipmentBase> _equipment = new Dictionary<EquipmentSlot, EquipmentBase>();
+
+        public virtual void Equip(EquipmentBase item)
+        {
+            if (item == null) return;
+            // Un-equip current item in slot if exists
+            if (_equipment.ContainsKey(item.Slot))
+            {
+                Unequip(item.Slot);
+            }
+            _equipment[item.Slot] = item;
+            // Remove from inventory? Handled by caller usually, but logic dictates equipment is "on body".
+        }
+
+        public virtual void Unequip(EquipmentSlot slot)
+        {
+            if (_equipment.ContainsKey(slot))
+            {
+                var item = _equipment[slot];
+                _equipment.Remove(slot);
+                AddItemToInventory(item);
+            }
+        }
+
+        public int GetTotalEquipmentAttack()
+        {
+            int total = 0;
+            foreach (var item in _equipment.Values)
+            {
+                total += item.AttackBonus;
+            }
+            return total;
+        }
+
+        public int GetTotalEquipmentDefense()
+        {
+            int total = 0;
+            foreach (var item in _equipment.Values)
+            {
+                total += item.DefenseBonus;
+            }
+            return total;
+        }
+
+        public Dictionary<EquipmentSlot, EquipmentBase> GetEquipment()
+        {
+            return _equipment;
         }
     }
 }

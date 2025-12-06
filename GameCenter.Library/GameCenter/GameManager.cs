@@ -85,18 +85,22 @@ namespace GameCenter.Library.GameCenter
             var keys = _gameLogs.GroupBy(x => x.GameNotificationState).Where(x => x.Count() > 10).Select(x => x.Key).ToList();
             foreach(var key in keys)
             {
-                _gameLogs.Remove(_gameLogs.Where(x => x.GameNotificationState == key).FirstOrDefault());
+                var toRemove = _gameLogs.Where(x => x.GameNotificationState == key).FirstOrDefault();
+                if (toRemove != null)
+                {
+                    _gameLogs.Remove(toRemove);
+                }
             }
         }
 
         public static List<GameNotification> GetUnreadLogs(GameNotificationState gameNotificationState)
         {
-            var notification = _gameLogs.Where(log => log.GameNotificationState == gameNotificationState && log.IsRead == false).Select(log => log);
+            var notification = _gameLogs.Where(log => log.GameNotificationState == gameNotificationState && log.IsRead == false).ToList();
             foreach(var not in notification)
             {
                 not.IsRead = true;
             }
-            return notification.ToList();
+            return notification;
         }
 
         public static string GetUnreadLogsString(GameNotificationState gameNotificationState)

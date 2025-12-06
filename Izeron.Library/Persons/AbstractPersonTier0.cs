@@ -1,4 +1,5 @@
-﻿using Izeron.Library.Interfaces;
+﻿#nullable enable
+using Izeron.Library.Interfaces;
 using Izeron.Library.InventorySystem;
 using Izeron.Library.Perks;
 using System;
@@ -20,10 +21,10 @@ namespace Izeron.Library.Persons
         private protected Dictionary<int, float> _lvlTable;
         private protected List<ActivePerk> _perks;
         
-        public event EventHandler<int> LeveledUp;
+        public event EventHandler<int>? LeveledUp;
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = null)
+        public void OnPropertyChanged([CallerMemberName]string? prop = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
