@@ -115,11 +115,11 @@ namespace GameCenter.Library.GameCenter
             return sb.ToString();
         }
 
-        public static QuestObserver InitiateQuestObserver(AbstractPerson hero,BattleRosterManager monsterManager)
+        public static QuestObserver InitiateQuestObserver(AbstractPerson hero, BattleRosterManager monsterManager, Func<int> getCurrentFloor = null)
         {
             if(_questObserver==null)
             {
-                _questObserver = new QuestObserver(hero,monsterManager);
+                _questObserver = new QuestObserver(hero, monsterManager, getCurrentFloor);
                 return _questObserver;
             }
             return _questObserver;

@@ -21,14 +21,16 @@ namespace QuestHandlerSystem.Library
         private List<QuestLoadModel> _questsModels;
         private int _maxActiveQuests;
         private BattleRosterManager _monsterManager;
+        private Func<int> _getCurrentFloor;
 
-        public QuestObserver(AbstractPerson Hero,BattleRosterManager monsterManager)
+        public QuestObserver(AbstractPerson Hero,BattleRosterManager monsterManager, Func<int> getCurrentFloor = null)
         {
             _activeQuests = new List<BaseQuestModel>();
             _hero = Hero;
             LoadQuestModels();
             _maxActiveQuests = 5;
             _monsterManager = monsterManager;
+            _getCurrentFloor = getCurrentFloor ?? (() => 1);
         }
 
         private void LoadQuestModels()
@@ -83,9 +85,9 @@ namespace QuestHandlerSystem.Library
                 }
                 else
                 {
-                    monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+                    monsters = _monsterManager.GenerateRandomMonsters(_getCurrentFloor(), 10);
                 }
-                _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+                _monsterManager.AddMonsterToRoster(_getCurrentFloor(), monsters.ToArray());
 
                 // Создаем квест на сбор лута
                 quest = new CollectLootQuest(
@@ -101,7 +103,7 @@ namespace QuestHandlerSystem.Library
             {
                 // Создаем обычный квест на убийство
                 var monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
-                _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+                _monsterManager.AddMonsterToRoster(_getCurrentFloor(), monsters.ToArray());
                 quest = new KillQuest(questModel.Title, questModel.Description, monsters, questModel.Reward);
             }
 
@@ -126,9 +128,9 @@ namespace QuestHandlerSystem.Library
                     }
                     else
                     {
-                        monsters = _monsterManager.GenerateRandomMonsters(1, 10);
+                        monsters = _monsterManager.GenerateRandomMonsters(_getCurrentFloor(), 10);
                     }
-                    _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+                    _monsterManager.AddMonsterToRoster(_getCurrentFloor(), monsters.ToArray());
 
                     return new CollectLootQuest(
                         questModel.Title,
@@ -142,7 +144,7 @@ namespace QuestHandlerSystem.Library
                  else
                  {
                     var monsters = _monsterManager.GenerateMonstersByName(questModel.Enemies);
-                    _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+                    _monsterManager.AddMonsterToRoster(_getCurrentFloor(), monsters.ToArray());
                     return new KillQuest(questModel.Title, questModel.Description, monsters, questModel.Reward);
                  }
              }
@@ -189,8 +191,8 @@ namespace QuestHandlerSystem.Library
 
             // Spawn monsters to drop loot (с учетом силы героя)
             int heroPower = HeroPowerCalculator.CalculatePowerRating(_hero);
-            var monsters = _monsterManager.GenerateRandomMonstersByPower(1, 10, heroPower);
-            _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+            var monsters = _monsterManager.GenerateRandomMonstersByPower(_getCurrentFloor(), 10, heroPower);
+            _monsterManager.AddMonsterToRoster(_getCurrentFloor(), monsters.ToArray());
 
             return new CollectLootQuest(title, description, lootName, quantity, reward, _hero);
         }
@@ -198,7 +200,7 @@ namespace QuestHandlerSystem.Library
         private BaseQuestModel GenerateRandomKillQuest()
         {
             int heroPower = HeroPowerCalculator.CalculatePowerRating(_hero);
-            var monsters = _monsterManager.GenerateRandomMonstersByPower(1, 10, heroPower);
+            var monsters = _monsterManager.GenerateRandomMonstersByPower(_getCurrentFloor(), 10, heroPower);
             var title = $"Monsters {GenerateVerb()} {GenerateSubject()}!";
             var description = "You must kill them!";
             var reward = new RewardModel
@@ -208,7 +210,7 @@ namespace QuestHandlerSystem.Library
             };
             var quest = new KillQuest(title,description,monsters, reward);
 
-            _monsterManager.AddMonsterToRoster(1, monsters.ToArray());
+            _monsterManager.AddMonsterToRoster(_getCurrentFloor(), monsters.ToArray());
 
             return quest;
         }

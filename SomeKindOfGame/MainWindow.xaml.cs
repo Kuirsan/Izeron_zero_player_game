@@ -88,7 +88,7 @@ namespace SomeKindOfGame
             Pers = new Peasant(2, dict); // Начинаем с 2 силы для лучшего баланса
 
 
-            quests = GameManager.InitiateQuestObserver(Pers,monsterRoster);
+            quests = GameManager.InitiateQuestObserver(Pers,monsterRoster, () => floorManager.CurrentFloor);
             gameProcess = GameManager.InitiateGameProcess(Pers, new GameStateLogicByHero());
             
             // Процедурная генерация начального квеста
@@ -201,6 +201,14 @@ namespace SomeKindOfGame
                     return;
                 }
                 var monstersForFloor = monsterRoster.GetMonsterRoastForFloor(floorManager.CurrentFloor);
+                
+                // Fix: Sync battleClass enemies if they ran out but the floor has new monsters (e.g. after floor advance)
+                if ((battleClass.Enemies == null || battleClass.Enemies.Count == 0) && 
+                    (monstersForFloor != null && monstersForFloor.Count > 0))
+                {
+                    battleClass.Enemies = monstersForFloor.ToList();
+                }
+
                 UpdateCurrentEnemy();
                 gameProcess.MoveNext(monstersForFloor ?? new List<AbstractPerson>());
             }
@@ -237,7 +245,7 @@ namespace SomeKindOfGame
                     quests.SignOnQuest(newQuest);
                 }
 
-                var currentMonsters = monsterRoster.GetMonsterRoastForFloor(1);
+                var currentMonsters = monsterRoster.GetMonsterRoastForFloor(floorManager.CurrentFloor);
                 if (currentMonsters != null && currentMonsters.Count > 0)
                 {
                     battleClass.Enemies = currentMonsters.ToList();
